@@ -1,0 +1,283 @@
+﻿@{
+    ViewData["Title"] = (ViewBag.Id >1 ? "Add" : "Edit") + " User";
+}
+<div data-ng-controller="userController">
+    <form name="form">
+        <div class="topbar">
+            <div class="md-toolbar-tools" layout="row">
+                <div class="topbar-title" flex>
+                    <h2>Details</h2>
+                    <i class="vertical-seperator" hide-sm hide-xs>&nbsp;</i>
+                    <span hide-sm hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / <a href="/user">Users</a> / Details</span>
+                </div>
+                <div flex="none">
+                    <md-button class="add-btn" aria-label="Back to List" data-ng-click="backToList()">
+                        <md-tooltip>Back to List</md-tooltip>
+                        <i class="ti-angle-double-left"></i>
+                    </md-button>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div layout="row" layout-sm="column" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <label>Role</label>
+                    <md-select name="userRole" ng-model="user.roleId" required ng-change="roleChange(user.roleId)">
+                        <md-option ng-repeat="role in roles" ng-value="role.id">{{role.name}}</md-option>
+                    </md-select>
+                    <div ng-messages="form.userRole.$error" md-auto-hide="false">
+                        <div ng-message="required">User Role is required</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container class="md-block" flex>
+                    <input type="hidden" value="@ViewBag.Id" ng-model="id" />
+                    <label>First Name</label>
+                    <input name="firstName" ng-model="user.firstName" maxlength="50" required>
+                    <div ng-messages="form.firstName.$error" md-auto-hide="false">
+                        <div ng-message="required">User First Name is required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Middle Name</label>
+                    <input name="middleName" ng-model="user.middleName" maxlength="50" />
+                </md-input-container>
+            </div>
+            <div layout="row" layout-sm="column" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <input type="hidden" value="@ViewBag.Id" ng-model="id" />
+                    <label>Last Name</label>
+                    <input name="lastName" ng-model="user.lastName" maxlength="50" required>
+                    <div ng-messages="form.lastName.$error" md-auto-hide="false">
+                        <div ng-message="required">User Last Name is required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Gender</label>
+                    <md-select name="gender" ng-model="user.gender" required>
+                        <md-option ng-repeat="gender in genders" ng-value="gender.id">{{gender.name}}</md-option>
+                    </md-select>
+                    <div ng-messages="form.gender.$error" md-auto-hide="false">
+                        <div ng-message="required">Gender is required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <input type="hidden" value="@ViewBag.Id" ng-model="id" />
+                    <label>User Name</label>
+                    <input name="userName" ng-model="user.userName" maxlength="50" required>
+                    <div ng-messages="form.userName.$error" md-auto-hide="false">
+                        <div ng-message="required">User Name is required</div>
+                    </div>
+                </md-input-container>
+
+            </div>
+            <div layout="row" layout-sm="column" layout-xs="column">
+                <md-input-container class="md-block" ng-if="edit" flex>
+                    <label>Password</label>
+                    <input name="password" ng-model="user.password" required>
+                    <div ng-messages="form.password.$error" md-auto-hide="false">
+                        <div ng-message="required">User Password is required</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container class="md-block" flex>
+                    <input type="hidden" value="@ViewBag.Id" ng-model="id" />
+                    <label>Address</label>
+                    <input name="address" ng-model="user.address" maxlength="150">
+                    <div ng-messages="form.address.$error" md-auto-hide="false">
+                        <div ng-message="required">Address is required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>City</label>
+                    <input ng-model="user.city">
+                </md-input-container>
+            </div>
+            <div layout="row" layout-sm="column" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <label>Country Name</label>
+                    <md-select ng-model="state.countryId" ng-required="isMissonaries">
+                        <md-option ng-repeat="country in countries" ng-value="country.id">{{country.name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-autocomplete flex class="padding-wrap"
+                                 md-no-cache="true"
+                                 md-selected-item="user.district"
+                                 md-selected-item-change="selectedDistrictName(district)"
+                                 md-search-text="districtSearch"
+                                 md-items="district in searchDistrict(districtSearch)"
+                                 md-item-text="district.name"
+                                 md-min-length="0"
+                                 md-floating-label="District Name">
+                    <md-item-template>
+                        <span md-highlight-text="districtSearch" md-highlight-flags="gi">{{district.name}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No Data Found .
+                    </md-not-found>
+                </md-autocomplete>
+                <md-input-container class="md-block" flex>
+                    <label>Section</label>
+                    <md-select name="section" ng-model="user.sectionId">
+                        <md-option ng-repeat="section in sections" ng-value="section.id">{{section.name}}</md-option>
+                    </md-select>
+                </md-input-container>                
+            </div>
+            <div layout="row" layout-sm="column" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <label>Zipcode</label>
+                    <input name="zipcode" ng-model="user.zipcode" required>
+                    <div ng-messages="form.zipcode.$error" md-auto-hide="false">
+                        <div ng-message="required">Zipcode is required</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container class="md-block" flex>
+                    <label>Email</label>
+                    <input type="email" name="email" ng-model="user.email" required>
+                    <div ng-messages="form.email.$error" md-auto-hide="false">
+                        <div ng-message="required">User Email is required</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container class="md-block" flex>
+                    <label>Phone</label>
+                    <input name="phone" ng-model="user.phone" required>
+                    <div ng-messages="form.phone.$error" md-auto-hide="false">
+                        <div ng-message="required">User Phone is required</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-sm="column" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <label>Work PhoneNo</label>
+                    <input ng-model="user.workPhoneNo">
+                </md-input-container>
+
+                <md-input-container class="md-block" flex>
+                    <label>TelePhone No</label>
+                    <input ng-model="user.telePhoneNo">
+                </md-input-container>
+
+                <md-input-container class="md-block" flex="none">
+                    <md-checkbox ng-model="user.isActive" id="active" aria-label="active">
+                        Active ?
+                    </md-checkbox>
+                </md-input-container>
+                <md-input-container class="md-block" flex="none">
+                    <md-checkbox ng-model="user.isSuperAdmin" id="active" aria-label="active">
+                        Super Admin ?
+                    </md-checkbox>
+                </md-input-container>
+            </div>
+        </div>
+        <md-table-container layout="column" layout-xs="column">
+            <table md-table md-progress="promise">
+                <thead md-head>
+                    <tr md-row>
+                        <th md-column class="center" style="width:40%;"><span>Attribute Type</span></th>
+                        <th md-column class="center" style="width:40%;"><span>Attribute Name</span></th>
+                        <th md-column class="center" style="width:20%;"><span>Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody md-body>
+                    <tr md-row ng-repeat="detail in user.attributes track by $index">
+                        <td md-cell class="center" style="width:40%;">
+                            <md-input-container class="md-block" flex>
+                                <label>Select</label>
+                                <md-select name="role" ng-model="detail.attributeTypeId" ng-change="getAttribute(detail.attributeTypeId,$index)" ng-click="typeSearch($index)" required>
+                                    <md-option ng-repeat="type in detail.types" ng-value="type.id">{{type.name}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </td>
+                        <td md-cell class="center" style="width:40%;">
+                            <md-input-container class="md-block" flex>
+                                <label>Select</label>
+                                <md-select name="role" ng-model="detail.attributeId" required>
+                                    <md-option ng-repeat="attribute in detail.butes" ng-value="attribute.id">{{attribute.attributeName}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </td>
+                        <td md-cell class="center" style="width:20%;">
+                            <md-button class="md-icon-button md-primary" ng-click="deleteState($index)" ng-if="user.attributes.length>0"><i class="fa fa-trash"></i></md-button>
+                        </td>
+                    </tr>
+                    <tr md-row>
+                        <td md-cell style="text-align:right;" colspan="4">
+                            <md-button class="add-btn" aria-label="Add" data-ng-click="addNewState()">
+                                <md-tooltip>Add Attribute</md-tooltip>
+                                <i class="ti-plus"></i>Add Attribute
+                            </md-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+        <md-table-container layout="column" layout-xs="column">
+            <table md-table md-progress="promise">
+                <thead md-head>
+                    <tr md-row>
+                        <th md-column class="center" style="width:80%;"><span>Church</span></th>
+                        <th md-column class="center" style="width:20%;"><span>Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody md-body>
+                    <tr md-row ng-repeat="detail in user.churches track by $index">
+                        <td md-cell class="center" width="80%">
+                            <md-autocomplete flex class="padding-wrap"
+                                             md-no-cache="true"
+                                             md-selected-item="detail.church"
+                                             md-selected-item-change="selectedChurchName(church, $index)"
+                                             md-search-text="churchSearch"
+                                             md-items="church in searchChurch(churchSearch)"
+                                             md-item-text="church.churchName"
+                                             md-min-length="0"
+                                             md-floating-label="Church Name" required>
+                                <md-item-template>
+                                    <span md-highlight-text="ChurchSearch" md-highlight-flags="gi">{{church.churchName}}</span>
+                                </md-item-template>
+                                <md-not-found>
+                                    No Data Found .
+                                </md-not-found>
+                            </md-autocomplete>
+                        </td>
+                        <td md-cell class="center" style="width:20%;">
+                            <md-button class="md-icon-button md-primary" ng-click="deleteChurch($index)" ng-if="user.churches.length>0"><i class="fa fa-trash"></i></md-button>
+                        </td>
+                    </tr>
+                    <tr md-row>
+                        <td md-cell style="text-align:right;" colspan="4">
+                            <md-button class="add-btn" aria-label="Add" data-ng-click="addNewChurch()">
+                                <md-tooltip>Add Church</md-tooltip>
+                                <i class="ti-plus"></i>Add Church
+                            </md-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+        <div class="container">
+            <div layout="row" layout-align="center center">
+                <md-button class="save-btn" aria-label="Save" data-ng-click="save()" data-ng-disabled="form.$invalid || isDisabled">
+                    <md-tooltip>Save</md-tooltip>
+                    <i class="far fa-save"></i> Save
+                </md-button>
+                <md-button class="cancel-btn" aria-label="Cancel" data-ng-click="backToList()">
+                    <md-tooltip>Cancel</md-tooltip>
+                    <i class="fas fa-reply"></i> Cancel
+                </md-button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/countryService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/districtService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/sectionService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/roleService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/attributeService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/churchService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/userService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/userController.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,84 @@
+﻿@{
+    ViewData["Title"] = "Edit";
+}
+
+<div data-ng-controller="attributeEditController">
+    <form name="form">
+        <div class="topbar">
+            <div class="md-toolbar-tools" layout="row">
+                <div class="topbar-title" flex>
+                    <h2>Edit Attribute</h2>
+                    <i class="vertical-seperator" hide-xs>&nbsp;</i>
+                    <span hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / <a href="/attribute">Attributes</a> / Edit</span>
+                </div>
+                <div flex="none">
+                    <md-button class="add-btn" aria-label="Back to List" data-ng-click="backToList()">
+                        <md-tooltip>Back to List</md-tooltip>
+                        <i class="ti-angle-double-left"></i> Back to List
+                    </md-button>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div layout="row" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <label>Attribute Type Name</label>
+                    <input ng-model="attribute.name" required>
+                </md-input-container>
+            </div>
+        </div>
+        <md-table-container layout="column" layout-xs="column">
+            <table md-table md-progress="promise">
+                <thead md-head>
+                    <tr md-row>
+                        <th md-column class="center" style="width:20%;"><span>Attribute Name</span></th>
+                        <th md-column class="center" style="width:80%;"><span>Attribute Notes</span></th>
+                        @*<th md-column class="center" style="width:20%;"><span>Actions</span></th>*@
+                    </tr>
+                </thead>
+                <tbody md-body>
+                    <tr md-row ng-repeat="detail in attribute.attributes track by $index">
+                        <td md-cell class="center" style="width:20%;">
+                            <md-input-container flex>
+                                <input ng-model="detail.attributeName" required>
+                            </md-input-container>
+                        </td>
+                        <td md-cell class="center" style="width:80%;">
+                            <md-input-container flex>
+                                <textarea ng-model="detail.attributeNotes"></textarea>
+                            </md-input-container>
+                        </td>
+                        @*<td md-cell class="center" style="width:20%;">
+                            <md-button class="md-icon-button md-primary" ng-click="deleteState($index)" ng-if="attribute.attributes.length>1"><i class="fa fa-trash"></i></md-button>
+                        </td>*@
+                    </tr>
+                    <tr md-row>
+                        <td md-cell style="text-align:right;" colspan="4">
+                            <md-button class="add-btn" aria-label="Add" data-ng-click="addNewState()">
+                                <md-tooltip>Add Attribute</md-tooltip>
+                                <i class="ti-plus"></i>Add Attribute
+                            </md-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+        <div class="container">
+            <div layout="row" layout-align="center center">
+                <md-button class="save-btn" aria-label="Save" data-ng-click="save()" data-ng-disabled="form.$invalid">
+                    <md-tooltip>Save</md-tooltip>
+                    <i class="far fa-save"></i> Save
+                </md-button>
+                <md-button class="cancel-btn" aria-label="Cancel" data-ng-click="backToList()">
+                    <md-tooltip>Cancel</md-tooltip>
+                    <i class="fas fa-reply"></i> Cancel
+                </md-button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/attributeService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/attributeEditController.js" asp-append-version="true"></script>
+}

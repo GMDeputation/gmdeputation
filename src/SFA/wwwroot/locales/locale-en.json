@@ -1,0 +1,16 @@
+{
+  "MOD_DASHBOARD": "Dashboard",
+  "MOD_GLOBAL": "Global",
+  "MOD_LOAN": "Loan",
+  "MOD_ACC": "Accounting",
+  "MOD_REPORT": "Reports",
+  "MOD_INVENTORY": "Inventory",
+  "MNU_CP": "Collection Points",
+  "MNU_CP_XFER": "Collection Point Transfer",
+  "MNU_LOAN_TYPES": "Loan Types",
+  "MNU_LOAN_PRDTS": "Loan Products",
+  "MNU_LOAN_PURPS": "Loan Purposes",
+  "MNU_LOAN_SUB_PURPS": "Loan Sub Purposes",
+  "MNU_HVQ": "House Visit Questions",
+  "MNU_LOAN_HVQ": "Loan Product House Visit Question"
+}

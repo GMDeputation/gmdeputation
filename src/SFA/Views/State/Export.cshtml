@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "Export States";
+}
+
+<div data-ng-controller="stateExportController">
+    <form name="form">
+        <div class="topbar">
+            <div class="md-toolbar-tools" layout="row">
+                <div class="topbar-title" flex>
+                    <h2>Import States</h2>
+                    <i class="vertical-seperator" hide-xs>&nbsp;</i>
+                    <span hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / <a href="/states">States</a> / Import</span>
+                </div>
+                <div flex="none">
+                    <md-button class="add-btn" ng-click="download()">
+                        <md-tooltip>Download Format</md-tooltip>
+                        <i class="ti-download"></i> <span hide-xs>Download Format</span>
+                    </md-button>
+                    <md-button class="add-btn" aria-label="Back to List" data-ng-click="backToList()">
+                        <md-tooltip>Back to List</md-tooltip>
+                        <i class="ti-angle-double-left"></i> Back to List
+                    </md-button>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div layout="row" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    @*<label class="active">File </label><br><br>*@
+                    <md-button class="md-primary md-raised" aria-label="Save" data-ng-click="browse()">
+                        <i class="fa fa-upload"></i> Choose File ...
+                    </md-button><p>( Choose between .xls, .xlsx files and file size should be 30MB maximum)</p>
+                    <input id="infile" type="file" style="display:none;" accept=".xls, .xlsx" required onchange="angular.element(this).scope().setFileName(this)" />
+                    <md-input-container class="md-block" flex>
+                        <input name="fileName" ng-model="fileName" disabled required />
+                        @*<div ng-messages="form.fileName.$error" md-auto-hide="false">
+                            <div ng-message="required">File is required</div>
+                        </div>*@
+                    </md-input-container>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-align="center center">
+                <md-button class="save-btn" aria-label="Save" data-ng-click="save()" data-ng-disabled="form.$invalid">
+                    <md-tooltip>Upload</md-tooltip>
+                    <i class="far fa-save"></i> Upload
+                </md-button>
+                <md-button class="cancel-btn" aria-label="Cancel" data-ng-click="backToList()">
+                    <md-tooltip>Cancel</md-tooltip>
+                    <i class="fas fa-reply"></i> Cancel
+                </md-button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/stateService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/stateExportController.js" asp-append-version="true"></script>
+}

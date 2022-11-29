@@ -1,0 +1,240 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    font-size: 12px;
+}
+
+.container-wraper {
+    width: 100vw;
+    height: 100vh;
+    padding: 15px;
+}
+
+    .container-wraper ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+
+        .container-wraper ul > li {
+            display: inline-block;
+            padding-right: 10px;
+            color: black;
+            line-height: 20px;
+        }
+
+            .container-wraper ul > li > span {
+                padding-left: 10px;
+                text-transform: uppercase;
+                color: #525252;
+            }
+
+.table-wrapper {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+    .table-wrapper table {
+        /* border-top: 1px solid #808080;
+    border-left: 1px solid #808080; */
+        border-spacing: 0px;
+    }
+
+        .table-wrapper table > thead > tr > th {
+            /* border-bottom: 1px solid #808080;
+    border-right: 1px solid #808080; */
+            font-size: 14px;
+        }
+
+        .table-wrapper table > tbody > tr > td {
+            /* border-bottom: 1px solid #808080;
+    border-right: 1px solid #808080; */
+            font-size: 14px;
+            padding: 5px;
+        }
+
+/* THE FOLLOWING CSS IS REQUIRED AND SHOULD NOT BE MODIFIED. */
+div.fauxRow {
+    display: inline-block;
+    vertical-align: top;
+    width: 100%;
+    page-break-inside: avoid;
+}
+
+table.fauxRow {
+    border-spacing: 0;
+}
+
+    table.fauxRow > tbody > tr > td {
+        padding: 0;
+        overflow: hidden;
+    }
+
+        table.fauxRow > tbody > tr > td > table.print {
+            display: inline-table;
+            vertical-align: top;
+        }
+
+            table.fauxRow > tbody > tr > td > table.print > caption {
+                caption-side: top;
+            }
+
+.noBreak {
+    float: right;
+    width: 100%;
+    visibility: hidden;
+}
+
+    .noBreak:before, .noBreak:after {
+        display: block;
+        content: "";
+    }
+
+    .noBreak:after {
+        margin-top: -594mm;
+    }
+
+    .noBreak > div {
+        display: inline-block;
+        vertical-align: top;
+        width: 100%;
+        page-break-inside: avoid;
+    }
+
+table.print > tbody > tr {
+    page-break-inside: avoid;
+}
+
+table.print > tbody > .metricsRow > td {
+    border-top: none !important;
+}
+
+
+table.fauxRow, table.print {
+    font-size: 16px;
+    line-height: 20px;
+}
+
+body {
+    counter-reset: t1;
+}
+/* Delete to remove row numbers. */
+.noBreak .t1 > tbody > tr > :first-child:before {
+    counter-increment: none;
+}
+/* Delete to remove row numbers. 
+.t1 > tbody > tr > :first-child:before { 
+    display: block;
+    text-align: right;
+    counter-increment: t1 1;
+    content: counter(t1);
+}
+    */
+
+table.fauxRow, table.print {
+    font-family: Tahoma, Verdana, Georgia;
+    margin: 0 auto 0 auto;
+}
+
+table.print {
+    border-spacing: 0;
+}
+
+    table.print > * > tr > * {
+        border-right: 1px solid #8e8e8e;
+        border-bottom: 1px solid #8e8e8e;
+        padding: 0 5px 0 5px;
+    }
+
+    table.print > * > :first-child > * {
+        border-top: 1px solid #8e8e8e;
+    }
+
+    table.print > thead ~ * > :first-child > *, table.print > tbody ~ * > :first-child > * {
+        border-top: none;
+    }
+
+    table.print > * > tr > :first-child {
+        border-left: 1px solid #8e8e8e;
+    }
+
+    table.print > thead {
+        vertical-align: bottom;
+    }
+
+        table.print > thead > .borderRow > th {
+            border-bottom: none;
+        }
+
+    table.print > tbody {
+        vertical-align: top;
+    }
+
+    table.print > caption {
+        font-weight: bold;
+    }
+
+.no-break {
+    /*page-break-inside: avoid;*/
+}
+
+.row {
+    width: 100%;
+    /*display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;*/
+}
+
+.table-grid, .signature-grid {
+    width: 100%;
+    padding: 10px;
+    /*-webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;*/
+}
+
+    .table-grid table {
+        width: 100%;
+        border-spacing: 0;
+        border-top: 1px solid #8e8e8e;
+        border-left: 1px solid #8e8e8e;
+        page-break-inside: avoid;
+    }
+
+    .signature-grid table {
+        width: 100%;
+        border-spacing: 0;
+    }
+
+    .table-grid table > thead > tr > th, .table-grid table > tbody > tr > td,
+    .table-grid table > tbody > tr > th {
+        border-bottom: 1px solid #8e8e8e;
+        border-right: 1px solid #8e8e8e;
+        padding: 5px 10px;
+    }
+
+    .signature-grid table > tbody > tr > th, .signature-grid table > tbody > tr > td {
+        padding: 30px 10px;
+    }
+
+@media print {
+    @page {
+        size: landscape;
+        margin: 0;
+        border: 2px solid #8e8e8e;
+    }
+
+    .table-wrapper table > thead > tr > th {
+        font-size: 10px;
+    }
+
+    .table-wrapper table > tbody > tr > td {
+        font-size: 10px;
+        padding: 3px;
+    }
+}

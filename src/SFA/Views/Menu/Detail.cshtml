@@ -1,0 +1,98 @@
+﻿@{
+    ViewData["Title"] = (ViewBag.Id == null ? "Add" : "Edit") + " Menu";
+}
+<div data-ng-controller="menuController">
+    <form name="form">
+        <div class="topbar">
+            <div class="md-toolbar-tools" layout="row">
+                <div class="topbar-title" flex>
+                    <h2>Details</h2>
+                    <i class="vertical-seperator" hide-sm hide-xs>&nbsp;</i>
+                    <span hide-sm hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / <a href="/menu">Menus</a> / Details</span>
+                </div>
+                <div flex="none">
+                    <md-button class="add-btn" aria-label="Back to List" data-ng-click="backToList()">
+                        <md-tooltip>Back to List</md-tooltip>
+                        <i class="ti-angle-double-left"></i>
+                    </md-button>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div layout="row" layout-sm="column" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <input type="hidden" value="@ViewBag.Id" ng-model="id" />
+                    <label>Name</label>
+                    <input name="name" ng-model="menu.name" maxlength="50" required>
+                    <div ng-messages="form.name.$error" md-auto-hide="false">
+                        <div ng-message="required">Menu Name is required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Category</label>
+                    <md-select name="category" ng-model="menu.category" required ng-change="getMenuGroups()">
+                        <md-option ng-repeat="category in categories" ng-value="category">{{category}}</md-option>
+                    </md-select>
+                    <div ng-messages="form.category.$error" md-auto-hide="false">
+                        <div ng-message="required">Category Name is required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Group</label>
+                    <md-select name="grp" ng-model="menu.menuGroupId" required>
+                        <md-option ng-repeat="group in groups" ng-value="group.id">{{group.name}}</md-option>
+                    </md-select>
+                    <div ng-messages="form.grp.$error" md-auto-hide="false">
+                        <div ng-message="required">Menu Group is required</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-sm="column" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <label>Icon</label>
+                    <input name="icon" ng-model="menu.icon" maxlength="20" required>
+                    <div ng-messages="form.icon.$error" md-auto-hide="false">
+                        <div ng-message="required">Menu Icon is required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Path</label>
+                    <input name="path" ng-model="menu.startingPath" maxlength="100" required>
+                    <div ng-messages="form.path.$error" md-auto-hide="false">
+                        <div ng-message="required">Menu Path is required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Position</label>
+                    <input type="number" name="position" ng-model="menu.position" min="=0" required>
+                    <div ng-messages="form.position.$error" md-auto-hide="false">
+                        <div ng-message="required">Position is required</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-sm="column" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <md-checkbox ng-model="menu.isActive" id="active" aria-label="active">
+                        Active ?
+                    </md-checkbox>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-align="center center">
+                <md-button class="save-btn" aria-label="Save" data-ng-click="save()" data-ng-disabled="form.$invalid || isDisabled">
+                    <md-tooltip>Save</md-tooltip>
+                    <i class="far fa-save"></i> Save
+                </md-button>
+                <md-button class="cancel-btn" aria-label="Cancel" data-ng-click="backToList()">
+                    <md-tooltip>Cancel</md-tooltip>
+                    <i class="fas fa-reply"></i> Cancel
+                </md-button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/menuService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/menuGroupService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/menuController.js" asp-append-version="true"></script>
+}

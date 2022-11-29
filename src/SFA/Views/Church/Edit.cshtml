@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Edit";
+}
+<div data-ng-controller="churchEditController">
+    <form name="form">
+        <div class="topbar">
+            <div class="md-toolbar-tools" layout="row">
+                <div class="topbar-title" flex>
+                    <h2>Edit</h2>
+                    <i class="vertical-seperator" hide-xs>&nbsp;</i>
+                    <span hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / <a href="/churches">Churches</a> / Edit</span>
+                </div>
+                <div flex="none">
+                    <md-button class="add-btn" aria-label="Back to List" data-ng-click="backToList()">
+                        <md-tooltip>Back to List</md-tooltip>
+                        <i class="ti-angle-double-left"></i> Back to List
+                    </md-button>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div layout="row" layout-xs="column">
+                <md-autocomplete flex class="padding-wrap"
+                                 md-no-cache="true"
+                                 md-selected-item="district"
+                                 md-selected-item-change="selectedDistrictName(district)"
+                                 md-search-text="districtSearch"
+                                 md-items="district in searchDistrict(districtSearch)"
+                                 md-item-text="district.name"
+                                 md-min-length="0"
+                                 md-floating-label="District Name" required>
+                    <md-item-template>
+                        <span md-highlight-text="districtSearch" md-highlight-flags="gi">{{district.name}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No Data Found .
+                    </md-not-found>
+                </md-autocomplete>
+                <md-input-container class="md-block" flex>
+                    <label>Section Name</label>
+                    <md-select ng-model="church.sectionId" required>
+                        <md-option ng-repeat="section in sections track by $index" ng-value="section.id">{{section.name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Church Name</label>
+                    <input ng-model="church.churchName" required>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <label>Church Type</label>
+                    <input ng-model="church.churchType">
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Account No</label>
+                    <input ng-model="church.accountNo">
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Directory Listing</label>
+                    <input ng-model="church.directory">
+                </md-input-container>
+            </div>
+            <div layout="row" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <label>Complete Address</label>
+                    <input ng-model="church.address">
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Mailing Address</label>
+                    <input ng-model="church.mailAddress">
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Phone Number</label>
+                    <input ng-model="church.phone">
+                </md-input-container>
+            </div>
+            <div layout="row" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <label>Alternative Phone Number</label>
+                    <input ng-model="church.phone2">
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Email</label>
+                    <input type="email" ng-model="church.email">
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Status</label>
+                    <input ng-model="church.status">
+                </md-input-container>
+            </div>
+            <div layout="row" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <label>Website</label>
+                    <input ng-model="church.webSite">
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Latitude</label>
+                    <input ng-model="church.lat">
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Longtitude</label>
+                    <input ng-model="church.lon">
+                </md-input-container>
+            </div>
+            <div layout="row" layout-align="center center">
+                <md-button class="save-btn" aria-label="Save" data-ng-click="save()" data-ng-disabled="form.$invalid">
+                    <md-tooltip>Save</md-tooltip>
+                    <i class="far fa-save"></i> Save
+                </md-button>
+                <md-button class="cancel-btn" aria-label="Cancel" data-ng-click="backToList()">
+                    <md-tooltip>Cancel</md-tooltip>
+                    <i class="fas fa-reply"></i> Cancel
+                </md-button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/districtService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/churchService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/sectionService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/churchEditController.js" asp-append-version="true"></script>
+}

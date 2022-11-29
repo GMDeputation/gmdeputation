@@ -1,0 +1,145 @@
+﻿<div ng-init="popoulateCP()" ng-if="accessCode === 'A' || accessCode === 'C' || accessCode === 'B'">
+    <table class="dashboard-table">
+        <thead>
+            <tr>
+                <th colspan="7" style="text-align:center;color: #000;font-size: 1.5em;background-color: white;">Collectionpoint</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Branch Name</th>
+                <th>No. Of LO.</th>
+                <th>No. Of CP.</th>
+                <th>Act.Member</th>
+                <th>No. Of Borrower.</th>
+                <th>Outstanding</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat-start="branch in branches track by $index" ng-click="popoulateCPByBranch(branch.branchId, branch.expanded)">
+                <td>
+                    <button class="drill-btn" ng-click="collapseBranchAll($index)">
+                        <span ng-bind="branch.expanded ? '-' : '+'"></span>
+                    </button>
+                </td>
+                <td >{{branch.branchName}}</td>
+                <td style="text-align:center;">{{branch.loCount}}</td>
+                <td style="text-align:center;">{{branch.cpCount}}</td>
+                <td style="text-align:center;">{{branch.activeMembers}}</td>
+                <td style="text-align:center;">{{branch.activeBorrowers}}</td>
+                <td style="text-align:center;">{{branch.outstanding | number : 2}}</td>
+            </tr>
+            <tr ng-repeat-end ng-show="branch.expanded">
+                <td></td>
+                <td colspan="6">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>LO Name</th>
+                                <th>No. Of CP.</th>
+                                <th>Act.Member</th>
+                                <th>No. Of Borrower.</th>
+                                <th>Outstanding</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat-start="loanOfficer in loanOfficers track by $index" ng-click="popoulateCPByLO(loanOfficer.loId, loanOfficer.expanded)">
+                                <td style="width:2%;">
+                                    <button class="drill-btn" ng-click="collapseLoanOfficerAll($index)">
+                                        <span ng-bind="loanOfficer.expanded ? '-' : '+'"></span>
+                                    </button>
+                                </td>
+                                <td>{{loanOfficer.loName}}({{loanOfficer.loCode}})</td>
+                                <td style="text-align:center;">{{loanOfficer.cpCount}}</td>
+                                <td style="text-align:center;">{{loanOfficer.activeMembers}}</td>
+                                <td style="text-align:center;">{{loanOfficer.activeBorrowers}}</td>
+                                <td style="text-align:center;">{{loanOfficer.outstanding | number : 2}}</td>
+                            </tr>
+                            <tr ng-repeat-end ng-show="loanOfficer.expanded">
+                                <td></td>
+                                <td colspan="5">
+                                    <table class="dashboard-table-4th">
+                                        <thead>
+                                            <tr>                                               
+                                                <th style="width:20%;">CP Name</th>
+                                                <th>Collection Day</th>                                                
+                                                <th>Act.Member</th>
+                                                <th>No. Of Borrower.</th>
+                                                <th>Outstanding</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="cp in collectionPoints track by $index">                                                
+                                                <td style="width:20%;">{{cp.cpName}}</td>
+                                                <td style="text-align:center;">{{cp.collectionDay}}</td>
+                                                <td style="text-align:center;">{{cp.activeMembers}}</td>
+                                                <td style="text-align:center;">{{cp.activeBorrowers}}</td>
+                                                <td style="text-align:center;">{{cp.outstanding | number : 2}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div ng-init="popoulateCPByBranch(null, true)" ng-if="accessCode === 'I'">
+    <table class="dashboard-table">
+        <thead>
+            <tr>
+                <th colspan="6" style="text-align:center;color: #000;font-size: 1.5em;background-color: white;">Collectionpoint</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>LO Name</th>
+                <th>No. Of CP.</th>
+                <th>Act.Member</th>
+                <th>No. Of Borrower.</th>
+                <th>Outstanding</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat-start="loanOfficer in loanOfficers track by $index" ng-click="popoulateCPByLO(loanOfficer.loId, loanOfficer.expanded)">
+                <td style="width:2%;">
+                    <button class="drill-btn" ng-click="collapseLoanOfficerAll($index)">
+                        <span ng-bind="loanOfficer.expanded ? '-' : '+'"></span>
+                    </button>
+                </td>
+                <td>{{loanOfficer.loName}}({{loanOfficer.loCode}})</td>
+                <td style="text-align:center;">{{loanOfficer.cpCount}}</td>
+                <td style="text-align:center;">{{loanOfficer.activeMembers}}</td>
+                <td style="text-align:center;">{{loanOfficer.activeBorrowers}}</td>
+                <td style="text-align:center;">{{loanOfficer.outstanding | number : 2}}</td>
+            </tr>
+            <tr ng-repeat-end ng-show="loanOfficer.expanded">
+                <td></td>
+                <td colspan="5">
+                    <table class="dashboard-table-4th">
+                        <thead>
+                            <tr>
+                                <th style="width:20%;">CP Name</th>
+                                <th>Collection Day.</th>
+                                <th>Act.Member</th>
+                                <th>No. Of Borrower.</th>
+                                <th>Outstanding</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="cp in collectionPoints track by $index">                                
+                                <td style="width:20%;">{{cp.cpName}}</td>
+                                <td style="text-align:center;">{{cp.collectionDay}}</td>
+                                <td style="text-align:center;">{{cp.activeMembers}}</td>
+                                <td style="text-align:center;">{{cp.activeBorrowers}}</td>
+                                <td style="text-align:center;">{{cp.outstanding | number : 2}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

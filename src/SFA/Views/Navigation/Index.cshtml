@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = ViewBag.Category;
+}
+@using SFA.Extensions;
+@using SFA.Models;
+@{
+    var loggedinUser = Context.Session.Get<User>("SESSIONSFAUSER");
+    var accessMenus = loggedinUser.Permissions.ToList();
+    var displayGroups = accessMenus.Select(m => m.MenuGroupId).Distinct().ToList();
+    var accessGroups = loggedinUser.Groups.Where(m => displayGroups.Contains(m.GroupId) && m.DefaultCategory == ViewBag.Category).OrderBy(m => m.GroupPosition).ToList();
+}
+<div>
+    <md-grid-list md-cols-xs="1" md-cols-sm="2" md-cols-md="4" md-cols-gt-md="4"
+                  md-row-height-gt-md="1:1" md-row-height="4:3"
+                  md-gutter="12px" md-gutter-gt-sm="8px">
+
+        @foreach (var accessGroup in accessGroups)
+        {
+            <md-grid-tile md-rowspan="1" md-colspan="1" md-colspan-sm="1" md-colspan-xs="1">
+                <div layout="column" style="padding:0 12px;position: absolute;top: 0px;width: 100%;" flex>
+                    <div class="nav-main" flex><h3>@accessGroup.GroupName</h3></div>
+                    <div class="nav-main-content" layout="column" flex>
+                        @foreach (var accessMenu in accessMenus.Where(m => m.MenuGroupId == accessGroup.GroupId).OrderBy(m => m.MenuPosition))
+                        {
+                            <div layout="row" style="padding:4px;">
+                                <i class="@(accessMenu.MenuIcon)"></i>
+                                <div style="margin-left:8px;">
+                                    <a href="@(accessMenu.MenuTarget)">@accessMenu.MenuName</a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </md-grid-tile>
+        }
+    </md-grid-list>
+</div>
+

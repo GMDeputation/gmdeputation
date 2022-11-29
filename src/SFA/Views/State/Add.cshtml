@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "Add";
+}
+
+<div data-ng-controller="stateAddController">
+    <form name="form">
+        <div class="topbar">
+            <div class="md-toolbar-tools" layout="row">
+                <div class="topbar-title" flex>
+                    <h2>Add New State</h2>
+                    <i class="vertical-seperator" hide-xs>&nbsp;</i>
+                    <span hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / <a href="/states">States</a> / Add</span>
+                </div>
+                <div flex="none">
+                    <md-button class="add-btn" aria-label="Back to List" data-ng-click="backToList()">
+                        <md-tooltip>Back to List</md-tooltip>
+                        <i class="ti-angle-double-left"></i> Back to List
+                    </md-button>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div layout="row" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <label>Country Name</label>
+                    <md-select ng-model="state.countryId" required>
+                        <md-option ng-repeat="country in countries" ng-value="country.id">{{country.name}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>State Name</label>
+                    <input ng-model="state.name" required>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <label>Code</label>
+                    <input ng-model="state.alias" ng-maxlength="5" required />
+                </md-input-container>
+            </div>
+            <div layout="row" layout-align="center center">
+                <md-button class="save-btn" aria-label="Save" data-ng-click="save()" data-ng-disabled="form.$invalid">
+                    <md-tooltip>Save</md-tooltip>
+                    <i class="far fa-save"></i> Save
+                </md-button>
+                <md-button class="cancel-btn" aria-label="Cancel" data-ng-click="backToList()">
+                    <md-tooltip>Cancel</md-tooltip>
+                    <i class="fas fa-reply"></i> Cancel
+                </md-button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/stateService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/countryService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/stateAddController.js" asp-append-version="true"></script>
+}

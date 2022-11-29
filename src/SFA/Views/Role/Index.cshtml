@@ -1,0 +1,87 @@
+﻿@{
+    ViewData["Title"] = "Roles";
+}
+<div data-ng-controller="rolesController">
+    <!--Topbar section-->
+    <div class="topbar">
+        <div class="md-toolbar-tools" layout="row">
+            <div class="topbar-title" flex>
+                <h2>List of Role</h2>
+                <i class="vertical-seperator" hide-sm hide-xs>&nbsp;</i>
+                <span hide-sm hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / Roles</span>
+            </div>
+            <div flex="none">
+                <md-button class="filter-btn" ng-click="filter()">
+                    <md-tooltip>Search</md-tooltip>
+                    <i class="ti-filter"></i> <span hide-xs>Filter</span>
+                </md-button>
+                @if (ViewBag.Access == 7 || ViewBag.Access == 3)
+                {
+                    <md-button class="add-btn" ng-click="detail()">
+                        <md-tooltip>Add New</md-tooltip>
+                        <i class="ti-plus"></i> <span hide-xs>Add New</span>
+                    </md-button>
+                }
+            </div>
+        </div>
+    </div>
+    <!--//End Topbar section-->
+    <!--Filter Section-->
+    <div class="filter-grid" data-ng-show="showFilter">
+        <div layout="row" layout-xs="column">
+            <div class="filter-title" flex="none">
+                <i class="ti-filter"></i> <span>Filter By</span>
+            </div>
+            <div flex>
+                <md-input-container class="md-block">
+                    <label>Name</label>
+                    <input data-ng-model="query.name" placeholder="Search By Role Name" data-ng-model-options="filter.options">
+                </md-input-container>
+            </div>
+            <div flex="none">
+                <md-button class="close-btn" ng-click="close()" ng-disabled="selected.length>0">
+                    <md-tooltip>Close</md-tooltip>
+                    <i class="ti-close"></i> Close
+                </md-button>
+            </div>
+        </div>
+    </div>
+    <!--//End Filter Section-->
+    <md-table-container>
+        <table md-table md-progress="promise">
+            <thead md-head>
+                <tr md-row>
+                    <th md-column class="center">Sl No</th>
+                    <th md-column><span class="pad-l-8">Name</span></th>
+                    <th md-column><span class="pad-l-8">Data AccessCode</span></th>
+                    <th md-column class="center" style="width:160px;"><span class="pad-l-8">Actions</span></th>
+                </tr>
+            </thead>
+            <tbody md-body>
+                <tr class="md-row md-row-empty" ng-show="roles.length === 0">
+                    <td class="md-cell" colspan="4">No Data Found</td>
+                </tr>
+                <tr md-row data-ng-repeat="role in roles track by $index"ng-show="role.isActive==true">
+                    <td md-cell class="center">{{((query.page - 1) * query.limit) + ($index+1)}}</td>
+                    <td md-cell class="pad-l-8">{{role.name}}</td>
+                    <td md-cell class="pad-l-8">{{role.dataAccessCode}}</td>
+                    <td md-cell class="center">
+                        @if (ViewBag.Access == 7 || ViewBag.Access == 3)
+                        {
+                            <md-button class="md-icon-button edit-btn" ng-click="detail(role.id)">
+                                <md-tooltip>Edit</md-tooltip>
+                                <i class="ti-marker-alt"></i>
+                            </md-button>
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+    <md-table-pagination md-limit="query.limit" md-limit-options="[20, 50, 100]" md-page="query.page" md-total="{{count}}" md-on-paginate="search" md-page-select></md-table-pagination>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/roleService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/rolesController.js" asp-append-version="true"></script>
+}

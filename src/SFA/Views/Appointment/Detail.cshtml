@@ -1,0 +1,162 @@
+﻿@{
+    ViewData["Title"] = (ViewBag.Id == Guid.Empty ? "Add" : "Edit") + " Appointment";
+}
+<div data-ng-controller="appointmentDetailController">
+    <form name="form">
+        <div class="topbar">
+            <div class="md-toolbar-tools" layout="row">
+                <div class="topbar-title" flex>
+                    <h2>Details</h2>
+                    <i class="vertical-seperator" hide-xs>&nbsp;</i>
+                    <span hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / <a href="/appointments">Appointments</a> / Details</span>
+                </div>
+                <div flex="none">
+                    <md-button class="add-btn" aria-label="Back to List" data-ng-click="backToList()">
+                        <md-tooltip>Back to List</md-tooltip>
+                        <i class="ti-angle-double-left"></i> Back to List
+                    </md-button>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div layout="row" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <label>Appointment Date</label>
+                    <md-datepicker name="eventDate" ng-model="appointment.eventDate" md-placeholder="Date of Appointment" md-min-date="minDate" md-max-date="maxDate" required ng-change="dateChange()" ng-disabled="appointment.isSubmit"></md-datepicker>
+                    <div ng-messages="form.eventDate.$error" md-auto-hide="false">
+                        <div ng-message="required">Appointment Date is required</div>
+                    </div>
+                </md-input-container>
+                <md-autocomplete flex class="padding-wrap"
+                                 md-no-cache="true"
+                                 md-selected-item="church"
+                                 md-selected-item-change="selectedChurchName(church)"
+                                 md-search-text="churchSearch"
+                                 md-items="church in searchChurch(churchSearch)"
+                                 md-item-text="church.churchName"
+                                 md-min-length="0"
+                                 md-floating-label="Church Name" required ng-readonly="appointment.isSubmit">
+                    <md-item-template>
+                        <span md-highlight-text="ChurchSearch" md-highlight-flags="gi">{{church.churchName}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No Data Found .
+                    </md-not-found>
+                </md-autocomplete>
+                <md-input-container class="md-block" flex>
+                    <label>Appointment Time</label>
+                    <md-select name="eventTime" ng-model="appointment.eventTime" required ng-disabled="appointment.isSubmit">
+                        <md-option ng-repeat="time in times" ng-value="time.serviceTime">{{time.timeString}}</md-option>
+                    </md-select>
+                    <div ng-messages="form.eventTime.$error" md-auto-hide="false">
+                        <div ng-message="required">Appointment is required</div>
+                    </div>
+                </md-input-container>
+            </div>
+            @*<div layout="row" layout-xs="column">
+            <md-input-container class="md-block" flex>
+                <label>Description</label>
+                <input name="description" ng-model="appointment.description" required maxlength="100" ng-readonly="appointment.isSubmit">
+                <div ng-messages="form.description.$error" md-auto-hide="false">
+                    <div ng-message="required">Description is required</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block" flex>
+                <label>Amount</label>
+                <input name="pimAmount" type="number" ng-model="appointment.pimAmount" required ng-readonly="appointment.isSubmit">
+                <div ng-messages="form.pimAmount.$error" md-auto-hide="false">
+                    <div ng-message="required">Amount is required</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block" flex>
+                <label>Offering</label>
+                <input name="offering" ng-model="appointment.offering" required maxlength="100" ng-readonly="appointment.isSubmit">
+                <div ng-messages="form.offering.$error" md-auto-hide="false">
+                    <div ng-message="required">Offering is required</div>
+                </div>
+            </md-input-container>
+        </div>
+        <div layout="row" layout-xs="column">
+            <md-input-container class="md-block" flex>
+                <label>Notes</label>
+                <input ng-model="appointment.notes" maxlength="100" ng-readonly="appointment.isSubmit">
+            </md-input-container>
+        </div>*@
+            <div layout="row" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <label>Description</label>
+                    <input name="description" ng-model="appointment.description" ng-required="appointment.accessCode =='P' || appointment.accessCode =='M'" ng-readonly="(appointment.isAcceptByPastor && appointment.accessCode =='P') || (appointment.isAcceptMissionary && appointment.accessCode =='M') || (appointment.accessCode !='A' && appointment.accessCode !='M'&& appointment.accessCode !='P') || appointment.isAcceptMissionary" maxlength="100">
+                    <div ng-messages="form.description.$error" md-auto-hide="false">
+                        <div ng-message="required">Description is required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex ng-if="appointment.isSubmit">
+                    <label>Amount</label>
+                    <input name="pimAmount" type="number" ng-model="appointment.pimAmount" ng-required="appointment.accessCode =='P' || appointment.accessCode =='M'" ng-readonly="(appointment.isAcceptByPastor && appointment.accessCode =='P') || (appointment.isAcceptMissionary && appointment.accessCode =='M') || (appointment.accessCode !='A' && appointment.accessCode !='M'&& appointment.accessCode !='P') ||appointment.isAcceptMissionary">
+                    <div ng-messages="form.pimAmount.$error" md-auto-hide="false">
+                        <div ng-message="required">Amount is required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex ng-if="appointment.isSubmit">
+                    <label>Offering</label>
+                    <input name="offering" ng-model="appointment.offering" ng-required="appointment.accessCode =='P' || appointment.accessCode =='M'" maxlength="100" ng-readonly="(appointment.isAcceptByPastor && appointment.accessCode =='P') || (appointment.isAcceptMissionary && appointment.accessCode =='M') || (appointment.accessCode !='A' && appointment.accessCode !='M'&& appointment.accessCode !='P') ||appointment.isAcceptMissionary">
+                    <div ng-messages="form.offering.$error" md-auto-hide="false">
+                        <div ng-message="required">Offering is required</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-xs="column" ng-if="appointment.isSubmit">
+                <md-input-container class="md-block" flex>
+                    <label>Notes</label>
+                    <input ng-model="appointment.notes" maxlength="100" ng-readonly="(appointment.isAcceptByPastor && appointment.accessCode =='P') || (appointment.isAcceptMissionary && appointment.accessCode =='M') || (appointment.accessCode !='A' && appointment.accessCode !='M'&& appointment.accessCode !='P') ||appointment.isAcceptMissionary">
+                </md-input-container>
+            </div>
+            <div layout="row" layout-xs="column" ng-if="appointment.isSubmit">
+                <md-input-container class="md-block" flex>
+                    <label>Pastor Remarks</label>
+                    <input ng-model="appointment.acceptByPastorRemarks" maxlength="100" ng-required="appointment.accessCode =='P'" ng-readonly="appointment.isAcceptByPastor">
+                </md-input-container>
+            </div>
+            <div layout="row" layout-xs="column" ng-if="(appointment.isForwardForMissionary && appointment.accessCode !='P')">
+                <md-input-container class="md-block" flex>
+                    <label>Missionary Remarks</label>
+                    <input ng-model="appointment.acceptMissionaryRemarks" maxlength="100" ng-required="appointment.accessCode =='M'" ng-readonly="appointment.isAcceptMissionary || (appointment.accessCode !='M' && appointment.accessCode !='A')" >
+                </md-input-container>
+            </div>
+            <div layout="row" layout-align="center center">
+                <md-button class="save-btn" aria-label="Save" data-ng-click="save()" data-ng-disabled="form.$invalid || isDiabled" ng-if="!appointment.isSubmit || (appointment.isSubmit && !appointment.isAcceptByPastor && appointment.accessCode =='P') || (appointment.isSubmit && !appointment.isAcceptMissionary && (appointment.accessCode =='M' || appointment.accessCode =='A'))">
+                    <md-tooltip>Save As Draft</md-tooltip>
+                    <i class="far fa-save"></i> Save As Draft
+                </md-button>
+                <md-button class="add-btn" aria-label="Save" data-ng-click="submit()" data-ng-disabled="form.$invalid || isDiabled" ng-if="!appointment.isSubmit">
+                    <md-tooltip>Submit</md-tooltip>
+                    <i class="far fa-save"></i> Submit
+                </md-button>
+                <md-button class="add-btn" aria-label="Save" data-ng-click="acceptPastor()" data-ng-disabled="form.$invalid || isDiabled" ng-if="appointment.isSubmit && !appointment.isAcceptByPastor && appointment.accessCode =='P' || appointment.isSubmit && !appointment.isAcceptByPastor && appointment.accessCode =='A'">
+                    <md-tooltip>Accept</md-tooltip>
+                    <i class="far fa-save"></i> Accept
+                </md-button>
+                <md-button class="add-btn" aria-label="Save" data-ng-click="forwardMissionary()" data-ng-disabled="form.$invalid || isDiabled" ng-if="appointment.isSubmit && appointment.isAcceptByPastor && !appointment.isForwardForMissionary &&(appointment.accessCode =='D' || appointment.accessCode =='S' || appointment.accessCode =='A')">
+                    <md-tooltip>Send To Missionary</md-tooltip>
+                    <i class="far fa-save"></i> Send To Missionary
+                </md-button>
+                <md-button class="add-btn" aria-label="Save" data-ng-click="acceptMissionary()" data-ng-disabled="form.$invalid || isDiabled" ng-if="(appointment.isForwardForMissionary && !appointment.isAcceptMissionary && appointment.accessCode =='M') || (appointment.isForwardForMissionary && !appointment.isAcceptMissionary && appointment.accessCode =='A')">
+                    <md-tooltip>Accept</md-tooltip>
+                    <i class="far fa-save"></i> Accept
+                </md-button>
+                <md-button class="cancel-btn" aria-label="Cancel" data-ng-click="backToList()">
+                    <md-tooltip>Cancel</md-tooltip>
+                    <i class="fas fa-reply"></i> Cancel
+                </md-button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/macroScheduleService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/churchServiceTimeService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/churchService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/appointmentService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/appointmentDetailController.js" asp-append-version="true"></script>
+}

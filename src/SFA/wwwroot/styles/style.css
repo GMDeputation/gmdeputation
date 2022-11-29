@@ -1,0 +1,103 @@
+﻿*, *::after, *::before {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Play', sans-serif;
+    background: url(/images/login-bg.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.body-overlay-wraper {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: linear-gradient(to bottom right, #b400ff52, #007eff8f);
+    background-image: -webkit-linear-gradient(left, #b400ff52, #007eff8f);
+    background-image: -o-linear-gradient(left, #b400ff52, #007eff8f);
+    background-image: -ms-linear-gradient(left, #b400ff52, #007eff8f);
+    background-image: -moz-linear-gradient(to bottom right, #b400ff52, #007eff8f);
+}
+
+.login-wraper {
+    display: table;
+    margin: 0 0 0 0;
+    position: absolute;
+    width: 30%;
+    height: 100%;
+    right: 0;
+    top: 0;
+    background-color: rgba(255, 255, 255, 1);
+    padding: 15px;
+    -webkit-animation-name: fadeInRight;
+    -webkit-animation-duration: 1s;
+    animation-name: fadeInRight;
+    animation-duration: 1s;
+    animation-timing-function: ease-in;
+}
+.login-wraper> * {
+    display: table-cell;
+    vertical-align: middle;
+}
+.login-grid {
+    position: relative;
+    width: 100%;
+}
+@keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        right: -430px;
+    }
+    100% {
+        opacity: 1;
+        right: 0;
+    }
+} 
+.login-grid> * {
+    text-align: center;
+}
+.logo> img {
+    width: 100%;
+    margin: 15px 0px;
+}
+.logo > h3 {
+    color: #0070b8;
+}
+.form-grid {
+    width: 85%;
+    margin: 10px auto;
+}
+.form-grid> h3 {
+    font-weight: normal;
+}
+.login-btn {
+    width: 130px;
+    height: 40px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background-image: linear-gradient(to bottom right, #1b83ef, #7628f3);
+}
+.login-btn:focus, .login-btn:active {
+    border: none;
+    box-shadow: none;
+}
+@media (min-width: 991px) and (max-width: 1200px) {
+        .login-wraper {
+        width: 40%;
+        height: 100%;
+        right: 0;
+        top: 0;
+    }
+}
+@media (min-width: 320px) and (max-width: 991px) {
+    .login-wraper {
+        width: 50%;
+    }
+}

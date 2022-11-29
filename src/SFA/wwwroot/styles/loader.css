@@ -1,0 +1,39 @@
+﻿.overlayContainer {
+    display: none;
+}
+
+.overlayBackground {
+    top: 0px;
+    left: 0px;
+    padding-left: 100px;
+    position: fixed;
+    z-index: 2000;
+    height: 100%;
+    width: 100%;
+    background-color: #808080;
+    opacity: 0.3;
+}
+
+.overlayContent {
+    position: absolute;
+    background-color: transparent;
+    font-weight: bold;
+    height: 130px;
+    width: 300px;
+    z-index: 1000;
+    text-align: center;
+}
+
+@media all and (min-width: 601px) {
+    /*nav {line-height:15px!important;}*/
+    .set-position {
+        text-align: right;
+    }
+}
+
+@media all and (max-width: 600px) {
+    /*nav {line-height:15px!important;}*/
+    .set-position {
+        text-align: center;
+    }
+}

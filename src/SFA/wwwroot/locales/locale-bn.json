@@ -1,0 +1,16 @@
+﻿{
+  "MOD_DASHBOARD": "ড্যাশবোর্ড",
+  "MOD_GLOBAL": "বিশ্বব্যাপী",
+  "MOD_LOAN": "ঋণ",
+  "MOD_ACC": "হিসাবরক্ষণ",
+  "MOD_REPORT": "প্রতিবেদন",
+  "MOD_INVENTORY": "বর্ণনামূলক তালিকা",
+  "MNU_CP": "সংগ্রহ পয়েন্ট",
+  "MNU_CP_XFER": "সংগ্রহ পয়েন্ট স্থানান্তর",
+  "MNU_LOAN_TYPES": "ঋণের ধরন",
+  "MNU_LOAN_PRDTS": "ঋণ পণ্য",
+  "MNU_LOAN_PURPS": "ঋণের উদ্দেশ্য",
+  "MNU_LOAN_SUB_PURPS": "ঋণের উপ উদ্দেশ্য",
+  "MNU_HVQ": "গৃহ পরিদর্শন প্রশ্ন",
+  "MNU_LOAN_HVQ": "ঋণের গৃহ পরিদর্শন প্রশ্ন"
+}

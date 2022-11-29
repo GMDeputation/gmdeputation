@@ -1,0 +1,135 @@
+﻿@{
+    ViewData["Title"] = (ViewBag.Id == Guid.Empty ? "Add" : "Edit") + " Macro Schedule";
+}
+<div data-ng-controller="macroScheduleDetailController">
+    <form name="form">
+        <div class="topbar">
+            <div class="md-toolbar-tools" layout="row">
+                <div class="topbar-title" flex>
+                    <h2>Details</h2>
+                    <i class="vertical-seperator" hide-sm hide-xs>&nbsp;</i>
+                    <span hide-sm hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / <a href="/macroSchedule">Macro Schedules</a> / Details</span>
+                </div>
+                <div flex="none">
+                    <md-button class="add-btn" aria-label="Back to List" data-ng-click="backToList()">
+                        <md-tooltip>Back to List</md-tooltip>
+                        <i class="ti-angle-double-left"></i>
+                    </md-button>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div layout="row" layout-sm="column" layout-xs="column">
+                <md-input-container class="md-block" flex="none">
+                    <label>Entry Date</label>
+                    <md-datepicker name="entryDate" ng-model="macroSchedule.entryDate" md-placeholder="Date of Entry" required></md-datepicker>
+                    <div ng-messages="form.entryDate.$error" md-auto-hide="false">
+                        <div ng-message="required">Entry Date is required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Description</label>
+                    <input ng-model="macroSchedule.description" maxlength="100">
+                </md-input-container>
+                <md-input-container class="md-block" flex="none">
+                    <md-checkbox ng-model="macroSchedule.isActive" id="active" aria-label="active">
+                        Active ?
+                    </md-checkbox>
+                </md-input-container>
+            </div>
+        </div>
+        <md-table-container flex>
+            <table md-table md-progress="promise" flex>
+                <thead md-head>
+                    <tr md-row>
+                        <th md-column class="center"><span>Sl. No</span></th>
+                        <th md-column class="center"><span>District</span></th>
+                        <th md-column class="center"><span>Missionaries User</span></th>
+                        <th md-column class="center"><span>Start Date</span></th>
+                        <th md-column class="center"><span>End Date</span></th>
+                        <th md-column class="center"><span>Notes</span></th>
+                        <th md-column class="center"><span class="pad-l-8">Actions</span></th>
+                    </tr>
+                </thead>
+                <tbody md-body>
+                    <tr md-row ng-repeat="detail in macroSchedule.macroScheduleDetails track by $index">
+                        <td md-cell class="center">{{$index + 1}}</td>
+                        <td md-cell class="center">
+                            <md-autocomplete flex class="padding-wrap"
+                                             md-no-cache="true"
+                                             md-selected-item="detail.district"
+                                             md-selected-item-change="selectedDistrictName(detail.district,$index)"
+                                             md-search-text="districtSearch"
+                                             md-items="district in searchDistrict(districtSearch)"
+                                             md-item-text="district.name"
+                                             md-min-length="0"
+                                             md-floating-label="District Name" required>
+                                <md-item-template>
+                                    <span md-highlight-text="districtSearch" md-highlight-flags="gi">{{district.name}}</span>
+                                </md-item-template>
+                                <md-not-found>
+                                    No Data Found .
+                                </md-not-found>
+                            </md-autocomplete>
+                        </td>
+                        <td md-cell>
+                            <md-input-container class="md-block" flex>
+                                <md-select name="user" ng-model="detail.userId" required>
+                                    <md-option ng-repeat="user in users" ng-value="user.id">{{user.name}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        </td>
+                        <td md-cell>
+                            <md-input-container class="md-block" flex="none">
+                                <label>Start Date</label>
+                                <md-datepicker name="" ng-model="detail.startDate" md-placeholder="Date of Start" md-min-date="minDate" required></md-datepicker>
+                            </md-input-container>
+                        </td>
+                        <td md-cell class="center">
+                            <md-input-container class="md-block" flex="none">
+                                <label>End Date</label>
+                                <md-datepicker name="" ng-model="detail.endDate" md-placeholder="Date of End" md-min-date="detail.startDate" required></md-datepicker>
+                            </md-input-container>
+                        </td>
+                        <td md-cell class="center">
+                            <md-input-container class="md-block" flex="none">
+                                <label>Notes</label>
+                                <input ng-model="detail.notes" maxlength="100">
+                            </md-input-container>
+                        </td>
+                        <td md-cell class="center">
+                            <md-button class="md-icon-button delete-btn" ng-click="deleteRow($index)" ng-if="macroSchedule.macroScheduleDetails.length>1"><i class="ti-trash"></i></md-button>
+                        </td>
+                    </tr>
+                    <tr md-row>
+                        <td md-cell class="center" colspan="7">
+                            <md-button class="add-btn" aria-label="Add" data-ng-click="addNewRow()" style="text-align:right;">
+                                <md-tooltip>Add New Row</md-tooltip>
+                                <i class="ti-plus"></i>Add New Row
+                            </md-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+        <div class="container">
+            <div layout="row" layout-align="center center">
+                <md-button class="save-btn" aria-label="Save" data-ng-click="save()" data-ng-disabled="form.$invalid || isDisabled">
+                    <md-tooltip>Save</md-tooltip>
+                    <i class="far fa-save"></i> Save
+                </md-button>
+                <md-button class="cancel-btn" aria-label="Cancel" data-ng-click="backToList()">
+                    <md-tooltip>Cancel</md-tooltip>
+                    <i class="fas fa-reply"></i> Cancel
+                </md-button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/userService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/districtService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/macroScheduleService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/macroScheduleDetailController.js" asp-append-version="true"></script>
+}

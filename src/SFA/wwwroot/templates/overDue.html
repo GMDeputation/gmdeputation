@@ -1,0 +1,249 @@
+﻿<div ng-init="popoulateOverdue()" ng-if="accessCode === 'A' || accessCode === 'C' || accessCode === 'B'">
+    <table class="dashboard-table">
+        <thead>
+            <tr>
+                <th colspan="8" style="text-align:center;color: #000;font-size: 1.5em;background-color: white;">Overdue</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Branch Name</th>
+                <th>No of LO's</th>
+                <th>No of OD</th>
+                <th>OD Pri</th>
+                <th>OD Int</th>
+                <th>Total OD</th>
+                <th>Outstanding</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat-start="branch in branches track by $index" ng-click="popoulateOverdueByBranch(branch.branchId, branch.expanded)">
+                <td>
+                    <button class="drill-btn" ng-click="collapseBranchAll($index)">
+                        <span ng-bind="branch.expanded ? '-' : '+'"></span>
+                    </button>
+                </td>
+                <td>{{branch.branchName}}</td>
+                <td style="text-align:center;">{{branch.loCount}}</td>
+                <td style="text-align:center;">{{branch.odCount}}</td>
+                <td style="text-align:right;">{{branch.overduePrincipal}}</td>
+                <td style="text-align:right;">{{branch.overdueInterest}}</td>
+                <td style="text-align:right;">{{branch.overduePrincipal + branch.overdueInterest}}</td>
+                <td style="text-align:right;">{{branch.outstanding}}</td>
+            </tr>
+            <tr ng-repeat-end ng-show="branch.expanded">
+                <td></td>
+                <td colspan="7">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th style="width:25%;">LO Name</th>
+                                <th>No of CP</th>
+                                <th>No of OD</th>
+                                <th>OD Pri</th>
+                                <th>OD Int</th>
+                                <th>Total OD</th>
+                                <th>Outstanding</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat-start="loanOfficer in loanOfficers track by $index" ng-click="popoulateOverdueByLO(loanOfficer.loId, loanOfficer.expanded)">
+                                <td style="width:2%;">
+                                    <button class="drill-btn" ng-click="collapseLoanOfficerAll($index)">
+                                        <span ng-bind="loanOfficer.expanded ? '-' : '+'"></span>
+                                    </button>
+                                </td>
+                                <td style="width:25%;">{{loanOfficer.loName}}({{loanOfficer.loCode}})</td>
+                                <td style="text-align:center;">{{loanOfficer.cpCount}}</td>
+                                <td style="text-align:center;">{{loanOfficer.odCount}}</td>
+                                <td style="text-align:right;">{{loanOfficer.overduePrincipal}}</td>
+                                <td style="text-align:right;">{{loanOfficer.overdueInterest}}</td>
+                                <td style="text-align:right;">{{loanOfficer.overduePrincipal + loanOfficer.overdueInterest}}</td>
+                                <td style="text-align:right;">{{loanOfficer.outstanding}}</td>
+                            </tr>
+                            <tr ng-repeat-end ng-show="loanOfficer.expanded">
+                                <td></td>
+                                <td colspan="7">
+                                    <table class="dashboard-table-3rd">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th style="width:15%;">CP Name</th>
+                                                <th>No of OD</th>
+                                                <th>OD Pri</th>
+                                                <th>OD Int</th>
+                                                <th>Total OD</th>
+                                                <th>Outstanding</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat-start="cp in collectionPoints track by $index" ng-click="popoulateOverdueByCP(cp.cpId, cp.expanded)">
+                                                <td style="width:2%;">
+                                                    <button class="drill-btn" ng-click="collapseCpAll($index)">
+                                                        <span ng-bind="cp.expanded ? '-' : '+'"></span>
+                                                    </button>
+                                                </td>
+                                                <td style="width:15%;">{{cp.cpName}}</td>
+                                                <td style="text-align:center;">{{cp.odCount}}</td>
+                                                <td style="text-align:right;">{{cp.overduePrincipal}}</td>
+                                                <td style="text-align:right;">{{cp.overdueInterest}}</td>
+                                                <td style="text-align:right;">{{cp.overduePrincipal + cp.overdueInterest}}</td>
+                                                <td style="text-align:right;">{{cp.outstanding}}</td>
+                                            </tr>
+                                            <tr ng-repeat-end ng-show="cp.expanded">
+                                                <td></td>
+                                                <td colspan="6">
+                                                    <table class="dashboard-table-4th">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="15%">Borrower Name</th>
+                                                                <th>Loan Bond No</th>
+                                                                <th>Loan Date</th>
+                                                                <th>Loan Product</th>
+                                                                <th>Loan Amount</th>
+                                                                <th>NEFT Amount</th>
+                                                                <th>Principal Collected</th>
+                                                                <th>Interest Collected</th>
+                                                                <th>OD Pri</th>
+                                                                <th>OD Int</th>
+                                                                <th>Total Od</th>
+                                                                <th>Outstanding</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr ng-repeat="member in members track by $index">
+                                                                <td width="15%">{{member.borrowerName}}</td>
+                                                                <td>{{member.loanBondNo}}</td>
+                                                                <td>{{member.loanDate | date:'dd-MMM-yyyy'}}</td>
+                                                                <td>{{member.loanProductName}}</td>
+                                                                <td style="text-align:right;">{{member.loanAmount}}</td>
+                                                                <td style="text-align:right;">{{member.disburseAmount}}</td>
+                                                                <td style="text-align:right;">{{member.priCollection}}</td>
+                                                                <td style="text-align:right;">{{member.intCollection}}</td>
+                                                                <td style="text-align:right;">{{member.overduePrincipal}}</td>
+                                                                <td style="text-align:right;">{{member.overdueInterest}}</td>
+                                                                <td style="text-align:right;">{{member.overduePrincipal + member.overdueInterest}}</td>
+                                                                <td style="text-align:right;">{{member.outstanding}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div ng-init="popoulateOverdueByBranch(null, true)" ng-if="accessCode === 'I'">
+    <table class="dashboard-table">
+        <thead>
+            <tr>
+                <th colspan="8" style="text-align:center;color: #000;font-size: 1.5em;background-color: white;">Overdue</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th style="width:25%;">LO Name</th>
+                <th>No of CP</th>
+                <th>No of OD</th>
+                <th>OD Pri</th>
+                <th>OD Int</th>
+                <th>Total OD</th>
+                <th>Outstanding</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat-start="loanOfficer in loanOfficers track by $index" ng-click="popoulateOverdueByLO(loanOfficer.loId, loanOfficer.expanded)">
+                <td style="width:2%;">
+                    <button class="drill-btn" ng-click="collapseLoanOfficerAll($index)">
+                        <span ng-bind="loanOfficer.expanded ? '-' : '+'"></span>
+                    </button>
+                </td>
+                <td style="width:25%;">{{loanOfficer.loName}}({{loanOfficer.loCode}})</td>
+                <td style="text-align:center;">{{loanOfficer.cpCount}}</td>
+                <td style="text-align:center;">{{loanOfficer.odCount}}</td>
+                <td style="text-align:right;">{{loanOfficer.overduePrincipal}}</td>
+                <td style="text-align:right;">{{loanOfficer.overdueInterest}}</td>
+                <td style="text-align:right;">{{loanOfficer.overduePrincipal + loanOfficer.overdueInterest}}</td>
+                <td style="text-align:right;">{{loanOfficer.outstanding}}</td>
+            </tr>
+            <tr ng-repeat-end ng-show="loanOfficer.expanded">
+                <td></td>
+                <td colspan="7">
+                    <table class="dashboard-table-3rd">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th style="width:15%;">CP Name</th>
+                                <th>No of OD</th>
+                                <th>OD Pri</th>
+                                <th>OD Int</th>
+                                <th>Total OD</th>
+                                <th>Outstanding</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat-start="cp in collectionPoints track by $index" ng-click="popoulateOverdueByCP(cp.cpId, cp.expanded)">
+                                <td style="width:2%;">
+                                    <button class="drill-btn" ng-click="collapseCpAll($index)">
+                                        <span ng-bind="cp.expanded ? '-' : '+'"></span>
+                                    </button>
+                                </td>
+                                <td style="width:15%;">{{cp.cpName}}</td>
+                                <td style="text-align:center;">{{cp.odCount}}</td>
+                                <td style="text-align:right;">{{cp.overduePrincipal}}</td>
+                                <td style="text-align:right;">{{cp.overdueInterest}}</td>
+                                <td style="text-align:right;">{{cp.overduePrincipal + cp.overdueInterest}}</td>
+                                <td style="text-align:right;">{{cp.outstanding}}</td>
+                            </tr>
+                            <tr ng-repeat-end ng-show="cp.expanded">
+                                <td></td>
+                                <td colspan="6">
+                                    <table class="dashboard-table-4th">
+                                        <thead>
+                                            <tr>
+                                                <th width="15%">Borrower Name</th>
+                                                <th>Loan Bond No</th>
+                                                <th>Loan Date</th>
+                                                <th>Loan Product</th>
+                                                <th>Loan Amount</th>
+                                                <th>NEFT Amount</th>
+                                                <th>Principal Collected</th>
+                                                <th>Interest Collected</th>
+                                                <th>OD Pri</th>
+                                                <th>OD Int</th>
+                                                <th>Total Od</th>
+                                                <th>Outstanding</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="member in members track by $index">
+                                                <td width="15%">{{member.borrowerName}}</td>
+                                                <td>{{member.loanBondNo}}</td>
+                                                <td>{{member.loanDate | date:'dd-MMM-yyyy'}}</td>
+                                                <td>{{member.loanProductName}}</td>
+                                                <td style="text-align:right;">{{member.loanAmount}}</td>
+                                                <td style="text-align:right;">{{member.disburseAmount}}</td>
+                                                <td style="text-align:right;">{{member.priCollection}}</td>
+                                                <td style="text-align:right;">{{member.intCollection}}</td>
+                                                <td style="text-align:right;">{{member.overduePrincipal}}</td>
+                                                <td style="text-align:right;">{{member.overdueInterest}}</td>
+                                                <td style="text-align:right;">{{member.overduePrincipal + member.overdueInterest}}</td>
+                                                <td style="text-align:right;">{{member.outstanding}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

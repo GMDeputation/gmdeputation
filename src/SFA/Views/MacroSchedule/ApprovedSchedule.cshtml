@@ -1,0 +1,102 @@
+﻿@{
+    ViewData["Title"] = "List of Approved Macro Schedules";
+}
+<div data-ng-controller="approvedMacroSchedulesController">
+    <div class="topbar">
+        <div class="md-toolbar-tools" layout="row">
+            <div class="topbar-title" flex>
+                <h2>List of Approved Macro Schedules</h2>
+                <i class="vertical-seperator" hide-xs>&nbsp;</i>
+                <span hide-xs><a href="/home">Home</a> / <a href="/appointments"> Appointments</a> / Approved Macro Schedules</span>
+            </div>
+            <div flex="none">
+                <md-button class="filter-btn" ng-click="filter()">
+                    <md-tooltip>Search</md-tooltip>
+                    <i class="ti-filter"></i> <span hide-xs>Filter</span>
+                </md-button>
+                <md-button class="add-btn" aria-label="Back to Appointments" ng-click="back()">
+                    <md-tooltip>Back to Appointments</md-tooltip>
+                    <i class="ti-angle-double-left"></i> Back to Appointments
+                </md-button>
+            </div>
+        </div>
+    </div>
+
+    <!--//End Topbar section-->
+    <!--Filter Section-->
+    <div class="filter-grid" data-ng-show="showFilter">
+        <div layout="row" layout-xs="column">
+            <div class="filter-title" flex="none">
+                <i class="ti-filter"></i> <span>Filter By</span>
+            </div>
+            <div flex>
+                <md-input-container class="md-block">
+                    <label>Search</label>
+                    <input data-ng-model="query.filter" placeholder="Search By Macro Schedule Description Or District Name Or Missionaries User" data-ng-model-options="filter.options">
+                </md-input-container>
+            </div>
+            <div flex="none">
+                <md-input-container class="md-block" flex>
+                    <label>From Date</label>
+                    <md-datepicker ng-model="query.fromDate" md-placeholder="From Date"></md-datepicker>
+                </md-input-container>
+            </div>
+            <div flex="none">
+                <md-input-container class="md-block" flex="none">
+                    <label>To Date</label>
+                    <md-datepicker ng-model="query.toDate" md-placeholder="To Date"></md-datepicker>
+                </md-input-container>
+            </div>
+            <div flex="none">
+                <md-button class="close-btn" ng-click="close()" ng-disabled="selected.length>0">
+                    <md-tooltip>Close</md-tooltip>
+                    <i class="ti-close"></i> Close
+                </md-button>
+            </div>
+        </div>
+    </div>
+    <!--//End Filter Section-->
+    <md-table-container>
+        <table md-table md-progress="promise">
+            <thead md-head>
+                <tr md-row>
+                    <th md-column class="center">Sl No</th>
+                    <th md-column><span class="pad-l-8">Schedule Description</span></th>
+                    <th md-column><span class="pad-l-8">District</span></th>
+                    <th md-column><span class="pad-l-8">Missionaries User</span></th>
+                    <th md-column><span class="pad-l-8">Start Date</span></th>
+                    <th md-column><span class="pad-l-8">End Date</span></th>
+                    <th md-column class="center" style="width:160px;"><span class="pad-l-8">Actions</span></th>
+                </tr>
+            </thead>
+            <tbody md-body>
+                <tr class="md-row md-row-empty" ng-show="macroSchedules.length === 0">
+                    <td class="md-cell" colspan="7">No Data Found</td>
+                </tr>
+                <tr md-row data-ng-repeat="macroSchedule in macroSchedules track by $index">
+                    <td md-cell class="center">{{$index+1}}</td>
+                    <td md-cell class="pad-l-8">{{macroSchedule.macroScheduleDesc}}</td>
+                    <td md-cell class="pad-l-8">{{macroSchedule.districtName}}</td>
+                    <td md-cell class="pad-l-8">{{macroSchedule.userName}}</td>
+                    <td md-cell class="pad-l-8">{{macroSchedule.startDate | date:'dd/MM/yyyy'}}</td>
+                    <td md-cell class="pad-l-8">{{macroSchedule.endDate | date:'dd/MM/yyyy'}}</td>
+                    <td md-cell class="center">
+                        <md-button class="md-button edit-btn" ng-click="detail(macroSchedule.id)" ng-if="!macroSchedule.isDateOver">
+                            <md-tooltip>Create Appointment</md-tooltip>
+                            <i class="ti-marker-alt">Appointment</i>
+                        </md-button>
+                        <md-button class="cancel-btn" ng-if="macroSchedule.isDateOver">
+                            <md-tooltip>Experied</md-tooltip>
+                            <i class="ti-cancel">Experied</i>
+                        </md-button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+    @*<md-table-pagination md-limit="query.limit" md-limit-options="[20, 50, 100]" md-page="query.page" md-total="{{count}}" md-on-paginate="search" md-page-select></md-table-pagination>*@
+</div>
+@section Scripts{
+    <script src="~/scripts/services/macroScheduleService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/approvedMacroSchedulesController.js" asp-append-version="true"></script>
+}

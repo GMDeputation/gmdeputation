@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Edit";
+}
+
+<div data-ng-controller="countryEditController">
+    <form name="form">
+        <div class="topbar">
+            <div class="md-toolbar-tools" layout="row">
+                <div class="topbar-title" flex>
+                    <h2>Edit Country</h2>
+                    <i class="vertical-seperator" hide-xs>&nbsp;</i>
+                    <span hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / <a href="/countries">Countries</a> / Edit</span>
+                </div>
+                <div flex="none">
+                    <md-button class="add-btn" aria-label="Back to List" data-ng-click="backToList()">
+                        <md-tooltip>Back to List</md-tooltip>
+                        <i class="ti-angle-double-left"></i> Back to List
+                    </md-button>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div layout="row" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <label>Country Name</label>
+                    <input ng-model="country.name" required>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Id</label>
+                    <input ng-model="country.code" ng-maxlength="5" readonly required>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Country Name (In French)</label>
+                    <input ng-model="country.frenchName">
+                </md-input-container>
+            </div>
+            <div layout="row" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <label>Country Alpha 2 Code</label>
+                    <input ng-model="country.alpha2Code">
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Country Alpha 3 Code</label>
+                    <input ng-model="country.alpha3Code">
+                </md-input-container>
+            </div>
+            <div layout="row" layout-align="center center">
+                <md-button class="save-btn" aria-label="Save" data-ng-click="save()" data-ng-disabled="form.$invalid">
+                    <md-tooltip>Save</md-tooltip>
+                    <i class="far fa-save"></i> Save
+                </md-button>
+                <md-button class="cancel-btn" aria-label="Cancel" data-ng-click="backToList()">
+                    <md-tooltip>Cancel</md-tooltip>
+                    <i class="fas fa-reply"></i> Cancel
+                </md-button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/countryService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/countryEditController.js" asp-append-version="true"></script>
+}

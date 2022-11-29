@@ -1,0 +1,33 @@
+﻿<div ng-init="popoulateBranch()">
+    <table class="dashboard-table-4th">
+        <thead>
+            <tr>
+                <th colspan="9" style="text-align:center;color: #000;font-size: 1.5em;background-color: white;">Branches</th>
+            </tr>
+            <tr class="center" style="text-align:center;">
+                <th>Branch Code</th>
+                <th>Branch Name</th>
+                <th>Opening Date</th>
+                <th>No.Of Emp.</th>
+                <th>BM Name</th>
+                <th>Email Id</th>
+                <th>Phone No</th>
+                <th>Dist. Name</th>
+                <th>State</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-ng-repeat="branch in branches track by $index">               
+                <td style="text-align:center;">{{branch.code}}</td>
+                <td >{{branch.name}}</td>
+                <td>{{branch.dateOfOpening | date:'dd-MMM-yyyy'}}</td>
+                <td style="text-align:center;">{{branch.totalEmployee}}</td>
+                <td>{{branch.branchManagerName}}</td>
+                <td>{{branch.email}}</td>
+                <td>{{branch.mobile}}</td>
+                <td>{{branch.districName}}</td>
+                <td>{{branch.stateName}}</td>
+            </tr>            
+        </tbody>
+    </table>
+</div>

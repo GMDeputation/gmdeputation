@@ -1,0 +1,1016 @@
+﻿@using SFA.Extensions;
+@using SFA.Models;
+@{
+    var loggedinUser = Context.Session.Get<User>("SESSIONSFAUSER");
+    var accessMenus = loggedinUser.Permissions.ToList();
+    var displayGroups = accessMenus.Select(m => m.MenuGroupId).Distinct().ToList();
+    var accessGroups = loggedinUser.Groups.Where(m => displayGroups.Contains(m.GroupId)).GroupBy(n => n.DefaultCategory)
+                   .Select(g => g.First()).OrderBy(m => m.Sequence).ThenBy(m => m.Category).ToList();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @*<link rel="icon" href="~/images/favicon.ico" type="image/png" sizes="16x16">*@
+    <title>@ViewBag.Title</title>
+    <link href="~/styles/fonts/play/play.css" rel="stylesheet">
+    <link href="~/styles/fonts/Cuprum/cuprum.css" rel="stylesheet">
+    <link href="~/styles/fonts/Lexend/lexend.css" rel="stylesheet">
+    <link href="~/styles/fonts/Livvic/livvic.css" rel="stylesheet">
+    <link href="~/styles/fonts/Lora/lora.css" rel="stylesheet">
+    <link href="~/styles/fonts/Roboto/roboto.css" rel="stylesheet">
+    <environment names="Development">
+        <link rel="stylesheet" href="~/libs/dhtmlxscheduler.css" />
+        <link rel="stylesheet" href="~/libs/fontawesome-all.css" />
+        <link href="~/styles/themify-icons.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/libs/angular-material.css" />
+        <link rel="stylesheet" href="~/libs/angular.treeview.css" />
+        <link rel="stylesheet" href="~/libs/md-data-table.css" />
+        @*<link rel="stylesheet" href="~/css/admin/loader.css" asp-append-version="true" />*@
+        <link href="~/libs/md-time-picker.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/libs/lf-ng-md-file-input.css" />
+        <link rel="stylesheet" href="~/styles/loader.css" />
+        <link rel="stylesheet" href="~/styles/site.css" asp-append-version="true" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/libs/dhtmlxscheduler.css" />
+        <link rel="stylesheet" href="~/libs/fontawesome-all.min.css" />
+        <link href="~/styles/themify-icons.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/libs/angular-material.min.css" />
+        <link rel="stylesheet" href="~/libs/angular.treeview.css" />
+        <link rel="stylesheet" href="~/libs/md-data-table.min.css" />
+        <link href="~/libs/md-time-picker.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/libs/lf-ng-md-file-input.css" />
+        <link rel="stylesheet" href="~/styles/loader.css" />
+        
+        @*<link rel="stylesheet" href="~/css/admin/loader.css" asp-append-version="true" />*@
+        <link rel="stylesheet" href="~/styles/site.css" asp-append-version="true" />
+    </environment>
+    <style>
+        table.dashboard-table {
+            border-spacing: 0 3px;
+            width: 100%;
+        }
+
+            table.dashboard-table > tbody > tr {
+                width: 100%;
+            }
+
+                table.dashboard-table > tbody > tr:nth-child(4n+1) {
+                    background-image: linear-gradient(to right, #d0d0d0, #e0e0e0) !important;
+                }
+
+                table.dashboard-table > tbody > tr:nth-child(2n) {
+                    background: #fff !important;
+                }
+
+
+
+            /*table.dashboard-table > tbody > tr:nth-child(2n+1) {
+                    background: #fff;
+                }*/
+
+            table.dashboard-table > thead > tr {
+                background: #0582eb;
+            }
+
+                table.dashboard-table > thead > tr > th {
+                    padding: 10px 5px;
+                    border-spacing: 0;
+                    text-align: left;
+                    color: #fff;
+                    text-align: center;
+                    /*border-left: 1px solid #fff;*/
+                }
+
+            table.dashboard-table > tbody > tr > td {
+                padding: 10px 5px;
+                border-spacing: 0;
+                color: #4E4E4E;
+                /*border-left: 1px solid #fff;*/
+            }
+
+                table.dashboard-table > tbody > tr > td:first-child {
+                    width: 2%;
+                    border-bottom-left-radius: 4px;
+                    border-top-left-radius: 4px;
+                }
+
+                table.dashboard-table > tbody > tr > td:last-child {
+                    border-bottom-right-radius: 4px;
+                    border-top-right-radius: 4px;
+                }
+                /*--2nd Level--*/
+                table.dashboard-table > tbody > tr > td > table {
+                    width: 100%;
+                    border-spacing: 0 3px;
+                }
+
+                    table.dashboard-table > tbody > tr > td > table > tbody > tr {
+                        width: 100%;
+                    }
+
+                        table.dashboard-table > tbody > tr > td > table > tbody > tr:nth-child(4n+1) {
+                            background-image: linear-gradient(to right, #d0d0d0, #e0e0e0);
+                        }
+
+                        table.dashboard-table > tbody > tr > td > table > tbody > tr:nth-child(2n) {
+                            background-image: linear-gradient(to right, #fff, #fff);
+                        }
+
+                    table.dashboard-table > tbody > tr > td > table > thead > tr {
+                        background: #0582eb;
+                    }
+
+                        table.dashboard-table > tbody > tr > td > table > thead > tr > th {
+                            padding: 10px 5px;
+                            border-spacing: 0;
+                            text-align: center;
+                            color: #fff;
+                            /*border-left: 1px solid #fff;*/
+                        }
+
+                    table.dashboard-table > tbody > tr > td > table > tbody > tr:nth-child(even) {
+                        background: #fff;
+                    }
+
+                    table.dashboard-table > tbody > tr > td > table > tbody > tr > td {
+                        padding: 10px 5px;
+                        border-spacing: 0;
+                        color: #4E4E4E;
+                        /*border-left: 1px solid #fff;*/
+                    }
+
+                        table.dashboard-table > tbody > tr > td > table > tbody > tr > td:first-child {
+                            width: 2%;
+                            border-bottom-left-radius: 4px;
+                            border-top-left-radius: 4px;
+                        }
+
+                        table.dashboard-table > tbody > tr > td > table > tbody > tr > td:last-child {
+                            border-bottom-right-radius: 4px;
+                            border-top-right-radius: 4px;
+                        }
+                        /*--3rd Level--*/
+                        table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table {
+                            width: 100%;
+                            border-spacing: 0 3px;
+                        }
+
+                            table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr {
+                                width: 100%;
+                            }
+
+                            table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table > thead > tr {
+                                background: #0582eb;
+                            }
+
+                                table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table > thead > tr > th {
+                                    padding: 10px 5px;
+                                    border-spacing: 0;
+                                    color: #FFF;
+                                    text-align: center;
+                                    /*border-left: 1px solid #fff;*/
+                                }
+
+                            /*table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(2n) {
+                                background: #fff;
+                            }
+
+                            table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(n+1) {
+                                background-image: linear-gradient(to right, #d0d0d0, #e0e0e0);
+                            }*/
+
+                            table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td {
+                                padding: 10px 5px;
+                                border-spacing: 0;
+                                color: #4E4E4E;
+                                /*border-left: 1px solid #fff;*/
+                            }
+
+                                table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td:first-child {
+                                    width: 2%;
+                                    border-bottom-left-radius: 4px;
+                                    border-top-left-radius: 4px;
+                                }
+
+                                table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td:last-child {
+                                    border-bottom-right-radius: 4px;
+                                    border-top-right-radius: 4px;
+                                }
+
+                            table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table.dashboard-table-3rd > tbody > tr:nth-child(2n) {
+                                background: #fff !important;
+                            }
+
+                            table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table.dashboard-table-3rd > tbody > tr:nth-child(4n+1) {
+                                background-image: linear-gradient(to right, #d0d0d0, #e0e0e0) !important;
+                            }
+
+        table.dashboard-table-4th {
+            border-spacing: 0 3px;
+            width: 100%;
+        }
+
+            table.dashboard-table-4th > thead > tr {
+                background: #0582eb;
+            }
+
+                table.dashboard-table-4th > thead > tr > th {
+                    padding: 10px 5px;
+                    border-spacing: 0;
+                    text-align: left;
+                    color: #fff;
+                    text-align: center;
+                    /*border-left: 1px solid #fff;*/
+                }
+
+            table.dashboard-table-4th > tbody > tr > td {
+                padding: 10px 5px;
+                border-spacing: 0;
+                color: #4E4E4E;
+                /*border-left: 1px solid #fff;*/
+            }
+
+            table.dashboard-table-4th > tbody > tr:nth-child(n+1) {
+                background-image: linear-gradient(to right, #d0d0d0, #e0e0e0) !important;
+            }
+
+            table.dashboard-table-4th > tbody > tr:nth-child(2n) {
+                background: #fff !important;
+            }
+
+        table.md-table > tbody > tr:nth-child(even) {
+            background-color: #e8f0f3;
+        }
+
+        table.md-table > tbody > tr:nth-child(odd) {
+            background-color: white;
+        }
+    </style>
+    @RenderSection("Styles", required: false)
+</head>
+<body data-ng-app="app" data-ng-cloak>
+    <section id="page-wraper" layout="column" flex data-ng-controller="navController" style=@(accessGroups.Count() > 0 ?  "padding-left:70px;" : "padding-left:0px;")>
+        <!--Side Navigation-->
+        <div id="sidebar-wraper" style="margin-left: -150px;left: -30px;" ng-show="@accessGroups.Count() > 0">
+            <div layout="row">
+                <div class="side-bar-top">
+                    @*<img src="~/images/vijay.png" alt="Alternate Text" />*@
+                    @*<h3 style="color:blueviolet">SFA</h3>*@
+                    <button class="toggler-btn" onclick="main_menu_open()"><span class="ti-menu"></span></button>
+                </div>
+            </div>
+            <div layout="row">
+                <ul class="side-nav-list">
+                    @foreach (var accessGroup in accessGroups)
+                    {
+                        <li data-ng-click="navigateTo('@accessGroup.Category')">
+                            <md-tooltip>@accessGroup.Category</md-tooltip>
+                            <span>@accessGroup.Category</span>
+                            <i class="@(accessGroup.Icon)"></i>
+                        </li>
+                        <md-divider></md-divider>
+                    }
+                </ul>
+            </div>
+        </div>
+        <!--//Side Navigation-->
+        <div id="content-wraper">
+            <div id="page-content">
+                <div layout="row" id="topBarNav" class="toppanel" layout-md="column" style=@(accessGroups.Count() > 0 ?  "width:calc(100%-70px);" : "width:100%;")>
+
+                    @*@if (loggedinUser.Permissions.Count > 0)
+                        {
+                            <div flex="3" style="border-right: 1px solid #6C6C6C;text-align:center;">
+                                <md-button class="md-icon-button" aria-label="Open Menu" data-ng-click="openSideNavPanel()" style="color:lightgray; height:64px !important;">
+                                    <md-tooltip>Open Menu</md-tooltip>
+                                    <i class="fas fa-list"></i>
+                                </md-button>
+                            </div>
+                        }*@
+
+
+                    @*<div style="font-size:14px;line-height:24px;"><span class="orange">Welcome</span> @(loggedinUser.UserName) @(loggedinUser.Permissions.Count > 0 ? "(" + loggedinUser.RoleName + ")" : "") </div>
+                        @if (loggedinUser.Permissions.Count > 0)
+                        {
+                            <div style="font-size:14px;">Working Date: <strong>@(loggedinUser.WorkingDate.ToString("dd-MM-yyyy"))</strong> | Working Branch: <strong>@(loggedinUser.BranchName)</strong> &nbsp;&nbsp;&nbsp;<a asp-action="Index" asp-controller="Selection">Change</a></div>
+                        }
+                                <div data-ng-controller="navController"><span class="byeline">Today: {{ clock | date:'dd-MM-yyyy'}} {{ clock | date:'hh:mm:ss a'}}</span></div>*@
+                                       
+                    <div flex layout-align="center end">
+                        <div class="info-panel">
+                            @*<div class="powerd-info">
+                                <a href="http://www.qbent.in" target="_blank">
+                                    <img src="~/images/qb_logo.png" title="Powered By Qbent Technology" alt="Qbent Technology" />
+                                </a>
+                            </div>
+                            <span flex="1" class="vertical-seperator">&nbsp;</span>*@
+                            @*<div class="notification" aria-label="Open Notification" ng-if="@accessGroups.Count() > 0">
+                                <div class="badge" ng-show="count>0">
+                                    <span>{{count}}</span>
+                                </div>
+                                <md-button class="md-icon-button">
+                                    <i class="ti-bell"></i>
+                                </md-button>
+                            </div>*@
+                            @*<div class="notification-wrapper" ng-if="@accessGroups.Count() > 0">
+                                <div class="notification-list">
+                                    <div ng-show="count==0">
+                                        No Notification Found
+                                    </div>
+                                    <ol ng-if="count>0">
+                                        <li data-ng-repeat="notification in notifications track by $index">
+                                            <a data-ng-click="openNotification(notification.id,notification.eventUrl)" href="javascript:void(0)">{{notification.description}}</a>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <span flex="1" class="vertical-seperator" ng-if="@accessGroups.Count() > 0">&nbsp;</span>*@
+                            <div class="user-info" aria-label="Open Menu" data-ng-click="showUserMenu($event)">
+                                <img src="~/images/user-male.png" width="40" height="40" />
+                                <div class="user-information" hide-xs>
+                                    <p>@(loggedinUser.Email)</p>
+                                    <small>@(loggedinUser.RoleName)</small>
+                                </div>
+                            </div>
+                            @*<span flex="1" class="vertical-seperator">&nbsp;</span>
+                            <div class="work-info" aria-label="Open Menu" data-ng-click="navigateTo('/selection')">
+                                <p>
+                                    <i class="ti-home"></i>
+                                    <span hide-xs>@(loggedinUser.BranchName != null ? loggedinUser.BranchName : "Branch Name")</span>
+                                </p>
+                                <p>
+                                    <i class="ti-calendar"></i>
+                                    <span hide-xs>@(loggedinUser.WorkingDate.ToString("dd-MM-yyyy"))</span>
+                                </p>
+                            </div>*@
+                        </div>
+                        @*<md-button class="md-icon-button notification-badge" aria-label="Open Menu" data-ng-click="navigateTo('/selection')" style="width:inherit;">
+                                <md-tooltip>Change Branch &amp; Date</md-tooltip>
+                                <i class="far fa-edit"></i>
+                            </md-button>
+                            <span flex="1" class="vertical-seperator">&nbsp;</span>
+                            <md-button class="md-icon-button notification-badge" data-ng-class="{'no-after':notifyCount<=0}" data-badge="{{notifyCount}}" aria-label="Open Menu" data-ng-click="openSideNavPanel()" style="width:inherit;">
+                                <md-tooltip>Notifications</md-tooltip>
+                                <i class="far fa-bell"></i>
+                            </md-button>
+                            <md-button class="md-icon-button" aria-label="Open Menu" data-ng-click="openSideNavPanel()" style="width:inherit;">
+                                <md-tooltip>Settings</md-tooltip>
+                                <i class="fas fa-cogs"></i>
+                            </md-button>*@
+
+
+                        @*<span style="vertical-align:top;">@(loggedinUser.UserName)</span> <br /> <span style="color:yellow;">[@(loggedinUser.RoleName)]</span>*@
+                    </div>
+                    @*<span flex="1" class="vertical-seperator">&nbsp;</span>*@
+                    @*<div flex="10" style="margin-left:20px;"><md-button class="md-raised md-warn" style="margin-top:12px !important;" onclick="location.href='@Url.Action("Index", "Logout")'"><i class="fa fa-sign-out"></i>Logout</md-button></div>*@
+                </div>
+                <div class="mainpanel">
+                    @RenderBody()
+                </div>
+                <!--Footer-->
+                <div style="background-color: #2c3e50;padding:12px;color:#ffffff;text-align:center;font-size:.8em; min-height: 40px;">
+                    @*<div>© Copyright Dar Credit & Capital Ltd. 2018 - @DateTime.Now.Year.ToString() | Powered by <a style="color:white" href="http://www.qbent.in" target="_blank">Qbent Technologies Pvt.Ltd.</a></div>*@
+                </div>
+                <!--//Footer-->
+            </div>
+        </div>
+        <!--Right side Nav-->
+        <div class="right-nav-toggle-btn">
+            <div class="language-info">
+                <md-button class="md-fab md-mini" aria-label="Open Menu" data-ng-click="openSideNavPanel()">
+                    <md-tooltip>Right Panel</md-tooltip>
+                    <i class="ti-settings"></i>
+                </md-button>
+            </div>
+        </div>
+        <md-sidenav class="md-sidenav-right" md-component-id="right" md-disable-backdrop="" md-whiteframe="4" style="position: fixed;">
+            <div layout="row" layout-align="start center">
+                <md-button ng-click="closeSideNavPanel()" class="md-icon-button delete-btn">
+                    <md-tooltip>Close</md-tooltip>
+                    <i class="ti-close"></i>
+                </md-button>
+                <h4 class="text-center">Application Configuration</h4>
+            </div>
+            <hr>
+            @*<h4 class="text-center">Select Language</h4>
+            <div layout="column" layout-align="center center">
+                <div flex>
+                    <md-button ng-click="changeLanguage('en')" style="width:45px; height:45px;" class="md-icon-button add-btn">ENG</md-button>
+                    <md-button ng-click="changeLanguage('bn')" style="width:45px; height:45px;" class="md-icon-button save-btn">বাংলা</md-button>
+                </div>
+            </div>
+            <hr>*@
+            <h4 class="text-center">Select Theame</h4>
+            <div layout="column" layout-align="center center">
+                <div flex>
+
+                    <md-button style="background-color: #2c3e50 !important;"
+                               onclick="change_theme('#2c3e50', '#27313c', '#f2c004', '#2456fd')"
+                               class="md-icon-button save-btn">
+                    </md-button>
+                    <md-button style="background-color: #0C96DC !important;"
+                               onclick="change_theme('#0C96DC', '#0a81be', '#5fe5b9', '#0c96dc')"
+                               class="md-icon-button save-btn">
+                    </md-button>
+                    <md-button aria-label="Change Theme" style="background-color: #2BAE66 !important;"
+                               onclick="change_theme('#2BAE66', '#1f9d58', '#35c3f9', '#e35757')"
+                               class="md-icon-button save-btn">
+                    </md-button>
+                    <md-button style="background-color: #F76637 !important;"
+                               onclick="change_theme('#F76637', '#c85530', '#e1bc53', '#049329')"
+                               class="md-icon-button save-btn">
+                    </md-button>
+                    <md-button style="background-color: #a45fd0 !important;"
+                               onclick="change_theme('#a45fd0', '#7d45a1', '#0bcaf5', '#270493')"
+                               class="md-icon-button save-btn">
+                    </md-button>
+                </div>
+            </div>
+            <hr>
+            <h4 class="text-center">Change Font Size</h4>
+            <div layout="column" layout-align="center center">
+                <div flex>
+                    <md-button class="md-icon-button save-btn" onclick="decreaseFont()">
+                        <md-tooltip>Decrease Font</md-tooltip>
+                        -A
+                    </md-button>
+                    <md-button class="md-icon-button save-btn" onclick="defaultFont()">
+                        <md-tooltip>Default Font</md-tooltip>
+                        A
+                    </md-button>
+                    <md-button class="md-icon-button save-btn" onclick="increaseFont()">
+                        <md-tooltip>Increase Font</md-tooltip>
+                        +A
+                    </md-button>
+                </div>
+            </div>
+            <hr>
+            <h4 class="text-center">Change Font Style</h4>
+            <div layout="column" layout-align="center center">
+                <div flex>
+                    <md-button style="font-family:sans-serif;margin-right:0" class="save-btn" onclick="changeFont('Play')">
+                        <md-tooltip>Change Font</md-tooltip>
+                        Style 1
+                    </md-button>
+                    <md-button style="font-family:sans-serif;margin-right:0" class="save-btn" onclick="changeFont('Livvic')">
+                        <md-tooltip>Change Font</md-tooltip>
+                        Style 2
+                    </md-button>
+                    <md-button style="font-family:sans-serif;margin-right:0" class="save-btn" onclick="changeFont('Lora')">
+                        <md-tooltip>Change Font</md-tooltip>
+                        Style 3
+                    </md-button>
+                </div>
+                <div flex>
+                    <md-button style="font-family:sans-serif;margin-right:0" class="save-btn" onclick="changeFont('Lexend Deca')">
+                        <md-tooltip>Change Font</md-tooltip>
+                        Style 4
+                    </md-button>
+                    <md-button style="font-family:sans-serif;margin-right:0" class="save-btn" onclick="changeFont('Roboto Slab')">
+                        <md-tooltip>Change Font</md-tooltip>
+                        Style 5
+                    </md-button>
+                    <md-button style="font-family:sans-serif;margin-right:0" class="save-btn" onclick="changeFont('Cuprum')">
+                        <md-tooltip>Change Font</md-tooltip>
+                        Style 6
+                    </md-button>
+                </div>
+            </div>
+            <hr>
+            <h4 class="text-center">Page Zoom In/Out</h4>
+            <div layout="column" layout-align="center center">
+                <div flex>
+                    <md-button class="md-icon-button save-btn" onclick="zoomOut()">
+                        <md-tooltip>Zoom Out</md-tooltip>
+                        <i class="ti-zoom-out"></i>
+                    </md-button>
+                    <md-button class="md-icon-button save-btn" onclick="zoomDefault()">
+                        <md-tooltip>Default View</md-tooltip>
+                        <i class="ti-search"></i>
+                    </md-button>
+                    <md-button class="md-icon-button save-btn" onclick="zoomIn()">
+                        <md-tooltip>Zoom In</md-tooltip>
+                        <i class="ti-zoom-in"></i>
+                    </md-button>
+                </div>
+            </div>
+        </md-sidenav>
+        <!--Right side Nav-->
+    </section>
+    <!--Page loader-->
+    <div data-overlay data-overlay-delay="300">
+        <img src="~/images/loader.gif" alt="Loader" />
+    </div>
+    <!--//Page loader-->
+    <environment names="Development">
+        <script src="~/libs/moment-with-locales.js"></script>
+        <script src="~/libs/angular.js"></script>
+        <script src="~/libs/angular-animate.js"></script>
+        <script src="~/libs/angular-aria.js"></script>
+        <script src="~/libs/angular-messages.js"></script>
+        <script src="~/libs/angular-translate.js"></script>
+        <script src="~/libs/angular-translate-loader-static-files.js"></script>
+        <script src="~/libs/angular-material.js"></script>
+        <script src="~/libs/angular.treeview.js"></script>
+        <script src="~/libs/md-data-table.js"></script>
+        <script src="~/libs/dhtmlxscheduler.js"></script>
+
+        <script src="~/lib/jquery.min.js"></script>
+
+        @*<script src="~/libs/signalr/signalr.js"></script>*@
+        <script src="~/libs/md-time-picker.js"></script>
+        <script src="~/libs/lf-ng-md-file-input.js"></script>
+        <script src="~/scripts/overlay.js" asp-append-version="true"></script>
+
+        <script src="~/scripts/bootstrap.js"></script>
+        @*<script src="~/scripts/httpInterceptor.js" asp-append-version="true"></script>*@
+        <script src="~/scripts/services/messageLogService.js"></script>
+        <script src="~/scripts/controllers/navController.js"></script>
+        <script src="~/scripts/controllers/changePasswordController.js"></script>
+        <script src="~/scripts/services/userService.js" asp-append-version="true"></script>
+        @*<script src="~/scripts/services/notificationService.js" asp-append-version="true"></script>*@
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/libs/moment-with-locales.min.js"></script>
+        <script src="~/libs/angular.min.js"></script>
+        <script src="~/libs/angular-animate.min.js"></script>
+        <script src="~/libs/angular-aria.min.js"></script>
+        <script src="~/libs/angular-messages.min.js"></script>
+        <script src="~/libs/angular-translate.min.js"></script>
+        <script src="~/libs/angular-translate-loader-static-files.min.js"></script>
+        <script src="~/libs/angular-material.min.js"></script>
+        <script src="~/libs/angular.treeview.min.js"></script>
+        <script src="~/libs/md-data-table.min.js"></script>
+        <script src="~/libs/dhtmlxscheduler.js"></script>
+        <script src="~/libs/lf-ng-md-file-input.js"></script>
+
+        <script src="~/lib/jquery.min.js"></script>
+
+        @*<script src="~/libs/signalr/signalr.min.js"></script>*@
+        <script src="~/libs/md-time-picker.js"></script>
+        <script src="~/scripts/bootstrap.js" asp-append-version="true"></script>
+        <script src="~/scripts/services/messageLogService.js" asp-append-version="true"></script>
+        <script src="~/scripts/controllers/navController.js" asp-append-version="true"></script>
+        <script src="~/scripts/controllers/changePasswordController.js" asp-append-version="true"></script>
+        <script src="~/scripts/services/userService.js" asp-append-version="true"></script>
+        @*<script src="~/scripts/services/notificationService.js" asp-append-version="true"></script>*@
+        <script src="~/scripts/overlay.js" asp-append-version="true"></script>
+        <script src="~/scripts/httpInterceptor.js" asp-append-version="true"></script>
+
+    </environment>
+    <script asp-append-version="true">
+        //var connection = new signalR.HubConnectionBuilder().withUrl("/messages").configureLogging(signalR.LogLevel.Information).build();
+        //connection.on("UpdateNotification", function (messages) {
+        //    var badge = document.getElementsByClassName("notification-badge")[0];
+        //    badge.setAttribute('data-badge', messages.length);
+        //    //var encodedMsg = user + " says " + message;
+        //    //var li = document.createElement("li");
+        //    //li.textContent = encodedMsg;
+        //    //document.getElementById("messagesList").appendChild(li);
+        //    //alert(messages);
+        //});
+        //connection.start().catch(function (err) {
+        //    return console.error(err.toString());
+        //});
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.notification').click(function (event) {
+                event.stopPropagation();
+                $('.notification-wrapper').toggle("fast");
+            });
+        });
+        $(document).on("click", function () {
+            $(".notification-wrapper").hide();
+        });
+
+    </script>
+    <script>
+        function main_menu_open() {
+            var x = document.getElementById("sidebar-wraper");
+            var y = document.getElementById("page-wraper");
+            var z = document.getElementById("topBarNav");
+            if (x.style.marginLeft === "-150px" && x.style.left === "-30px" && y.style.paddingLeft === "70px") {
+                x.style.marginLeft = "0px";
+                x.style.left = "0px";
+                y.style.paddingLeft = "250px";
+                z.style.width = "calc(100% - 250px)";
+            } else {
+                x.style.marginLeft = "-150px";
+                x.style.left = "-30px";
+                y.style.paddingLeft = "70px";
+                z.style.width = "calc(100% - 70px)";
+            }
+        }
+
+        if (localStorage.getItem('primary') != null) {
+            document.getElementById("topBarNav").style.background = localStorage.getItem('primary');
+            document.getElementById("sidebar-wraper").style.background = localStorage.getItem('secondary');
+            for (var i = 0; i < document.getElementsByClassName("topbar").length; i++) {
+                document.getElementsByClassName("topbar")[i].style.background = localStorage.getItem('title');
+            }
+            for (var i = 0; i < document.getElementsByClassName("filter-btn").length; i++) {
+                document.getElementsByClassName("filter-btn")[i].style.background = localStorage.getItem('btn');
+            }
+            for (var i = 0; i < document.getElementsByClassName("add-btn").length; i++) {
+                document.getElementsByClassName("add-btn")[i].style.background = localStorage.getItem('btn');
+            }
+
+
+
+        } else {
+            document.getElementById("topBarNav").style.background = "#2c3e50";
+            document.getElementById("sidebar-wraper").style.background = "#27313c";
+            for (var i = 0; i < document.getElementsByClassName("topbar").length; i++) {
+                document.getElementsByClassName("topbar")[i].style.background = "#f2c004";
+            }
+            for (var i = 0; i < document.getElementsByClassName("filter-btn").length; i++) {
+                document.getElementsByClassName("filter-btn")[i].style.background = "#2456fd";
+            }
+            for (var i = 0; i < document.getElementsByClassName("add-btn").length; i++) {
+                document.getElementsByClassName("add-btn")[i].style.background = "#2456fd";
+            }
+        }
+
+        function colorChange(color1, color2, color3, color4) {
+            document.getElementById("topBarNav").style.background = color1;
+            document.getElementById("sidebar-wraper").style.background = color2;
+            for (var i = 0; i < document.getElementsByClassName("topbar").length; i++) {
+                document.getElementsByClassName("topbar")[i].style.background = color3;
+            }
+            for (var i = 0; i < document.getElementsByClassName("filter-btn").length; i++) {
+                document.getElementsByClassName("filter-btn")[i].style.background = color4;
+            }
+            for (var i = 0; i < document.getElementsByClassName("add-btn").length; i++) {
+                document.getElementsByClassName("add-btn")[i].style.background = color4;
+            }
+        }
+
+        function change_theme(color1, color2, color3, color4) {
+            colorChange(color1, color2, color3, color4);
+            if (localStorage.getItem('primary') != null && localStorage.getItem('secondary') != null) {
+                localStorage.removeItem('primary');
+                localStorage.removeItem('secondary');
+                localStorage.removeItem('title');
+                localStorage.removeItem('btn');
+            }
+            localStorage.setItem('primary', color1);
+            localStorage.setItem('secondary', color2);
+            localStorage.setItem('title', color3);
+            localStorage.setItem('btn', color4);
+        }
+
+        //Change Font Size
+        //if (localStorage.getItem("current_val") === "increase") {
+        //    increaseFont();
+        //}
+        //if (localStorage.getItem("current_val") === "decrease") {
+        //    decreaseFont();
+        //}
+        //if (localStorage.getItem("current_val") === "default") {
+        //    defaultFont();
+        //}
+
+        if (localStorage.getItem("current_value") !== null && localStorage.getItem("current_value") !== "100") {
+            var pointer = parseInt(localStorage.getItem("current_value"));
+            //P Tag
+            var paragraph = document.getElementsByTagName("p");
+            for (var i = 0; i < paragraph.length; i++) {
+                paragraph[i].style.fontSize = pointer + "%";
+            }
+            //A Tag
+            var ancher = document.getElementsByTagName("a");
+            for (var i = 0; i < ancher.length; i++) {
+                ancher[i].style.fontSize = pointer + "%";
+            }
+            //td Tag
+            var tabledata = document.getElementsByTagName("td");
+            for (var i = 0; i < tabledata.length; i++) {
+                tabledata[i].style.fontSize = pointer + "%";
+            }
+            //md-select Tag
+            var select = document.getElementsByTagName("md-select");
+            for (var i = 0; i < select.length; i++) {
+                select[i].style.fontSize = pointer + "%";
+            }
+            //input Tag
+            var input_text = document.getElementsByTagName("input");
+            for (var i = 0; i < input_text.length; i++) {
+                input_text[i].style.fontSize = pointer + "%";
+            }
+        }
+
+
+        function increaseFont() {
+            var pointer = 0;
+            var max_size = 108;
+            var current_val = "increase";
+            localStorage.setItem("current_val", current_val);
+            if (localStorage.getItem("current_value") !== null && localStorage.getItem("current_value") !== "100") {
+                pointer = parseInt(localStorage.getItem("current_value"));
+            }
+
+            //P Tag
+            var paragraph = document.getElementsByTagName("p");
+            for (var i = 0; i < paragraph.length; i++) {
+                if (paragraph[i].style.fontSize) {
+                    var pointer = parseInt(paragraph[i].style.fontSize.replace("%", ""));
+                } else if (localStorage.getItem("current_value") === null || localStorage.getItem("current_value") === "100") {
+                    pointer = 100;
+                }
+
+                if (pointer != max_size) {
+                    pointer += 2;
+                }
+                paragraph[i].style.fontSize = pointer + "%";
+            }
+            //A Tag
+            var ancher = document.getElementsByTagName("a");
+            for (var i = 0; i < ancher.length; i++) {
+                if (ancher[i].style.fontSize) {
+                    var pointer = parseInt(ancher[i].style.fontSize.replace("%", ""));
+                } else if (localStorage.getItem("current_value") === null || localStorage.getItem("current_value") === "100") {
+                    pointer = 100;
+                }
+
+                if (pointer != max_size) {
+                    pointer += 2;
+                }
+
+                ancher[i].style.fontSize = pointer + "%";
+            }
+            //td Tag
+            var tabledata = document.getElementsByTagName("td");
+            for (var i = 0; i < tabledata.length; i++) {
+                if (tabledata[i].style.fontSize) {
+                    var pointer = parseInt(tabledata[i].style.fontSize.replace("%", ""));
+                } else if (localStorage.getItem("current_value") === null || localStorage.getItem("current_value") === "100") {
+                    pointer = 100;
+                }
+                if (pointer != max_size) {
+                    pointer += 2;
+                }
+
+                tabledata[i].style.fontSize = pointer + "%";
+            }
+            //md-select Tag
+            var select = document.getElementsByTagName("md-select");
+            for (var i = 0; i < select.length; i++) {
+
+                if (select[i].style.fontSize) {
+                    var pointer = parseInt(select[i].style.fontSize.replace("%", ""));
+                } else if (localStorage.getItem("current_value") === null || localStorage.getItem("current_value") === "100") {
+                    pointer = 100;
+                }
+                if (pointer != max_size) {
+                    pointer += 2;
+                }
+
+                select[i].style.fontSize = pointer + "%";
+            }
+            //input Tag
+            var input_text = document.getElementsByTagName("input");
+            for (var i = 0; i < input_text.length; i++) {
+
+                if (input_text[i].style.fontSize) {
+                    var pointer = parseInt(input_text[i].style.fontSize.replace("%", ""));
+                } else if (localStorage.getItem("current_value") === null || localStorage.getItem("current_value") === "100") {
+                    pointer = 100;
+                }
+                if (pointer != max_size) {
+                    pointer += 2;
+                }
+
+                input_text[i].style.fontSize = pointer + "%";
+            }
+            localStorage.setItem("current_value", pointer);
+        }
+        function decreaseFont() {
+            var pointer = 0;
+            var min_size = 92;
+            var current_val = "decrease";
+            localStorage.setItem("current_val", current_val);
+            if (localStorage.getItem("current_value") !== null && localStorage.getItem("current_value") !== "100") {
+                pointer = parseInt(localStorage.getItem("current_value"));
+            }
+            //P Tag
+            var paragraph = document.getElementsByTagName("p");
+            for (var i = 0; i < paragraph.length; i++) {
+                if (paragraph[i].style.fontSize && paragraph[i].style.fontSize != "") {
+                    pointer = parseInt(paragraph[i].style.fontSize.replace("%", ""));
+                }
+                else if (localStorage.getItem("current_value") === null || localStorage.getItem("current_value") === "100") {
+                    pointer = 100;
+                }
+
+                if (pointer != min_size) {
+                    pointer -= 2;
+                }
+
+                paragraph[i].style.fontSize = pointer + "%";
+            }
+            //A Tag
+            var ancher = document.getElementsByTagName("a");
+            for (var i = 0; i < ancher.length; i++) {
+                if (ancher[i].style.fontSize) {
+                    var pointer = parseInt(ancher[i].style.fontSize.replace("%", ""));
+                }
+                else if (localStorage.getItem("current_value") === null || localStorage.getItem("current_value") === "100") {
+                    pointer = 100;
+                }
+
+                if (pointer != min_size) {
+                    pointer -= 2;
+                }
+                //localStorage.setItem("current_value", pointer);
+                ancher[i].style.fontSize = pointer + "%";
+            }
+            //td Tag
+            var tabledata = document.getElementsByTagName("td");
+            for (var i = 0; i < tabledata.length; i++) {
+
+                if (tabledata[i].style.fontSize) {
+                    var pointer = parseInt(tabledata[i].style.fontSize.replace("%", ""));
+                } else if (localStorage.getItem("current_value") === null || localStorage.getItem("current_value") === "100") {
+                    pointer = 100;
+                }
+
+                if (pointer != min_size) {
+                    pointer -= 2;
+                }
+
+                tabledata[i].style.fontSize = pointer + "%";
+            }
+            //md-select Tag
+            var select = document.getElementsByTagName("md-select");
+            for (var i = 0; i < select.length; i++) {
+
+                if (select[i].style.fontSize) {
+                    var pointer = parseInt(select[i].style.fontSize.replace("%", ""));
+                } else if (localStorage.getItem("current_value") === null || localStorage.getItem("current_value") === "100") {
+                    pointer = 100;
+                }
+
+                if (pointer != min_size) {
+                    pointer -= 2;
+                }
+                //localStorage.setItem("current_value", pointer);
+                select[i].style.fontSize = pointer + "%";
+            }
+            //input Tag
+            var input_text = document.getElementsByTagName("input");
+            for (var i = 0; i < input_text.length; i++) {
+
+                if (input_text[i].style.fontSize) {
+                    var pointer = parseInt(input_text[i].style.fontSize.replace("%", ""));
+                } else if (localStorage.getItem("current_value") === null || localStorage.getItem("current_value") === "100") {
+                    pointer = 100;
+                }
+                if (pointer != min_size) {
+                    pointer -= 2;
+                }
+                //localStorage.setItem("current_value", pointer);
+                input_text[i].style.fontSize = pointer + "%";
+            }
+            localStorage.setItem("current_value", pointer);
+        }
+        function defaultFont() {
+            var current_val = "default";
+            localStorage.setItem("current_val", current_val);
+            //P Tag
+            var paragraph = document.getElementsByTagName("p");
+            for (var i = 0; i < paragraph.length; i++) {
+                paragraph[i].style.fontSize = 100 + "%";
+            }
+            //A Tag
+            var ancher = document.getElementsByTagName("a");
+            for (var i = 0; i < ancher.length; i++) {
+                ancher[i].style.fontSize = 100 + "%";
+            }
+            //td Tag
+            var tabledata = document.getElementsByTagName("td");
+            for (var i = 0; i < tabledata.length; i++) {
+                tabledata[i].style.fontSize = 93 + "%";
+            }
+            //md-select Tag
+            var select = document.getElementsByTagName("md-select");
+            for (var i = 0; i < select.length; i++) {
+                select[i].style.fontSize = 100 + "%";
+            }
+            //input Tag
+            var input_text = document.getElementsByTagName("input");
+            for (var i = 0; i < input_text.length; i++) {
+                input_text[i].style.fontSize = 100 + "%";
+            }
+            localStorage.setItem("current_value", 100);
+        }
+        //End Change Font Size
+        //Change Font Famaly
+        if (localStorage.getItem('font_style') != null) {
+            for (var i = 0; i < document.getElementsByTagName("body").length; i++) {
+                document.getElementsByTagName("body")[i].style.fontFamily = localStorage.getItem('font_style') + ",sans-serif";
+            }
+        } else {
+            for (var i = 0; i < document.getElementsByTagName("body").length; i++) {
+                document.getElementsByTagName("body")[i].style.fontFamily = "Play,sans-serif";
+            }
+        }
+        function font_change(fontStyle) {
+            for (var i = 0; i < document.getElementsByTagName("body").length; i++) {
+                document.getElementsByTagName("body")[i].style.fontFamily = fontStyle + ",sans-serif";
+            }
+        }
+        function changeFont(fontStyle) {
+            var r = font_change(fontStyle);
+            if (localStorage.getItem('font_style') != null) {
+                localStorage.removeItem('font_style');
+            }
+            localStorage.setItem('font_style', fontStyle);
+            return r;
+        }
+        //End Change Font Famaly
+        //Zoom In Out
+        //if (localStorage.getItem("zoom_val") === "increase") {
+        //    zoomIn();
+        //}
+        //if (localStorage.getItem("zoom_val") === "decrease") {
+        //    zoomOut();
+        //}
+        //if (localStorage.getItem("zoom_val") === "default") {
+        //    zoomDefault();
+        //}
+
+        if (localStorage.getItem("zoom_value") !== null && localStorage.getItem("zoom_value") !== "100") {
+            var pointer = parseInt(localStorage.getItem("zoom_value"));
+            var body = document.getElementsByTagName("body");
+            for (var i = 0; i < body.length; i++) {
+                body[i].style.zoom = pointer + "%"
+            }
+        }
+
+
+        function zoomIn() {
+            var max_zoom = 110;
+            var zoom_val = "increase";
+            localStorage.setItem("zoom_val", zoom_val);
+            var body = document.getElementsByTagName("body");
+            for (var i = 0; i < body.length; i++) {
+                if (localStorage.getItem("zoom_value") !== null && localStorage.getItem("zoom_value") !== "100") {
+                    var pointer = parseInt(localStorage.getItem("zoom_value"));
+                }
+                else {
+                    if (body[i].style.zoom) {
+                        var pointer = parseInt(body[i].style.zoom);
+                    } else {
+                        pointer = 100;
+                    }
+                }
+
+                if (pointer != max_zoom) {
+                    pointer += 5;
+                }
+                localStorage.setItem("zoom_value", pointer);
+                body[i].style.zoom = pointer + "%";
+            }
+
+        }
+        function zoomOut() {
+            var min_zoom = 65;
+            var zoom_val = "decrease";
+            localStorage.setItem("zoom_val", zoom_val);
+            var body = document.getElementsByTagName("body");
+            for (var i = 0; i < body.length; i++) {
+                if (localStorage.getItem("zoom_value") !== null && localStorage.getItem("zoom_value") !== "100") {
+                    var pointer = parseInt(localStorage.getItem("zoom_value"));
+                }
+                else {
+                    if (body[i].style.zoom) {
+                        var pointer = parseInt(body[i].style.zoom);
+                    } else {
+                        pointer = 100;
+                    }
+                }
+
+                if (pointer != min_zoom) {
+                    pointer -= 5;
+                }
+                localStorage.setItem("zoom_value", pointer);
+                body[i].style.zoom = pointer + "%";
+            }
+        }
+        function zoomDefault() {
+            var zoom_val = "default";
+            localStorage.setItem("zoom_val", zoom_val);
+            var body = document.getElementsByTagName("body");
+            for (var i = 0; i < body.length; i++) {
+                body[i].style.zoom = "100%";
+            }
+            localStorage.setItem("zoom_value", 100);
+        }
+                //End Zoom In Out
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

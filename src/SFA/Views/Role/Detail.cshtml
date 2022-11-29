@@ -1,0 +1,61 @@
+﻿@{
+    ViewData["Title"] = (ViewBag.Id > 1 ? "Add" : "Edit") + " Role";
+}
+<div data-ng-controller="roleController">
+    <form name="form">
+        <div class="topbar">
+            <div class="md-toolbar-tools" layout="row">
+                <div class="topbar-title" flex>
+                    <h2>Details</h2>
+                    <i class="vertical-seperator" hide-sm hide-xs>&nbsp;</i>
+                    <span hide-sm hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / <a href="/role">Roles</a> / Details</span>
+                </div>
+                <div flex="none">
+                    <md-button class="add-btn" aria-label="Back to List" data-ng-click="backToList()">
+                        <md-tooltip>Back to List</md-tooltip>
+                        <i class="ti-angle-double-left"></i>
+                    </md-button>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div layout="row" layout-sm="column" layout-xs="column">
+                <md-input-container class="md-block" flex>
+                    <input type="hidden" value="@ViewBag.Id" ng-model="id" />
+                    <label>Name</label>
+                    <input name="name" ng-model="role.name" maxlength="50" required>
+                    <div ng-messages="form.name.$error" md-auto-hide="false">
+                        <div ng-message="required">Role Name is required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Data Access Code</label>
+                    <input name="dataAccessCode" ng-model="role.dataAccessCode" maxlength="1"  required/> <!--required @(ViewBag.Id >1  ? "" : "readonly")>-->
+                    <div ng-messages="form.dataAccessCode.$error" md-auto-hide="false">
+                        <div ng-message="required">Data AccessCode is required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <md-checkbox ng-model="role.isActive" id="active" aria-label="active">
+                        Active ?
+                    </md-checkbox>
+                </md-input-container>
+            </div>
+            <div layout="row" layout-align="center center">
+                <md-button class="save-btn" aria-label="Save" data-ng-click="save()" data-ng-disabled="form.$invalid || isDisabled">
+                    <md-tooltip>Save</md-tooltip>
+                    <i class="far fa-save"></i> Save
+                </md-button>
+                <md-button class="cancel-btn" aria-label="Cancel" data-ng-click="backToList()">
+                    <md-tooltip>Cancel</md-tooltip>
+                    <i class="fas fa-reply"></i> Cancel
+                </md-button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/roleService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/roleController.js" asp-append-version="true"></script>
+}

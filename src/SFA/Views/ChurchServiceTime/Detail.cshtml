@@ -1,0 +1,91 @@
+﻿@{
+    ViewData["Title"] = (ViewBag.Id == Guid.Empty ? "Add" : "Edit") + " Church Service Time";
+}
+<div data-ng-controller="churchServiceTimeDetailController">
+    <form name="form">
+        <div class="topbar">
+            <div class="md-toolbar-tools" layout="row">
+                <div class="topbar-title" flex>
+                    <h2>Details</h2>
+                    <i class="vertical-seperator" hide-xs>&nbsp;</i>
+                    <span hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / <a href="/churchServiceTime">Church Service Times</a> / Details</span>
+                </div>
+                <div flex="none">
+                    <md-button class="add-btn" aria-label="Back to List" data-ng-click="backToList()">
+                        <md-tooltip>Back to List</md-tooltip>
+                        <i class="ti-angle-double-left"></i> Back to List
+                    </md-button>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div layout="row" layout-xs="column">
+                <md-autocomplete flex class="padding-wrap"
+                                 md-no-cache="true"
+                                 md-selected-item="church"
+                                 md-selected-item-change="selectedChurchName(church)"
+                                 md-search-text="churchSearch"
+                                 md-items="church in searchChurch(churchSearch)"
+                                 md-item-text="church.churchName"
+                                 md-min-length="0"
+                                 md-floating-label="Church Name" required>
+                    <md-item-template>
+                        <span md-highlight-text="ChurchSearch" md-highlight-flags="gi">{{church.churchName}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No Data Found .
+                    </md-not-found>
+                </md-autocomplete>
+                <md-input-container class="md-block" flex>
+                    <label>Service Type</label>
+                    <md-select name="serviceType" ng-model="churchServiceTime.serviceTypeId" required>
+                        <md-option ng-repeat="serviceType in serviceTypes" ng-value="serviceType.id">{{serviceType.name}}</md-option>
+                    </md-select>
+                    <div ng-messages="form.serviceType.$error" md-auto-hide="false">
+                        <div ng-message="required">Service Type is required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Week Day</label>
+                    <md-select name="weekDay" ng-model="churchServiceTime.weekDay" required>
+                        <md-option ng-repeat="day in days" ng-value="day">{{day}}</md-option>
+                    </md-select>
+                    <div ng-messages="form.weekDay.$error" md-auto-hide="false">
+                        <div ng-message="required">Week Day is required</div>
+                    </div>
+                </md-input-container>
+                </div>
+                <div layout="row" layout-xs="column">
+                        @*<label>Service Time</label>*@
+                        @*<input type="time" ng-model="churchServiceTime.serviceTime" time-pick="HH:MM:SS" time-default="'08:00:00'">*@
+                        @*<md-time-picker ng-model="serviceTime" time-pick="HH:MM:SS" required no-meridiem no-auto-switch></md-time-picker>*@
+                        <md-time-picker ng-model="churchServiceTime.serviceTime" no-meridiem message="message" required flex></md-time-picker>
+                    <md-input-container class="md-block" flex>
+                        <label>Preferencelevel</label>
+                        <input type="number" ng-model="churchServiceTime.preferencelevel" required>
+                    </md-input-container>
+                    <md-input-container class="md-block" flex>
+                        <label>Notes</label>
+                        <input ng-model="churchServiceTime.notes" maxlength="100">
+                    </md-input-container>
+                </div>
+                <div layout="row" layout-align="center center">
+                    <md-button class="save-btn" aria-label="Save" data-ng-click="save()" data-ng-disabled="form.$invalid">
+                        <md-tooltip>Save</md-tooltip>
+                        <i class="far fa-save"></i> Save
+                    </md-button>
+                    <md-button class="cancel-btn" aria-label="Cancel" data-ng-click="backToList()">
+                        <md-tooltip>Cancel</md-tooltip>
+                        <i class="fas fa-reply"></i> Cancel
+                    </md-button>
+                </div>
+            </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/churchService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/serviceTypeService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/churchServiceTimeService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/churchServiceTimeDetailController.js" asp-append-version="true"></script>
+}

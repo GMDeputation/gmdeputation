@@ -1,0 +1,134 @@
+﻿@{
+    ViewData["Title"] = "List of Churches";
+}
+<div data-ng-controller="churchesController">
+    <!--Topbar section-->
+    <div class="topbar">
+        <div class="md-toolbar-tools" layout="row">
+            <div class="topbar-title" flex>
+                <h2>List of Churches</h2>
+                <i class="vertical-seperator" hide-xs>&nbsp;</i>
+                <span hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / Churches</span>
+            </div>
+            <div flex="none">
+                <md-button class="filter-btn" ng-click="filter()" ng-disabled="selected.length>0">
+                    <md-tooltip>Filter</md-tooltip>
+                    <i class="ti-filter"></i> <span hide-xs>Filter</span>
+                </md-button>
+                @if (ViewBag.Access == 7 || ViewBag.Access == 3)
+                {
+                    <md-button class="add-btn" ng-click="add()" ng-disabled="selected.length>0">
+                        <md-tooltip>Add New</md-tooltip>
+                        <i class="ti-plus"></i> <span hide-xs>Add New</span>
+                    </md-button>
+                    <md-button class="add-btn" ng-click="viewOnMap()" ng-disabled="selected.length>0">
+                        <md-tooltip>View On Map</md-tooltip>
+                        <i class="ti-calendar"></i> <span hide-xs>View On Map</span>
+                    </md-button>
+                    <md-button class="add-btn" ng-click="export()" ng-disabled="selected.length>0">
+                        <md-tooltip>Import</md-tooltip>
+                        <i class="ti-export"></i> <span hide-xs>Import</span>
+                    </md-button>
+                }
+            </div>
+        </div>
+    </div>
+    <!--//End Topbar section-->
+    <!--Filter Section-->
+    <div class="filter-grid" data-ng-show="showFilter">
+        <div layout="row" layout-xs="column">
+            <div class="filter-title" flex="none">
+                <i class="ti-filter"></i> <span>Filter By</span>
+            </div>
+            <div flex>
+                <md-input-container class="md-block">
+                    <label>District</label>
+                    <md-select ng-model="query.districtId">
+                        <md-option value=""><em>All Districts </em></md-option>
+                        <md-option ng-repeat="district in districts track by $index" ng-value="district.id">{{district.name}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div flex>
+                <md-input-container class="md-block">
+                    <label>Section</label>
+                    <md-select ng-model="query.sectionId">
+                        <md-option value=""><em>All Sections </em></md-option>
+                        <md-option ng-repeat="section in sections track by $index" ng-value="section.id">{{section.name}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <div flex>
+                <md-input-container class="md-block">
+                    <label>Church Name</label>
+                    <input data-ng-model="query.filter" data-ng-model-options="filter.options">
+                </md-input-container>
+            </div>
+            <div flex>
+                <md-input-container class="md-block">
+                    <label>Email</label>
+                    <input data-ng-model="query.email">
+                </md-input-container>
+            </div>
+            <div flex="none">
+                <md-button class="close-btn" ng-click="close()" ng-disabled="selected.length>0">
+                    <md-tooltip>Close</md-tooltip>
+                    <i class="ti-close"></i> Close
+                </md-button>
+            </div>
+        </div>
+    </div>
+    <!--//End Filter Section-->
+    <md-table-container>
+        <table md-table md-progress="promise">
+            <thead md-head md-order="query.order" md-on-reorder="search">
+                <tr md-row>
+                    <th md-column class="center">Sl No</th>
+                    <th md-column md-order-by="name"><span class="pad-l-8">Church Name</span></th>
+                    <th md-column><span class="pad-l-8">District Name</span></th>
+                    <th md-column><span class="pad-l-8">Section Name</span></th>
+                    <th md-column><span class="pad-l-8">Mailing Address</span></th>
+                    <th md-column><span class="pad-l-8">Pastors</span></th>
+                    <th md-column><span class="pad-l-8">Phone</span></th>
+                    <th md-column><span class="pad-l-8">Email + Website</span></th>
+                    <th md-column class="center" style="width:160px;"><span class="pad-l-8">Actions</span></th>
+                </tr>
+            </thead>
+            <tbody md-body>
+                <tr class="md-row md-row-empty" ng-show="churchs.length === 0">
+                    <td class="md-cell" colspan="9">No Data Found</td>
+                </tr>
+                <tr md-row data-ng-repeat="church in churchs track by $index">
+                    <td md-cell class="center">{{((query.page - 1) * query.limit) + ($index+1)}}</td>
+                    <td md-cell class="pad-l-8">{{church.churchName}}</td>
+                    <td md-cell class="pad-l-8">{{church.districtName}}</td>
+                    <td md-cell class="pad-l-8">{{church.sectionName}}</td>
+                    <td md-cell class="pad-l-8">{{church.mailAddress}}</td>
+                    <td md-cell class="pad-l-8">{{church.pastor}}</td>
+                    <td md-cell class="pad-l-8">{{church.phone}}</td>
+                    <td md-cell class="pad-l-8">{{church.email}},{{church.webSite}}</td>
+                    <td md-cell class="center">
+                        @if (ViewBag.Access == 7 || ViewBag.Access == 3)
+                        {
+                            <md-button class="md-icon-button edit-btn" ng-click="edit(church.id)">
+                                <md-tooltip>Edit</md-tooltip>
+                                <i class="ti-marker-alt"></i>
+                            </md-button>
+                            <md-button class="md-icon-button delete-btn" ng-click="delete(church.id)">
+                                <md-tooltip>Delete</md-tooltip>
+                                <i class="ti-trash"></i>
+                            </md-button>
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+    <md-table-pagination md-limit="query.limit" md-limit-options="[20, 50, 100]" md-page="query.page" md-total="{{count}}" md-on-paginate="search" md-page-select></md-table-pagination>
+</div>
+@section Scripts{
+    <script src="~/scripts/services/districtService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/sectionService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/churchService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/churchesController.js" asp-append-version="true"></script>
+}

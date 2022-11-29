@@ -1,0 +1,161 @@
+﻿<div ng-init="popoulateDemandColl()" ng-if="accessCode === 'A' || accessCode === 'C' || accessCode === 'B'">
+    <table class="dashboard-table">
+        <thead>
+            <tr>
+                <th colspan="5" style="text-align:center;color: #000;font-size: 1.5em;background-color: white;">Today Demand Collection</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Branch Name</th>
+                <th>No of LO's</th>
+                <th>Today Demand</th>
+                <th>Today Collection</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat-start="branch in branches track by $index" ng-click="popoulateDemandCollByBranch(branch.branchId, branch.expanded)">
+                <td>
+                    <button class="drill-btn" ng-click="collapseBranchAll($index)">
+                        <span ng-bind="branch.expanded ? '-' : '+'"></span>
+                    </button>
+                </td>
+                <td>{{branch.branchName}}</td>
+                <td style="text-align:center;">{{branch.loCount}}</td>
+                <td style="text-align:center;">{{branch.todayDemand}}</td>
+                <td style="text-align:center;">{{branch.todayColl}}</td>
+            </tr>
+            <tr ng-repeat-end ng-show="branch.expanded">
+                <td></td>
+                <td colspan="9">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>LO Name</th>
+                                <th>No of CP</th>
+                                <th>Principal Demand</th>
+                                <th>Interest Demand</th>
+                                <th>Total Demand</th>
+                                <th>Principal Collection</th>
+                                <th>Interest Collection</th>
+                                <th>Total Collection</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat-start="loanOfficer in loanOfficers track by $index" ng-click="popoulateDemandCollByLO(loanOfficer.loId, loanOfficer.expanded)">
+                                <td style="width:2%;">
+                                    <button class="drill-btn" ng-click="collapseLoanOfficerAll($index)">
+                                        <span ng-bind="loanOfficer.expanded ? '-' : '+'"></span>
+                                    </button>
+                                </td>
+                                <td>{{loanOfficer.loName}}({{loanOfficer.loCode}})</td>
+                                <td style="text-align:center;">{{loanOfficer.cpCount}}</td>
+                                <td style="text-align:center;">{{loanOfficer.principalDemand}}</td>
+                                <td style="text-align:center;">{{loanOfficer.interestDemand}}</td>
+                                <td style="text-align:center;">{{loanOfficer.principalDemand + loanOfficer.interestDemand}}</td>
+                                <td style="text-align:center;">{{loanOfficer.principalCollection}}</td>
+                                <td style="text-align:center;">{{loanOfficer.interestCollection}}</td>
+                                <td style="text-align:center;">{{loanOfficer.principalCollection + loanOfficer.interestCollection}}</td>
+                            </tr>
+                            <tr ng-repeat-end ng-show="loanOfficer.expanded">
+                                <td></td>
+                                <td colspan="8">
+                                    <table class="dashboard-table-4th">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:20%;">CP Name</th>
+                                                <th>Principal Demand</th>
+                                                <th>Interest Demand</th>
+                                                <th>Total Demand</th>
+                                                <th>Principal Collection</th>
+                                                <th>Interest Collection</th>
+                                                <th>Total Collection</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="cp in collectionPoints track by $index">
+                                                <td style="width:20%;">{{cp.cpName}}</td>
+                                                <td style="text-align:center;">{{cp.principalDemand}}</td>
+                                                <td style="text-align:center;">{{cp.interestDemand}}</td>
+                                                <td style="text-align:center;">{{cp.principalDemand + cp.interestDemand}}</td>
+                                                <td style="text-align:center;">{{cp.principalCollection}}</td>
+                                                <td style="text-align:center;">{{cp.interestCollection}}</td>
+                                                <td style="text-align:center;">{{cp.principalCollection + cp.interestCollection}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div ng-init="popoulateDemandCollByBranch(null, true)" ng-if="accessCode === 'I'">
+    <table class="dashboard-table">
+        <thead>
+            <tr>
+                <th colspan="9" style="text-align:center;color: #000;font-size: 1.5em;background-color: white;">Today Demand Collection</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>LO Name</th>
+                <th>No of CP</th>
+                <th>Principal Demand</th>
+                <th>Interest Demand</th>
+                <th>Total Demand</th>
+                <th>Principal Collection</th>
+                <th>Interest Collection</th>
+                <th>Total Collection</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat-start="loanOfficer in loanOfficers track by $index" ng-click="popoulateDemandCollByLO(loanOfficer.loId, loanOfficer.expanded)">
+                <td style="width:2%;">
+                    <button class="drill-btn" ng-click="collapseLoanOfficerAll($index)">
+                        <span ng-bind="loanOfficer.expanded ? '-' : '+'"></span>
+                    </button>
+                </td>
+                <td>{{loanOfficer.loName}}({{loanOfficer.loCode}})</td>
+                <td style="text-align:center;">{{loanOfficer.cpCount}}</td>
+                <td style="text-align:center;">{{loanOfficer.principalDemand}}</td>
+                <td style="text-align:center;">{{loanOfficer.interestDemand}}</td>
+                <td style="text-align:center;">{{loanOfficer.principalDemand + loanOfficer.interestDemand}}</td>
+                <td style="text-align:center;">{{loanOfficer.principalCollection}}</td>
+                <td style="text-align:center;">{{loanOfficer.interestCollection}}</td>
+                <td style="text-align:center;">{{loanOfficer.principalCollection + loanOfficer.interestCollection}}</td>
+            </tr>
+            <tr ng-repeat-end ng-show="loanOfficer.expanded">
+                <td></td>
+                <td colspan="8">
+                    <table class="dashboard-table-4th">
+                        <thead>
+                            <tr>
+                                <th style="width:20%;">CP Name</th>
+                                <th>Principal Demand</th>
+                                <th>Interest Demand</th>
+                                <th>Total Demand</th>
+                                <th>Principal Collection</th>
+                                <th>Interest Collection</th>
+                                <th>Total Collection</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="cp in collectionPoints track by $index">
+                                <td style="width:20%;">{{cp.cpName}}</td>
+                                <td style="text-align:center;">{{cp.principalDemand}}</td>
+                                <td style="text-align:center;">{{cp.interestDemand}}</td>
+                                <td style="text-align:center;">{{cp.principalDemand + cp.interestDemand}}</td>
+                                <td style="text-align:center;">{{cp.principalCollection}}</td>
+                                <td style="text-align:center;">{{cp.interestCollection}}</td>
+                                <td style="text-align:center;">{{cp.principalCollection + cp.interestCollection}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

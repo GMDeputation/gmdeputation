@@ -1,0 +1,88 @@
+﻿@{
+    ViewData["Title"] = "List of Service Types";
+}
+<div data-ng-controller="serviceTypesController">
+    <div class="topbar">
+        <div class="md-toolbar-tools" layout="row">
+            <div class="topbar-title" flex>
+                <h2>List of Service Types</h2>
+                <i class="vertical-seperator" hide-xs>&nbsp;</i>
+                <span hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / Service Types</span>
+            </div>
+            <div flex="none">
+                <md-button class="filter-btn" ng-click="filter()" ng-disabled="selected.length>0">
+                    <md-tooltip>Filter</md-tooltip>
+                    <i class="ti-filter"></i> <span hide-xs>Filter</span>
+                </md-button>
+                @if (ViewBag.Access == 7 || ViewBag.Access == 3)
+                {
+                    <md-button class="add-btn" ng-click="detail()" ng-disabled="selected.length>0">
+                        <md-tooltip>Add New</md-tooltip>
+                        <i class="ti-plus"></i> Add New
+                    </md-button>
+                    @*<md-button class="add-btn" ng-click="export()" ng-disabled="selected.length>0">
+                        <md-tooltip>Import</md-tooltip>
+                        <i class="ti-export"></i> <span hide-xs>Import</span>
+                    </md-button>*@
+                }
+            </div>
+        </div>
+    </div>
+    <div class="filter-grid" data-ng-show="showFilter">
+        <div layout="row" layout-xs="column">
+            <div class="filter-title" flex="none">
+                <i class="ti-filter"></i> <span>Filter By</span>
+            </div>
+            <div flex>
+                <md-input-container class="md-block">
+                    <label>Name</label>
+                    <input data-ng-model="query.filter" data-ng-model-options="filter.options">
+                </md-input-container>
+            </div>
+            <div flex="none">
+                <md-button class="close-btn" ng-click="close()" ng-disabled="selected.length>0">
+                    <md-tooltip>Close</md-tooltip>
+                    <i class="ti-close"></i> Close
+                </md-button>
+            </div>
+        </div>
+    </div>
+    <md-table-container>
+        <table md-table md-progress="promise">
+            <thead md-head md-order="query.order" md-on-reorder="search">
+                <tr md-row>
+                    <th md-column class="center">Sl No</th>
+                    <th md-column md-order-by="name"><span class="pad-l-8">Name</span></th>
+                    <th md-column class="center" style="width:160px;"><span class="pad-l-8">Actions</span></th>
+                </tr>
+            </thead>
+            <tbody md-body>
+                <tr class="md-row md-row-empty" ng-show="serviceTypes.length === 0">
+                    <td class="md-cell" colspan="2">No Data Found</td>
+                </tr>
+                <tr md-row data-ng-repeat="serviceType in serviceTypes track by $index">
+                    <td md-cell class="center">{{((query.page - 1) * query.limit) + ($index+1)}}</td>
+                    <td md-cell class="pad-l-8">{{serviceType.name}}</td>
+                    <td md-cell class="center">
+                        @if (ViewBag.Access == 7 || ViewBag.Access == 3)
+                        {
+                        <md-button class="md-icon-button edit-btn" ng-click="detail(serviceType.id)">
+                            <md-tooltip>Edit</md-tooltip>
+                            <i class="ti-marker-alt"></i>
+                        </md-button>
+                        <md-button class="md-icon-button delete-btn" ng-click="delete(serviceType.id)">
+                            <md-tooltip>Delete</md-tooltip>
+                            <i class="ti-trash"></i>
+                        </md-button>
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+    <md-table-pagination md-limit="query.limit" md-limit-options="[20, 50, 100]" md-page="query.page" md-total="{{count}}" md-on-paginate="search" md-page-select></md-table-pagination>
+</div>
+@section Scripts{
+    <script src="~/scripts/services/serviceTypeService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/serviceTypesController.js" asp-append-version="true"></script>
+}

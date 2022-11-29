@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = (ViewBag.Id == Guid.Empty ? "Add" : "Edit") + " Accommodation";
+}
+<div data-ng-controller="accommodationController">
+    <form name="form">
+        <div class="topbar">
+            <div class="md-toolbar-tools" layout="row">
+                <div class="topbar-title" flex>
+                    <h2>Details</h2>
+                    <i class="vertical-seperator" hide-sm hide-xs>&nbsp;</i>
+                    <span hide-sm hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / <a href="/accommodations">Accommodations</a> / Details</span>
+                </div>
+                <div flex="none">
+                    <md-button class="add-btn" aria-label="Back to List" data-ng-click="backToList()">
+                        <md-tooltip>Back to List</md-tooltip>
+                        <i class="ti-angle-double-left"></i>
+                    </md-button>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div layout="row" layout-sm="column" layout-xs="column">
+                <md-autocomplete flex class="padding-wrap"
+                                 md-no-cache="true"
+                                 md-selected-item="church"
+                                 md-selected-item-change="selectedChurchName(church)"
+                                 md-search-text="churchSearch"
+                                 md-items="church in searchChurch(churchSearch)"
+                                 md-item-text="church.churchName"
+                                 md-min-length="0"
+                                 md-floating-label="Church Name" required>
+                    <md-item-template>
+                        <span md-highlight-text="ChurchSearch" md-highlight-flags="gi">{{church.churchName}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No Data Found .
+                    </md-not-found>
+                </md-autocomplete>
+
+                <md-input-container class="md-block" flex>
+                    <input type="hidden" value="@ViewBag.Id" ng-model="id" />
+                    <label>Accommodation Type</label>
+                    <input name="accommodation" ng-model="accommodation.accomType" maxlength="50" required>
+                    <div ng-messages="form.accommodation.$error" md-auto-hide="false">
+                        <div ng-message="required">Accommodation Type is required</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" flex>
+                    <label>Accommodation Notes</label>
+                    <input ng-model="accommodation.accomNotes" maxlength="100">
+                </md-input-container>
+            </div>
+            <div layout="row" layout-align="center center">
+                <md-button class="save-btn" aria-label="Save" data-ng-click="save()" data-ng-disabled="form.$invalid || isDisabled">
+                    <md-tooltip>Save</md-tooltip>
+                    <i class="far fa-save"></i> Save
+                </md-button>
+                <md-button class="cancel-btn" aria-label="Cancel" data-ng-click="backToList()">
+                    <md-tooltip>Cancel</md-tooltip>
+                    <i class="fas fa-reply"></i> Cancel
+                </md-button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/churchService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/accommodationService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/accommodationController.js" asp-append-version="true"></script>
+}
