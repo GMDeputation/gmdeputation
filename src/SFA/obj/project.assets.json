@@ -15028,7 +15028,8 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\SEANR\\.nuget\\packages\\": {}
+    "C:\\Users\\SEANR\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
@@ -15039,6 +15040,9 @@
       "packagesPath": "C:\\Users\\SEANR\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\SEANR\\OneDrive\\Documents\\GitHub\\gmdeputation\\src\\SFA\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
         "C:\\Users\\SEANR\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
