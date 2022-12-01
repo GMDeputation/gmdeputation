@@ -11,6 +11,7 @@
         });
     };
     this.search = function (query) {
+        var tmp = query.data;
         return $http.post('/macroSchedule/search', query);
     };
     this.save = function (data) {

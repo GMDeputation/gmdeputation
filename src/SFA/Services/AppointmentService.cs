@@ -13,7 +13,7 @@ namespace SFA.Services
         Task<List<Appointment>> GetAll(string accessCode, int userId);
         Task<Appointment> GetById(int id, string accessCode);
         Task<QueryResult<Appointment>> Search(AppointmentQuery query, string accessCode, int userId);
-        Task<string> Save(Appointment appointment);
+        Task<string> Save(Appointment appointment, User loggedinUser);
         Task<string> SubmitAppointment(Appointment appointment);
         Task<string> ApproveAppointmentByPator(Appointment appointment);
         Task<string> ForwardAppointmentForMissionary(Appointment appointment);
@@ -207,7 +207,7 @@ namespace SFA.Services
             }
         }
 
-        public async Task<string> Save(Appointment appointment)
+        public async Task<string> Save(Appointment appointment, User loggedinUser)
         {
             if (appointment.Id < 0)
             {
@@ -225,8 +225,8 @@ namespace SFA.Services
                     IsAcceptByPastor = false,
                     IsForwardForMissionary = false,
                     IsAcceptMissionary = false,
-                    CreatedBy = appointment.CreatedBy,
-                    CreatedOn = DateTime.Now
+                    InsertUser = loggedinUser.Id.ToString(),
+                    InsertDatetime = DateTime.Now
                 };
                 _context.TblAppointmentNta.Add(appointmentEntities);
             }
@@ -243,6 +243,8 @@ namespace SFA.Services
                 appointmentEntity.Notes = appointment.Notes;
                 appointmentEntity.AcceptByPastorRemarks = appointment.AcceptByPastorRemarks;
                 appointmentEntity.AcceptMissionaryRemarks = appointment.AcceptMissionaryRemarks;
+                appointmentEntity.UpdateDatetime = DateTime.Now;
+                appointmentEntity.UpdateUser = loggedinUser.Id.ToString();
             }
             try
             {

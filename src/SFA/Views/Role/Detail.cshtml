@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = (ViewBag.Id > 1 ? "Add" : "Edit") + " Role";
+    ViewData["Title"] = (ViewBag.Id == 0 ? "Add" : "Edit") + " Role";
 }
 <div data-ng-controller="roleController">
     <form name="form">

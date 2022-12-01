@@ -8,6 +8,7 @@ namespace SFA.Entities
     [Table("Tbl_Appointment_NTA", Schema = "Global")]
     public partial class TblAppointmentNta
     {
+
         public int Id { get; set; }
         [Column(TypeName = "date")]
         public DateTime EventDate { get; set; }
@@ -60,17 +61,13 @@ namespace SFA.Entities
         [Column("UPDATE_DATETIME", TypeName = "datetime")]
         public DateTime? UpdateDatetime { get; set; }
 
-        [NotMapped]
+
         public TblUserNta AcceptByPastorByNavigation { get; set; }
-        [NotMapped]
         public TblUserNta AcceptMissionaryByNavigation { get; set; }
-        [NotMapped]
         public TblChurchNta Church { get; set; }
-        [NotMapped]
         public TblUserNta CreatedByNavigation { get; set; }
-        [NotMapped]
         public TblMacroScheduleDetailsNta MacroScheduleDetail { get; set; }
-        [NotMapped]
         public TblUserNta SubmittedByNavigation { get; set; }
+
     }
 }

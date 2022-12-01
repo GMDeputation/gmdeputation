@@ -14,6 +14,8 @@ namespace SFA.Entities
             TblChurchAccommodationNta = new HashSet<TblChurchAccommodationNta>();
             TblChurchAttributeNta = new HashSet<TblChurchAttributeNta>();
             TblChurchServiceTimeNta = new HashSet<TblChurchServiceTimeNta>();
+            TblAppointmentNta = new HashSet<TblAppointmentNta>();
+
         }
 
         public int Id { get; set; }
@@ -78,6 +80,8 @@ namespace SFA.Entities
         public ICollection<TblChurchServiceTimeNta> TblChurchServiceTimeNta { get; set; }
 
         public ICollection<TblUserChurchNta> TblUserChurch { get; set; }
+        public ICollection<TblAppointmentNta> TblAppointmentNta { get; set; }
+
 
     
 }

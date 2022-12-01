@@ -83,10 +83,9 @@ namespace SFA.Controllers
         public async Task<IActionResult> Save([FromBody]ServiceType serviceType)
         {
             var loggedinUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");
-            serviceType.CreatedBy = loggedinUser.Id;
-            serviceType.ModifiedBy = loggedinUser.Id;
 
-            var result = await _serviceTypeService.Save(serviceType);
+
+            var result = await _serviceTypeService.Save(serviceType, loggedinUser);
             return new JsonResult(result);
         }
     }

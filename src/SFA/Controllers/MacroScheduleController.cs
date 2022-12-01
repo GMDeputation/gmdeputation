@@ -94,19 +94,19 @@ namespace SFA.Controllers
 
             if (query.FromDate != null)
             {
-                query.FromDate = TimeZoneInfo.ConvertTimeFromUtc(query.FromDate, tzi);
+                query.FromDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)query.FromDate, tzi);
             }
             if (query.ToDate != null)
             {
-                query.ToDate = TimeZoneInfo.ConvertTimeFromUtc(query.ToDate, tzi);
+                query.ToDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)query.ToDate, tzi);
             }
             if (query.FromEntryDate != null)
             {
-                query.FromEntryDate = TimeZoneInfo.ConvertTimeFromUtc(query.FromEntryDate, tzi);
+                query.FromEntryDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)query.FromEntryDate, tzi);
             }
             if (query.ToEntryDate != null)
             {
-                query.ToEntryDate = TimeZoneInfo.ConvertTimeFromUtc(query.ToEntryDate, tzi);
+                query.ToEntryDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)query.ToEntryDate, tzi);
             }
 
             var macroSchedules = await _macroScheduleService.GetAllapproved(query, loggedinUser.Id, loggedinUser.IsSuperAdmin);
@@ -117,6 +117,10 @@ namespace SFA.Controllers
         [Route("search")]
         public async Task<IActionResult> Search([FromBody]MacroScheduleQuery query)
         {
+            if(ModelState.IsValid)
+            {
+                Console.WriteLine("Valid");
+            }
             var loggedinUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");
 
             TimeZoneInfo timeZone = TimeZoneInfo.Local;
@@ -124,19 +128,19 @@ namespace SFA.Controllers
 
             if (query.FromDate != null)
             {
-                query.FromDate = TimeZoneInfo.ConvertTimeFromUtc(query.FromDate, tzi);
+                query.FromDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)query.FromDate, tzi);
             }
             if (query.ToDate != null)
             {
-                query.ToDate = TimeZoneInfo.ConvertTimeFromUtc(query.ToDate, tzi);
+                query.ToDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)query.ToDate, tzi);
             }
             if (query.FromEntryDate != null)
             {
-                query.FromEntryDate = TimeZoneInfo.ConvertTimeFromUtc(query.FromEntryDate, tzi);
+                query.FromEntryDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)query.FromEntryDate, tzi);
             }
             if (query.ToEntryDate != null)
             {
-                query.ToEntryDate = TimeZoneInfo.ConvertTimeFromUtc(query.ToEntryDate, tzi);
+                query.ToEntryDate = TimeZoneInfo.ConvertTimeFromUtc((DateTime)query.ToEntryDate, tzi);
             }
 
             var macroSchedules = await _macroScheduleService.Search(query, loggedinUser.Id);
@@ -164,10 +168,8 @@ namespace SFA.Controllers
         public async Task<IActionResult> Save([FromBody]MacroSchedule macroSchedule)
         { 
             var loggedinUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");
-            macroSchedule.CreatedBy = loggedinUser.Id;
-            macroSchedule.ModifiedBy = loggedinUser.Id;
 
-            var result = await _macroScheduleService.Save(macroSchedule);
+            var result = await _macroScheduleService.Save(macroSchedule, loggedinUser);
             return new JsonResult(result);
         }
 
@@ -177,7 +179,7 @@ namespace SFA.Controllers
         {
             var loggedinUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");
 
-            var result = await _macroScheduleService.Edit(macroScheduleDetails);
+            var result = await _macroScheduleService.Edit(macroScheduleDetails, loggedinUser);
             return new JsonResult(result);
         }
 

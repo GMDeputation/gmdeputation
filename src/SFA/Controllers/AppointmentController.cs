@@ -96,13 +96,12 @@ namespace SFA.Controllers
         public async Task<IActionResult> Save([FromBody]Appointment appointment)
         {
             var loggedinUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");
-            appointment.CreatedBy = loggedinUser.Id;
 
             TimeZoneInfo timeZone = TimeZoneInfo.Local;
             TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZone.Id);
             appointment.EventDate = TimeZoneInfo.ConvertTimeFromUtc(appointment.EventDate, tzi);
 
-            var result = await _appointmentService.Save(appointment);
+            var result = await _appointmentService.Save(appointment, loggedinUser);
             return new JsonResult(result);
         }
 

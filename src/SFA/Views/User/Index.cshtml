@@ -10,6 +10,24 @@
                 <i class="vertical-seperator" hide-sm hide-xs>&nbsp;</i>
                 <span hide-sm hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / Users</span>
             </div>
+            <!--  checkbox -->
+            <div class="form-check">
+              <input
+                mdbCheckbox
+                ng-model="checkboxModel"
+                ng-init="checkboxModel ='NO'"
+                class="form-check-input"
+                type="checkbox"
+                id="flexCheckChecked"
+                ng-true-value="'YES'" 
+                ng-false-value="'NO'"            
+               
+   
+              />
+              <label class="form-check-label" for="flexCheckChecked">
+                Show Inactive Users 
+              </label>
+            </div>
             <div flex="none">
                 <md-button class="filter-btn" ng-click="filter()">
                     <md-tooltip>Search</md-tooltip>
@@ -69,7 +87,7 @@
                 <tr class="md-row md-row-empty" ng-show="users.length === 0">
                     <td class="md-cell" colspan="8">No Data Found</td>
                 </tr>
-                <tr md-row data-ng-repeat="user in users track by $index">
+                <tr md-row data-ng-repeat="user in users track by $index" ng-show="((user.isActive==true || user.isActive!=true)  && checkboxModel == 'YES' )|| (user.isActive==true && checkboxModel == 'NO') ">
                     <td md-cell class="center">{{((query.page - 1) * query.limit) + ($index+1)}}</td>
                     <td md-cell class="pad-l-8">{{user.name}}</td>
                     <td md-cell class="pad-l-8">{{user.roleName}}</td>

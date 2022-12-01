@@ -13,7 +13,7 @@ namespace SFA.Services
         Task<List<ServiceType>> GetAll();
         Task<ServiceType> GetById(int id);
         Task<QueryResult<ServiceType>> Search(ServiceTypeQuery query);
-        Task<string> Save(ServiceType serviceType);
+        Task<string> Save(ServiceType serviceType, User loggedinUser);
         Task<bool> Delete(int id, int userId);
     }
     public class ServiceTypeService : IServiceTypeService
@@ -77,14 +77,14 @@ namespace SFA.Services
             }
         }
 
-        public async Task<string> Save(ServiceType serviceType)
+        public async Task<string> Save(ServiceType serviceType, User loggedinUser)
         {
             if (serviceType.Id == 0)
             {
                 var serviceTypeEntity = new TblServiceTypeNta
                 {      
                     Name = serviceType.Name,  
-                    InsertUser = serviceType.CreatedBy.ToString(),
+                    InsertUser = loggedinUser.Id.ToString(),
                     InsertDatetime = DateTime.Now
                 };
                 _context.TblServiceTypeNta.Add(serviceTypeEntity);
@@ -93,7 +93,7 @@ namespace SFA.Services
             {
                 var serviceTypeEntity = await _context.TblServiceTypeNta.FirstOrDefaultAsync(m => m.Id == serviceType.Id);
                 serviceTypeEntity.Name = serviceType.Name;
-                serviceTypeEntity.UpdateUser = serviceType.ModifiedBy.ToString();
+                serviceTypeEntity.UpdateUser = loggedinUser.Id.ToString();
                 serviceTypeEntity.UpdateDatetime = DateTime.Now;
             }
             try
@@ -110,10 +110,21 @@ namespace SFA.Services
 
         public async Task<bool> Delete(int id, int userId)
         {
+            
             var serviceTypeEntity = await _context.TblServiceTypeNta.FirstOrDefaultAsync(m => m.Id == id);
 
+            //If archive is -1 this means there was an issue. The return should be 1 which is the number of rows that were affected
+            //This is calling a stored procedure in the database that will archive deleted records. 
+            var archive = _context.Database.ExecuteSqlCommand("exec Global.ArchiveRecords @p0, @p1, @p2;", parameters: new[] { id.ToString(), "Global.Tbl_ServiceType_NTA", userId.ToString() });
+
+
+            if (serviceTypeEntity == null || archive == -1)
+            {
+                return false;
+            }
             try
             {
+                _context.TblServiceTypeNta.Remove(serviceTypeEntity);
                 await _context.SaveChangesAsync();
                 return true;
             }

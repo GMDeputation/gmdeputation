@@ -75,6 +75,41 @@ namespace SFA.Entities
                     .HasForeignKey(d => d.RequestedUserId)
                     .HasConstraintName("FK_Tbl_AccomodationBooking_NTA_UserId_Tbl_User_NTA_ID");
             });
+            modelBuilder.Entity<TblAppointmentNta>(entity =>
+            {
+                entity.HasOne(d => d.AcceptByPastorByNavigation)
+                    .WithMany(p => p.TblAppointmentNtaAcceptByPastorByNavigation)
+                    .HasForeignKey(d => d.AcceptByPastorBy)
+                    .HasConstraintName("FK_Tbl_Appointment_NTA_AcceptByPastorBy_Tbl_User_NTA_ID");
+
+                entity.HasOne(d => d.AcceptMissionaryByNavigation)
+                    .WithMany(p => p.TblAppointmentNtaAcceptMissionaryByNavigation)
+                    .HasForeignKey(d => d.AcceptMissionaryBy)
+                    .HasConstraintName("FK_Tbl_Appointment_NTA_AcceptMissionaryBy_Tbl_User_NTA_ID");
+
+                entity.HasOne(d => d.Church)
+                    .WithMany(p => p.TblAppointmentNta)
+                    .HasForeignKey(d => d.ChurchId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Tbl_Appointment_NTA_ChurchId_Tbl_Church_NTA_ID");
+
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.TblAppointmentNtaCreatedByNavigation)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Tbl_Appointment_NTA_CreatedBy_Tbl_User_NTA_ID");
+
+                entity.HasOne(d => d.MacroScheduleDetail)
+                    .WithMany(p => p.TblAppointmentNta)
+                    .HasForeignKey(d => d.MacroScheduleDetailId)
+                    .HasConstraintName("FK_Tbl_Appointment_NTA_MacroScheduleDetailId_Tbl_MacroScheduleDetails_NTA_ID");
+
+                entity.HasOne(d => d.SubmittedByNavigation)
+                    .WithMany(p => p.TblAppointmentNtaSubmittedByNavigation)
+                    .HasForeignKey(d => d.SubmittedBy)
+                    .HasConstraintName("FK_Tbl_Appointment_NTA_SubmittedBy_Tbl_User_NTA_ID");
+            });
+
 
             modelBuilder.Entity<TblAttributeNta>(entity =>
             {

@@ -6,6 +6,9 @@
     $scope.churchIdNull = false;
     $scope.isMissonaries = false;
 
+
+
+
     if (id === "0")
     {
         $scope.edit = true;
@@ -14,6 +17,14 @@
     $scope.user = {};
     $scope.isDisabled = false;
 
+    //This is to require the Church to be included when adding a new user
+    //10 is the ID for Pastor. 
+    $scope.isOneContactRequired = function () {
+        if ($scope.user.roleId == 10)
+            return true;
+        else
+            return false;
+};
 
     $scope.searchDistrict = function (searchText) {
         $scope.district = [];

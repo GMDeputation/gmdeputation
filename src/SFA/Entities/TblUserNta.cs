@@ -21,6 +21,19 @@ namespace SFA.Entities
             TblUserPasswordNta = new HashSet<TblUserPasswordNta>();
             TblUserChurchNta = new HashSet<TblUserChurchNta>();
 
+
+            TblAccomodationBookingNtaApprovedByNavigation = new HashSet<TblAccomodationBookingNta>();
+            TblAccomodationBookingNtaRequestedUser = new HashSet<TblAccomodationBookingNta>();
+            TblAppointmentNtaAcceptByPastorByNavigation = new HashSet<TblAppointmentNta>();
+            TblAppointmentNtaAcceptMissionaryByNavigation = new HashSet<TblAppointmentNta>();
+            TblAppointmentNtaCreatedByNavigation = new HashSet<TblAppointmentNta>();
+            TblAppointmentNtaSubmittedByNavigation = new HashSet<TblAppointmentNta>();
+            TblMacroScheduleDetailsNtaApprovedRejectByNavigation = new HashSet<TblMacroScheduleDetailsNta>();
+            TblMacroScheduleDetailsNtaUser = new HashSet<TblMacroScheduleDetailsNta>();
+            TblUserAttributeNta = new HashSet<TblUserAttributeNta>();
+            TblUserLogNta = new HashSet<TblUserLogNta>();
+            TblUserPasswordNta = new HashSet<TblUserPasswordNta>();
+
         }
 
         public int Id { get; set; }
@@ -120,6 +133,13 @@ namespace SFA.Entities
 
         public ICollection<TblUserChurchNta> TblUserChurchNta { get; set; }
 
+        public ICollection<TblAppointmentNta> TblAppointmentNtaAcceptByPastorByNavigation { get; set; }
+
+        public ICollection<TblAppointmentNta> TblAppointmentNtaAcceptMissionaryByNavigation { get; set; }
+
+        public ICollection<TblAppointmentNta> TblAppointmentNtaCreatedByNavigation { get; set; }
+
+        public ICollection<TblAppointmentNta> TblAppointmentNtaSubmittedByNavigation { get; set; }
 
 
 }

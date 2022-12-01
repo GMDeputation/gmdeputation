@@ -13,7 +13,7 @@ namespace SFA.Services
         Task<List<ChurchServiceTime>> GetAll();
         Task<ChurchServiceTime> GetById(int id);
         Task<QueryResult<ChurchServiceTime>> Search(ChurchServiceTimeQuery query, string accessCode, int userId);
-        Task<string> Save(ChurchServiceTime churchServiceTime);
+        Task<string> Save(ChurchServiceTime churchServiceTime, User loggedinUser);
         Task<List<ChurchServiceTime>> GetTimeByChurch(int churchId, string day);
     }
     public class ChurchServiceTimeService : IChurchServiceTimeService
@@ -178,7 +178,7 @@ namespace SFA.Services
                 return null;
             }
         }
-        public async Task<string> Save(ChurchServiceTime churchServiceTime)
+        public async Task<string> Save(ChurchServiceTime churchServiceTime, User loggedinUser)
         {        
                 if (churchServiceTime.Id  == 0)
             {
@@ -190,7 +190,7 @@ namespace SFA.Services
                     ServiceTypeId = churchServiceTime.ServiceTypeId,
                     Preferencelevel = churchServiceTime.Preferencelevel,
                     Notes = churchServiceTime.Notes,
-                    InsertUser = churchServiceTime.CreatedBy.ToString(),
+                    InsertUser = loggedinUser.Id.ToString(),
                     InsertDatetime = DateTime.Now
                 };
                 _context.TblChurchServiceTimeNta.Add(churchServiceTimeEntities);
@@ -205,7 +205,7 @@ namespace SFA.Services
                 churchServiceTimeEntity.ServiceTypeId = churchServiceTime.ServiceTypeId;
                 churchServiceTimeEntity.Preferencelevel = churchServiceTime.Preferencelevel;
                 churchServiceTimeEntity.Notes = churchServiceTime.Notes;
-                churchServiceTimeEntity.UpdateUser = churchServiceTime.ModifiedBy.ToString();
+                churchServiceTimeEntity.UpdateUser = loggedinUser.Id.ToString();
                 churchServiceTimeEntity.UpdateDatetime = DateTime.Now;
             }
             try

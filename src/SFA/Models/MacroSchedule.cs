@@ -11,10 +11,10 @@ namespace SFA.Models
         public string Description { get; set; }
         public bool IsActive { get; set; }
         public DateTime EntryDate { get; set; }
-        public int CreatedBy { get; set; }
-        public DateTime CreatedOn { get; set; }
-        public int ModifiedBy { get; set; }
-        public DateTime? ModifiedOn { get; set; }
+        public int InsertUser { get; set; }
+        public DateTime? InsertDatetime { get; set; }
+        public int UpdateUser { get; set; }
+        public DateTime? UpdateDatetime { get; set; }
 
         public List<MacroScheduleDetails> MacroScheduleDetails { get; set; }
     }
@@ -48,9 +48,9 @@ namespace SFA.Models
     public class MacroScheduleQuery : Query
     {
         public string Filter { get; set; }
-        public DateTime FromDate { get; set; }
-        public DateTime ToDate { get; set; }
-        public DateTime FromEntryDate { get; set; }
-        public DateTime ToEntryDate { get; set; } 
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+        public DateTime? FromEntryDate { get; set; }
+        public DateTime? ToEntryDate { get; set; } 
     }
 }

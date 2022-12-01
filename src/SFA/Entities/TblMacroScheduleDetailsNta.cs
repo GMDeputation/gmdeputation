@@ -8,6 +8,12 @@ namespace SFA.Entities
     [Table("Tbl_MacroScheduleDetails_NTA", Schema = "Global")]
     public partial class TblMacroScheduleDetailsNta
     {
+
+        public TblMacroScheduleDetailsNta()
+        {
+            TblAppointmentNta = new HashSet<TblAppointmentNta>();
+        }
+
         public int Id { get; set; }
         public int MacroScheduleId { get; set; }
         public int DistrictId { get; set; }
@@ -47,6 +53,6 @@ namespace SFA.Entities
         public TblUserNta User { get; set; }
 
         public TblDistrictNta District { get; set; }
-        public ICollection<TblAppointmentNta> TblAppointment { get; set; }
+        public ICollection<TblAppointmentNta> TblAppointmentNta { get; set; }
     }
 }

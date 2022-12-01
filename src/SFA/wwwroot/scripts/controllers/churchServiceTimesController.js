@@ -172,7 +172,7 @@
             $scope.serviceTypes = resp.data;
         });
 
-        $scope.days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thurseday", "Friday", "Saturday"];
+        $scope.days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
         $scope.search();
     }

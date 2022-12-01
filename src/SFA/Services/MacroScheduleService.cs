@@ -13,8 +13,8 @@ namespace SFA.Services
         Task<List<MacroScheduleDetails>> GetAll(string dataAccessCode,int userId);
         Task<MacroSchedule> GetById(int id);
         Task<QueryResult<MacroScheduleDetails>> Search(MacroScheduleQuery query, int userId);
-        Task<string> Save(MacroSchedule macroSchedule);
-        Task<string> Edit(MacroScheduleDetails macroScheduleDetails);
+        Task<string> Save(MacroSchedule macroSchedule, User loggedinUser);
+        Task<string> Edit(MacroScheduleDetails macroScheduleDetails, User loggedinUser);
         Task<MacroScheduleDetails> GetMacroScheduleDetailsById(int id, string accesscode);
         Task<string> Approved(MacroScheduleDetails macroScheduleDetails, int userId);
         Task<string> Rejected(MacroScheduleDetails macroScheduleDetails, int userId);
@@ -131,11 +131,11 @@ namespace SFA.Services
             }
             if (query.FromDate != null)
             {
-                macroScheduleEntities = macroScheduleEntities.Where(m => m.StartDate.Date >= query.FromDate.Date).ToList();
+                macroScheduleEntities = macroScheduleEntities.Where(m => m.StartDate.Date >= query.FromDate).ToList();
             }
             if (query.ToDate != null)
             {
-                macroScheduleEntities = macroScheduleEntities.Where(m => m.EndDate.Date <= query.ToDate.Date).ToList();
+                macroScheduleEntities = macroScheduleEntities.Where(m => m.EndDate.Date <= query.ToDate).ToList();
             }
 
             return macroScheduleEntities.Select(n => new MacroScheduleDetails
@@ -187,19 +187,19 @@ namespace SFA.Services
                 }
                 if (query.FromDate != null)
                 {
-                    macroScheduleQuery = macroScheduleQuery.Where(m => m.StartDate.Date >= query.FromDate.Date);
+                    macroScheduleQuery = macroScheduleQuery.Where(m => m.StartDate.Date >= query.FromDate);
                 }
                 if (query.ToDate != null)
                 {
-                    macroScheduleQuery = macroScheduleQuery.Where(m => m.EndDate.Date <= query.ToDate.Date);
+                    macroScheduleQuery = macroScheduleQuery.Where(m => m.EndDate.Date <= query.ToDate);
                 }
                 if (query.FromEntryDate != null)
                 {
-                    macroScheduleQuery = macroScheduleQuery.Where(m => m.MacroSchedule.EntryDate.Date >= query.FromEntryDate.Date);
+                    macroScheduleQuery = macroScheduleQuery.Where(m => m.MacroSchedule.EntryDate.Date >= query.FromEntryDate);
                 }
                 if (query.ToEntryDate != null)
                 {
-                    macroScheduleQuery = macroScheduleQuery.Where(m => m.MacroSchedule.EntryDate.Date <= query.ToEntryDate.Date);
+                    macroScheduleQuery = macroScheduleQuery.Where(m => m.MacroSchedule.EntryDate.Date <= query.ToEntryDate);
                 }
 
                 var count = await macroScheduleQuery.CountAsync();
@@ -253,11 +253,12 @@ namespace SFA.Services
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return null;
             }
         }
 
-        public async Task<string> Save(MacroSchedule macroSchedule)
+        public async Task<string> Save(MacroSchedule macroSchedule, User loggedinUser)
         {
             if (macroSchedule.Id == 0)
             {
@@ -267,7 +268,7 @@ namespace SFA.Services
                     IsActive = macroSchedule.IsActive,
                     Description = macroSchedule.Description,
                     EntryDate = macroSchedule.EntryDate,
-                    InsertUser = macroSchedule.CreatedBy.ToString(),
+                    InsertUser = loggedinUser.Id.ToString(),
                     InsertDatetime = DateTime.Now
                 };
 
@@ -304,7 +305,7 @@ namespace SFA.Services
                 macroScheduleEntity.IsActive = macroSchedule.IsActive;
                 macroScheduleEntity.Description = macroSchedule.Description;
                 macroScheduleEntity.EntryDate = macroSchedule.EntryDate;
-                macroScheduleEntity.UpdateUser = macroSchedule.ModifiedBy.ToString();
+                macroScheduleEntity.UpdateUser = loggedinUser.Id.ToString();
                 macroScheduleEntity.UpdateDatetime = DateTime.Now;
 
                 var macroScheduleDetailsEntities = new List<TblMacroScheduleDetailsNta>();
@@ -338,7 +339,7 @@ namespace SFA.Services
             }
         }
 
-        public async Task<string> Edit(MacroScheduleDetails macroScheduleDetails)
+        public async Task<string> Edit(MacroScheduleDetails macroScheduleDetails, User loggedinUser)
         {
             var macroScheduleDetailsEntity = await _context.TblMacroScheduleDetailsNta.FirstOrDefaultAsync(m => m.Id == macroScheduleDetails.Id);
 
@@ -348,6 +349,8 @@ namespace SFA.Services
             macroScheduleDetailsEntity.StartDate = macroScheduleDetails.StartDate;
             macroScheduleDetailsEntity.EndDate = macroScheduleDetails.EndDate;
             macroScheduleDetailsEntity.Notes = macroScheduleDetails.Notes;
+            macroScheduleDetailsEntity.UpdateDatetime = DateTime.Now;
+            macroScheduleDetailsEntity.UpdateUser = loggedinUser.Id.ToString();
 
             try
             {

@@ -75,11 +75,9 @@ namespace SFA.Controllers
         [Route("save")]
         public async Task<IActionResult> Save([FromBody]ChurchServiceTime churchServiceTime)
         {
-            var loggedinUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");
-            churchServiceTime.CreatedBy = loggedinUser.Id;
-            churchServiceTime.ModifiedBy = loggedinUser.Id;
+            var loggedinUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");            
 
-            var result = await _churchServiceTimeService.Save(churchServiceTime);
+            var result = await _churchServiceTimeService.Save(churchServiceTime, loggedinUser);
             return new JsonResult(result);
         }
 

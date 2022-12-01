@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\SEANR\\source\\repos\\SFAMigration3\\SFA\\SFA.csproj": {}
+    "C:\\Users\\SEANR\\OneDrive\\Documents\\GitHub\\gmdeputation\\src\\SFA\\SFA.csproj": {}
   },
   "projects": {
-    "C:\\Users\\SEANR\\source\\repos\\SFAMigration3\\SFA\\SFA.csproj": {
+    "C:\\Users\\SEANR\\OneDrive\\Documents\\GitHub\\gmdeputation\\src\\SFA\\SFA.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\SEANR\\source\\repos\\SFAMigration3\\SFA\\SFA.csproj",
+        "projectUniqueName": "C:\\Users\\SEANR\\OneDrive\\Documents\\GitHub\\gmdeputation\\src\\SFA\\SFA.csproj",
         "projectName": "SFA",
-        "projectPath": "C:\\Users\\SEANR\\source\\repos\\SFAMigration3\\SFA\\SFA.csproj",
+        "projectPath": "C:\\Users\\SEANR\\OneDrive\\Documents\\GitHub\\gmdeputation\\src\\SFA\\SFA.csproj",
         "packagesPath": "C:\\Users\\SEANR\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\SEANR\\source\\repos\\SFAMigration3\\SFA\\obj\\",
+        "outputPath": "C:\\Users\\SEANR\\OneDrive\\Documents\\GitHub\\gmdeputation\\src\\SFA\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\SEANR\\AppData\\Roaming\\NuGet\\NuGet.Config",
