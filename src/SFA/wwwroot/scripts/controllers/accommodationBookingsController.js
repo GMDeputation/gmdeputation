@@ -79,7 +79,7 @@
     };   
     $scope.detail = function (id) {
         if (id === undefined) {
-            id = '00000000-0000-0000-0000-000000000000';
+            id = '0';
         }
         $window.location.href = '/accomodation-booking/detail/' + id;
     };

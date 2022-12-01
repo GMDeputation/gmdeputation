@@ -32,10 +32,10 @@
         return $scope.district;
     };
     $scope.selectedDistrictName = function ($item) {
-        $scope.accommodationBook.districtId = $item !== null && $item !== undefined ? $item.id : '00000000-0000-0000-0000-000000000000';
+        $scope.accommodationBook.districtId = $item !== null && $item !== undefined ? $item.id : '0';
         $scope.churches = [];
 
-        if ($scope.accommodationBook.districtId !== null && $scope.accommodationBook.districtId !== undefined && $scope.accommodationBook.districtId !== '00000000-0000-0000-0000-000000000000') {
+        if ($scope.accommodationBook.districtId !== null && $scope.accommodationBook.districtId !== undefined && $scope.accommodationBook.districtId !== '0') {
 
             churchService.getChurchByDistrict($scope.accommodationBook.districtId).then(function (resp) {
                 $scope.churches = resp;
@@ -59,9 +59,9 @@
         return $scope.test;
     };
     $scope.selectedChurchName = function ($item) {
-        $scope.accommodationBook.churchId = $item !== null && $item !== undefined ? $item.id : '00000000-0000-0000-0000-000000000000';
+        $scope.accommodationBook.churchId = $item !== null && $item !== undefined ? $item.id : '0';
 
-        if ($scope.accommodationBook.churchId !== null && $scope.accommodationBook.churchId !== undefined && $scope.accommodationBook.churchId !== '00000000-0000-0000-0000-000000000000') {
+        if ($scope.accommodationBook.churchId !== null && $scope.accommodationBook.churchId !== undefined && $scope.accommodationBook.churchId !== '0') {
 
             accommodationService.getAllByChurch($scope.accommodationBook.churchId).then(function (resp) {
                 $scope.accommodations = resp;
@@ -73,7 +73,7 @@
     $scope.save = function () {
         $scope.isDisabled = true;
         
-        if ($scope.accommodationBook.districtId === null && $scope.accommodationBook.districtId === undefined && $scope.accommodationBook.districtId === '00000000-0000-0000-0000-000000000000') {
+        if ($scope.accommodationBook.districtId === null && $scope.accommodationBook.districtId === undefined && $scope.accommodationBook.districtId === '0') {
             $mdDialog.show(
                 $mdDialog.alert()
                     .clickOutsideToClose(false)
@@ -86,7 +86,7 @@
             });
             return false;
         }
-        else if ($scope.accommodationBook.churchId === null && $scope.accommodationBook.churchId === undefined && $scope.accommodationBook.churchId === '00000000-0000-0000-0000-000000000000') {
+        else if ($scope.accommodationBook.churchId === null && $scope.accommodationBook.churchId === undefined && $scope.accommodationBook.churchId === '0') {
             $mdDialog.show(
                 $mdDialog.alert()
                     .clickOutsideToClose(false)
@@ -201,7 +201,7 @@
             $scope.districts = resp.data;
         });
 
-        if (id !== null && id !== undefined && id !== '00000000-0000-0000-0000-000000000000') {
+        if (id !== null && id !== undefined && id !== '0') {
             accomodationBookService.get(id).then(function (resp) {
                 $scope.accommodationBook = resp; 
 

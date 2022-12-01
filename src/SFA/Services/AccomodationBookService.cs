@@ -283,7 +283,7 @@ namespace SFA.Services
 				Notification notification = new Notification();
 				notification.Description = "Accomodation Booked By " + userEntity.FirstName + " " + userEntity.LastName + " (" + userEntity.Role.Name + " ), please approved it.";
 				notification.EventUrl = "/accomodation-booking";
-				//notification.CreatedBy = userId;
+				notification.InsertUser = userId.ToString();
 				notification.EventUser = item2.Id;
 				Notification item = notification;
 				list2.Add(item);
@@ -317,7 +317,7 @@ namespace SFA.Services
 				Notification notification = new Notification();
 				notification.Description = "Accomodation Booking FeedBack given By " + userEntity.FirstName + " " + userEntity.LastName + " (" + userEntity.Role.Name + " ). ";
 				notification.EventUrl = "/accomodation-booking";
-				//notification.CreatedBy = userId;
+				notification.InsertUser = userId.ToString();
 				notification.EventUser = item2.Id;
 				Notification item = notification;
 				list2.Add(item);
@@ -347,7 +347,7 @@ namespace SFA.Services
 			Notification notification = new Notification();
 			notification.Description = "Accomodation Booking Submit By " + userEntity.FirstName + " " + userEntity.LastName + " (" + userEntity.Role.Name + " ). ";
 			notification.EventUrl = "/accomodation-booking";
-			//notification.CreatedBy = userId;
+			notification.InsertUser = userId.ToString();
 			notification.EventUser = accomodationBooking.RequestedUserId;
 			Notification notification2 = notification;
 			try

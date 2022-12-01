@@ -51,6 +51,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Views\AccomodationBook\CalenderView.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\AccomodationBook\FeedBack.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\AccomodationBook\View.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\AccomodationBook\Detail.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Appointment\Add.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
