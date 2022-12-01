@@ -141,6 +141,5 @@ namespace SFA.Entities
 
         public ICollection<TblAppointmentNta> TblAppointmentNtaSubmittedByNavigation { get; set; }
 
-
-}
+    }
 }

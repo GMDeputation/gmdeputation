@@ -14,7 +14,7 @@
       "NETCOREAPP2_0_OR_GREATER",
       "NETCOREAPP2_1_OR_GREATER"
     ],
-    "languageVersion": "7.3",
+    "languageVersion": "8.0",
     "platform": "",
     "allowUnsafe": false,
     "warningsAsErrors": false,

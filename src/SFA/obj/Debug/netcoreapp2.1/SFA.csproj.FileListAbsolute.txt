@@ -342,3 +342,4 @@ C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\obj\Debug\netcorea
 C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\obj\Debug\netcoreapp2.1\SFA.pdb
 C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\obj\Debug\netcoreapp2.1\SFA.genruntimeconfig.cache
 C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\obj\Debug\netcoreapp2.1\SFA.csproj.CopyComplete
+C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\obj\Debug\netcoreapp2.1\Razor\Views\AccomodationBook\Index.cshtml.g.cs

@@ -74,6 +74,8 @@ namespace SFA
             services.AddScoped<IServiceTypeService, ServiceTypeService>();
             services.AddScoped<IChurchServiceTimeService, ChurchServiceTimeService>();
             services.AddScoped<IAppointmentService, AppointmentService>();
+            services.AddScoped<IAccomodationBookService, AccomodationBookService>();
+            services.AddScoped<INotificationService, NotificationService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
