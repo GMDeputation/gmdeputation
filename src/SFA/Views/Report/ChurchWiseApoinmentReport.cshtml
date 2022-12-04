@@ -1,0 +1,120 @@
+﻿@{
+   ViewData["Title"] = "Church Wise Appoinment Report";
+}
+<div data-ng-controller="churchWiseAppoinmentReportsController">
+    <form name="form">
+    <!--Topbar section-->
+<div class="topbar">
+    <div class="md-toolbar-tools" layout="row">
+        <div class="topbar-title" flex>
+            <h2>Macroschedule Wise Appoinment Report</h2>
+            <i class="vertical-seperator" hide-sm hide-xs>&nbsp;</i> <span hide-sm hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / Macroschedule Wise Appoinment Report</span>
+        </div>
+        <div flex="none">
+            <md-button class="add-btn" aria-label="Back to home" href="/home"> <md-tooltip>Back to home</md-tooltip> <i class="ti-angle-double-left"></i> </md-button>
+        </div>
+    </div>
+</div>
+    <!--//End Topbar section-->
+    <!--Filter Section-->
+     <div class="container">
+    <div layout="row" layout-sm="column" layout-xs="column">
+        <md-autocomplete
+            flex
+            class="padding-wrap"
+            md-no-cache="true"
+            md-selected-item="reportParams.district"
+            md-selected-item-change="selectedDistrictName(district)"
+            md-search-text="districtSearch"
+            md-items="district in searchDistrict(districtSearch)"
+            md-item-text="district.name"
+            md-min-length="0"
+            md-floating-label="District Name"
+        >
+            <md-item-template> <span md-highlight-text="districtSearch" md-highlight-flags="gi">{{district.name}}</span> </md-item-template> <md-not-found> No Data Found . </md-not-found>
+        </md-autocomplete>
+        <md-input-container class="md-block" flex>
+            <label>Section</label>
+            <md-select name="section" ng-model="reportParams.sectionId" ng-change="getAllChurchBySection()">
+                <md-option ng-value="">None</md-option> <md-option ng-repeat="section in sections" ng-value="section.id">{{section.name}}</md-option>
+            </md-select>
+        </md-input-container>
+        <md-autocomplete
+            flex
+            class="padding-wrap"
+            md-no-cache="true"
+            md-selected-item="reportParams.church"
+            md-selected-item-change="selectedChurchName(church)"
+            md-search-text="churchSearch"
+            md-items="church in searchChurch(churchSearch)"
+            md-item-text="church.churchName"
+            md-min-length="0"
+            md-floating-label="Church Name"
+        >
+            <md-item-template> <span md-highlight-text="ChurchSearch" md-highlight-flags="gi">{{church.churchName}}</span> </md-item-template> <md-not-found> No Data Found . </md-not-found>
+        </md-autocomplete>
+    </div>
+    <div layout="row" layout-align="center center">
+        <md-button class="save-btn" aria-label="Save" data-ng-click="search()" data-ng-disabled="form.$invalid"> <md-tooltip>Search</md-tooltip> <i class="ti-search"></i> Search </md-button>
+        <md-button class="cancel-btn" aria-label="Cancel" href="/nav/@ViewBag.Group"> <md-tooltip>Cancel</md-tooltip> <i class="fas fa-reply"></i> Cancel </md-button>
+    </div>
+    <div layout="row" layout-sm="column" layout-xs="column">
+        <md-button class="add-btn" aria-label="Download" data-ng-click="generateExcell()" data-ng-disabled="searchDatas.length === 0"> <md-tooltip>Generate Excel</md-tooltip> <i class="fas fa-download"></i> Generate Excel </md-button>
+    </div>
+    <table md-table md-progress="promise">
+        <thead md-head>
+            <tr md-row>
+                <th md-column class="center"><span>Church Name</span></th>
+                <th md-column class="center"><span>Total ServiceDateTime</span></th>
+                <th md-column class="center"><span>Appointment Details</span></th>
+            </tr>
+        </thead>
+        <tbody md-body>
+            <tr class="md-row md-row-empty" ng-show="searchDatas.length === 0">
+                <td class="md-cell" colspan="3">No Data Found</td>
+            </tr>
+            <tr md-row data-ng-repeat="item in searchDatas track by $index">
+                <td md-cell class="center">{{item.churchName}}</td>
+                <td md-cell class="center">{{item.totalServiceTime}}</td>
+                <td md-cell class="center">
+                    <table md-table md-progress="promise">
+                        <thead md-head>
+                            <tr md-row>
+                                <th md-column class="center">Sl No</th>
+                                <th md-column class="center"><span>Appoinment Date</span></th>
+                                <th md-column class="center"><span>Appoinment Time</span></th>
+                                <th md-column class="center"><span>Service Type</span></th>
+                                <th md-column class="center"><span>Missionary LastName</span></th>
+                                <th md-column class="center"><span>Missionary FirstName</span></th>
+                            </tr>
+                        </thead>
+                        <tbody md-body>
+                            <tr class="md-row md-row-empty" ng-show="item.appoinmentDetails.length === 0">
+                                <td class="md-cell" colspan="6">No Data Found</td>
+                            </tr>
+                            <tr md-row data-ng-repeat="detail in item.appoinmentDetails track by $index">
+                                <td md-cell class="center">{{$index+1}}</td>
+                                <td md-cell class="center">{{detail.appoinmentDate | date: 'dd-MM-yyyy'}}</td>
+                                <td md-cell class="center">{{detail.time}}</td>
+                                <td md-cell class="center">{{detail.serviceType}}</td>
+                                <td md-cell class="center">{{detail.lastName}}</td>
+                                <td md-cell class="center">{{detail.firstName}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</form>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/districtService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/sectionService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/churchService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/reportsService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/churchWiseAppoinmentReportsController.js" asp-append-version="true"></script>
+}

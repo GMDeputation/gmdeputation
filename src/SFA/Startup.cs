@@ -76,6 +76,7 @@ namespace SFA
             services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddScoped<IAccomodationBookService, AccomodationBookService>();
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IReportService, ReportService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

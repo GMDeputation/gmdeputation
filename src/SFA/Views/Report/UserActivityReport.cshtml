@@ -1,0 +1,98 @@
+﻿@{
+    ViewData["Title"] = "User Activity Report";
+}
+<div data-ng-controller="userActivityReportsController">
+    <form name="form">
+    <!--Topbar section-->
+    <div class="topbar">
+        <div class="md-toolbar-tools" layout="row">
+            <div class="topbar-title" flex>
+                <h2>User Activity Report</h2>
+                <i class="vertical-seperator" hide-sm hide-xs>&nbsp;</i> <span hide-sm hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / User Activity Report</span>
+            </div>
+            <div flex="none">
+                <md-button class="add-btn" aria-label="Back to home" href="/home"> <md-tooltip>Back to home</md-tooltip> <i class="ti-angle-double-left"></i> </md-button>
+            </div>
+        </div>
+    </div>
+    <!--//End Topbar section-->
+    <!--Filter Section-->
+       <div class="container">
+        <div layout="row" layout-sm="column" layout-xs="column">
+            <md-input-container class="md-block" flex="none">
+                <label>From Date</label> <md-datepicker name="fromDate" ng-model="reportParams.fromDate" md-placeholder="From Date" md-max-date="maxyear" md-min-date="minYear" required></md-datepicker>
+                <div ng-messages="form.fromDate.$error" md-auto-hide="false"><div ng-message="required">From Date is required</div></div>
+            </md-input-container>
+            <md-input-container class="md-block" flex="none">
+                <label>To Date</label> <md-datepicker name="toDate" ng-model="reportParams.toDate" md-placeholder="To Date" md-max-date="maxyear" md-min-date="reportParams.fromDate" required></md-datepicker>
+                <div ng-messages="form.toDate.$error" md-auto-hide="false"><div ng-message="required">To Date is required</div></div>
+            </md-input-container>
+            <md-autocomplete
+                flex
+                class="padding-wrap"
+                md-no-cache="true"
+                md-selected-item="reportParams.user"
+                md-selected-item-change="selectedUserName(user)"
+                md-search-text="userSearch"
+                md-items="user in searchUser(userSearch)"
+                md-item-text="user.name"
+                md-min-length="0"
+                md-floating-label="User Name"
+            >
+                <md-item-template> <span md-highlight-text="userSearch" md-highlight-flags="gi">{{user.name}}</span> </md-item-template> <md-not-found> No Data Found . </md-not-found>
+            </md-autocomplete>
+            <md-input-container class="md-block" flex>
+                <label>Search by Action</label> <md-select name="section" ng-model="reportParams.action"> <md-option ng-value="">None</md-option> <md-option ng-repeat="item in actions" ng-value="item">{{item}}</md-option> </md-select>
+            </md-input-container>
+            <md-input-container class="md-block" flex>
+                <label>Search by Role</label>
+                <md-select name="userRole" ng-model="reportParams.roleName"> <md-option ng-value="">None</md-option> <md-option ng-repeat="role in roles" ng-value="role.name">{{role.name}}</md-option> </md-select>
+            </md-input-container>
+        </div>
+        <div layout="row" layout-align="center center">
+            <md-button class="save-btn" aria-label="Save" data-ng-click="searchUserActivityData()" data-ng-disabled="form.$invalid"> <md-tooltip>Search</md-tooltip> <i class="ti-search"></i> Search </md-button>
+            <md-button class="cancel-btn" aria-label="Cancel" href="/nav/@ViewBag.Group"> <md-tooltip>Cancel</md-tooltip> <i class="fas fa-reply"></i> Cancel </md-button>
+        </div>
+        <div layout="row" layout-sm="column" layout-xs="column">
+            <md-button class="add-btn" aria-label="Download" data-ng-click="generateExcell()" data-ng-disabled="searchDatas.length === 0"> <md-tooltip>Generate Excel</md-tooltip> <i class="fas fa-download"></i> Generate Excel </md-button>
+        </div>
+
+        <table md-table md-progress="promise">
+            <thead md-head>
+                <tr md-row>
+                    <th md-column class="center">Sl No</th>
+                    <th md-column><span class="pad-l-8">USER NAME</span></th>
+                    <th md-column><span class="pad-l-8">ROLE</span></th>
+                    <th md-column><span class="pad-l-8">EMAIL</span></th>
+                    <th md-column><span class="pad-l-8">PAGE</span></th>
+                    <th md-column><span class="pad-l-8">DESCRIPTION</span></th>
+                    <th md-column><span class="pad-l-8">ACTION</span></th>
+                    <th md-column><span class="pad-l-8">ACTION TIME</span></th>
+                </tr>
+            </thead>
+            <tbody md-body>
+                <tr class="md-row md-row-empty" ng-show="searchDatas.length === 0">
+                    <td class="md-cell" colspan="8">No Data Found</td>
+                </tr>
+                <tr md-row data-ng-repeat="item in searchDatas track by $index">
+                    <td md-cell class="center">{{$index+1}}</td>
+                    <td md-cell class="pad-l-8">{{item.name}}</td>
+                    <td md-cell class="pad-l-8">{{item.role}}</td>
+                    <td md-cell class="pad-l-8">{{item.email}}</td>
+                    <td md-cell class="pad-l-8">{{item.page}}</td>
+                    <td md-cell class="pad-l-8">{{item.description}}</td>
+                    <td md-cell class="pad-l-8">{{item.action}}</td>
+                    <td md-cell class="pad-l-8">{{item.actionTime | date: 'dd-MM-yyyy HH:mm:ss'}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/roleService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/userService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/reportsService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/userActivityReportsController.js" asp-append-version="true"></script>
+}

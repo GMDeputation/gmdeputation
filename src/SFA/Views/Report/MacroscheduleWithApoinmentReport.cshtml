@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "Macroschedule Wise Appoinment Report";
+}
+<div data-ng-controller="macroscheduleWiseAppoinmentReportsController">
+    <form name="form">
+    <!--Topbar section-->
+<div class="topbar">
+    <div class="md-toolbar-tools" layout="row">
+        <div class="topbar-title" flex>
+            <h2>Macroschedule Wise Appoinment Report</h2>
+            <i class="vertical-seperator" hide-sm hide-xs>&nbsp;</i> <span hide-sm hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / Macroschedule Wise Appoinment Report</span>
+        </div>
+        <div flex="none">
+            <md-button class="add-btn" aria-label="Back to home" href="/home"> <md-tooltip>Back to home</md-tooltip> <i class="ti-angle-double-left"></i> </md-button>
+        </div>
+    </div>
+</div>
+    <!--//End Topbar section-->
+    <!--Filter Section-->
+<div class="container">
+    <div layout="row" layout-sm="column" layout-xs="column">
+        <md-input-container class="md-block" flex="25"> <label>Start From Date</label> <md-datepicker name="fromDate" ng-model="reportParams.startFromDate" md-placeholder="Start From Date"></md-datepicker> </md-input-container>
+        <md-input-container class="md-block" flex="25">
+            <label>Start To Date</label> <md-datepicker name="fromDate" ng-model="reportParams.startToDate" md-pl aceholder="Start To Date" md-min-date="reportParams.startFromDate"></md-datepicker>
+        </md-input-container>
+        <md-input-container class="md-block" flex="25"> <label>Appoinment From Date</label> <md-datepicker name="toDate" ng-model="reportParams.eventFromDate" md-placeholder="Appoinment From Date"></md-datepicker> </md-input-container>
+        <md-input-container class="md-block" flex="25">
+            <label>Appoinment To Date</label> <md-datepicker name="toDate" ng-model="reportParams.eventToDate" md-placeholder="Appoinment To Date" md-min-date="reportParams.eventFromDate"></md-datepicker>
+        </md-input-container>
+    </div>
+    <div layout="row" layout-align="center center">
+        <md-button class="save-btn" aria-label="Save" data-ng-click="search()" data-ng-disabled="form.$invalid"> <md-tooltip>Search</md-tooltip> <i class="ti-search"></i> Search </md-button>
+        <md-button class="cancel-btn" aria-label="Cancel" href="/nav/@ViewBag.Group"> <md-tooltip>Cancel</md-tooltip> <i class="fas fa-reply"></i> Cancel </md-button>
+    </div>
+    <div layout="row" layout-sm="column" layout-xs="column">
+        <md-button class="add-btn" aria-label="Download" data-ng-click="generateExcell()" data-ng-disabled="searchDatas.length === 0"> <md-tooltip>Generate Excel</md-tooltip> <i class="fas fa-download"></i> Generate Excel </md-button>
+    </div>
+    <table md-table md-progress="promise">
+        <thead md-head>
+            <tr md-row>
+                <th md-column class="center"><span>MacroSchedule Description</span></th>
+                <th md-column class="center"><span>Appointment Details</span></th>
+            </tr>
+        </thead>
+        <tbody md-body>
+            <tr
+                class="md-row md-row-empty"
+                ng-show="searchDatas.l
+			ength === 0"
+            >
+                <td class="md-cell" colspan="2">No Data Found</td>
+            </tr>
+            <tr md-row data-ng-repeat="item in searchDatas track by $index">
+                <td md-cell class="center">{{item.description}}</td>
+                <td md-cell class="center">
+                    <table md-table md-progress="promise">
+                        <thead md-head>
+                            <tr md-row>
+                                <th md-column class="center">Sl No</th>
+                                <th md-column class="center"><span>Church Name</span></th>
+                                <th md-column class="center"><span>Appoinment Date</span></th>
+                                <th md-column class="center"><span>Appoinment Time</span></th>
+                                <th md-column class="center"><span>Service Type</span></th>
+                                <th md-column class="center"><span>Pastor Name</span></th>
+                            </tr>
+                        </thead>
+                        <tbody md-body>
+                            <tr class="md-row md-row-empty" ng-show="item.appoinmentDetails.length === 0">
+                                <td class="md-cell" colspan="6">No Data Found</td>
+                            </tr>
+                            <tr md-row data-ng-repeat="detail in item.appoinmentDetails track by $index">
+                                <td md-cell class="center">{{$index+1}}</td>
+                                <td md-cell class="center">{{detail.churchName}}</td>
+                                <td md-cell class="center">{{detail.appoinmentDate | date: 'dd-MM-yyyy'}}</td>
+                                <td md-cell class="center">{{detail.time}}</td>
+                                <td md-cell class="center">
+                                    {{detail.serviceType}}
+                                </td>
+                                <td md-cell class="center">{{detail.pastorName}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</form>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/reportsService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/macroscheduleWiseAppoinmentReportsController.js" asp-append-version="true"></script>
+
+}

@@ -38,7 +38,10 @@
           "Microsoft.EntityFrameworkCore.SqlServer.Design": "1.1.6",
           "Microsoft.EntityFrameworkCore.Tools": "2.1.1",
           "Microsoft.NETCore.App": "2.1.0",
-          "Microsoft.VisualStudio.Web.CodeGeneration": "2.1.1"
+          "Microsoft.VisualStudio.Web.CodeGeneration": "2.1.1",
+          "MailKit": "1.6.0.0",
+          "MimeKit": "1.6.0.0",
+          "NETCore.MailKit": "1.0.0.0"
         },
         "runtime": {
           "SFA.dll": {}
@@ -592,6 +595,39 @@
         },
         "compile": {
           "ref/netstandard1.3/System.Xml.XPath.XmlDocument.dll": {}
+        }
+      },
+      "MailKit/1.6.0.0": {
+        "runtime": {
+          "MailKit.dll": {
+            "assemblyVersion": "1.6.0.0",
+            "fileVersion": "1.6.0.0"
+          }
+        },
+        "compile": {
+          "MailKit.dll": {}
+        }
+      },
+      "MimeKit/1.6.0.0": {
+        "runtime": {
+          "MimeKit.dll": {
+            "assemblyVersion": "1.6.0.0",
+            "fileVersion": "1.6.0.0"
+          }
+        },
+        "compile": {
+          "MimeKit.dll": {}
+        }
+      },
+      "NETCore.MailKit/1.0.0.0": {
+        "runtime": {
+          "NETCore.MailKit.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        },
+        "compile": {
+          "NETCore.MailKit.dll": {}
         }
       },
       "Libuv/1.10.0": {
@@ -4448,6 +4484,21 @@
       "sha512": "sha512-A/uxsWi/Ifzkmd4ArTLISMbfFs6XpRPsXZonrIqyTY70xi8t+mDtvSM5Os0RqyRDobjMBwIDHDL4NOIbkDwf7A==",
       "path": "system.xml.xpath.xmldocument/4.3.0",
       "hashPath": "system.xml.xpath.xmldocument.4.3.0.nupkg.sha512"
+    },
+    "MailKit/1.6.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MimeKit/1.6.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "NETCore.MailKit/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
     },
     "Libuv/1.10.0": {
       "type": "package",

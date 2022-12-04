@@ -167,5 +167,6 @@
             $scope.districts = resp.data;
         });
     }
+
     init();
 });

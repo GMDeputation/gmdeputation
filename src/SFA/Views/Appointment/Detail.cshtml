@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = (ViewBag.Id == Guid.Empty ? "Add" : "Edit") + " Appointment";
+    ViewData["Title"] = (ViewBag.Id == 0 ? "Add" : "Edit") + " Appointment";
 }
 <div data-ng-controller="appointmentDetailController">
     <form name="form">

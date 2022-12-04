@@ -20,9 +20,12 @@ namespace SFA.Services
         Task<List<RoleMenu>> GetMenuByUser(int userId);
         //Task<List<ApplicationAccess>> GetAccessList(int id);
         //Task<List<UserApplication>> GetMenuByUser(int userId);
-        //Task<bool> SaveLogIn(int id);
-        //Task<bool> SaveLogOut(int id);
+        Task<bool> SaveLogIn(int id);
+        Task<bool> SaveLogOut(int id);
+        Task<bool> VerifyMail(int otp, int userId);
+        Task<bool> SaveOTP(int otp, int userId);
 
+        Task<string> UpdateDistrictAndSection(List<User> users);
         Task<List<User>> GetAllMissionariesUser();
     }
 
@@ -38,6 +41,61 @@ namespace SFA.Services
             _menuService = menuService;
             _menuGroupService = menuGroupService;
         }
+        public async Task<bool> SaveLogIn(int id)
+        {
+            TblUserLogNta tblUserLog = await _context.TblUserLogNta.Where((TblUserLogNta m) => m.UserId == id).FirstOrDefaultAsync();
+            if (tblUserLog != null)
+            {
+                tblUserLog.LoginTime = DateTime.Now;
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SaveLogOut(int id)
+        {
+            TblUserLogNta tblUserLog = await _context.TblUserLogNta.Where((TblUserLogNta m) => m.UserId == id && m.LogoutTime == null).FirstOrDefaultAsync();
+            if (tblUserLog != null)
+            {
+                tblUserLog.LogoutTime = DateTime.Now;
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<string> UpdateDistrictAndSection(List<User> users)
+        {
+            foreach (User item in users)
+            {
+                TblUserNta tblUser = await _context.TblUserNta.FirstOrDefaultAsync((TblUserNta m) => m.Id == item.Id);
+                tblUser.DistrictId = item.DistrictId;
+                tblUser.SectionId = item.SectionId;
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+                return "";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
 
         public async Task<bool> ChangePassword(int userId, User user)
         {
@@ -65,6 +123,40 @@ namespace SFA.Services
                 throw ex;
             }
 
+        }
+
+        public async Task<bool> SaveOTP(int otp, int userId)
+        {
+            (await _context.TblUserNta.FirstOrDefaultAsync((TblUserNta m) => m.Id == userId)).Otp = otp;
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> VerifyMail(int otp, int userId)
+        {
+            TblUserNta tblUser = await _context.TblUserNta.FirstOrDefaultAsync((TblUserNta m) => m.Id == userId);
+            if (tblUser.Otp != otp)
+            {
+                return false;
+            }
+            tblUser.IsEmailVerify = true;
+            tblUser.VerifiedOn = DateTime.Now;
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public async Task<List<User>> GetAll()

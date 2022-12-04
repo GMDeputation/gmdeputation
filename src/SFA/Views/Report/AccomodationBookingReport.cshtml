@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Evangangelist Quarter Report";
+}
+<div data-ng-controller="accomodationBookingReportController">
+    <form name="form">
+    <!--Topbar section-->
+<div class="topbar">
+    <div class="md-toolbar-tools" layout="row">
+        <div class="topbar-title" flex>
+            <h2>Evangangelist Quarter Report</h2>
+            <i class="vertical-seperator" hide-sm hide-xs>&nbsp;</i> <span hide-sm hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / Evangangelist Quarter Report</span>
+        </div>
+        <div flex="none">
+            <md-button class="add-btn" aria-label="Back to home" href="/home"> <md-tooltip>Back to home</md-tooltip> <i class="ti-angle-double-left"></i> </md-button>
+        </div>
+    </div>
+</div>
+    <!--//End Topbar section-->
+    <!--Filter Section-->
+    <div class="container">
+    <div layout="row" layout-sm="column" layout-xs="column">
+        <md-autocomplete
+            flex
+            class="padding-wrap"
+            md-no-cache="true"
+            md-selected-item="reportParams.church"
+            md-selected-item-change="selectedChurchName(church)"
+            md-search-text="churchSearch"
+            md-items="church in searchChurch(churchSearch)"
+            md-item-text="church.churchName"
+            md-min-length="0"
+            md-floating-label="Church Name"
+        >
+            <md-item-template> <span md-highlight-text="ChurchSearch" md-highlight-flags="gi">{{church.churchName}}</span> </md-item-template> <md-not-found> No Data Found . </md-not-found>
+        </md-autocomplete>
+        <md-input-container class="md-block" flex="25"> <label>From Date</label> <md-datepicker name="fromDate" ng-model="reportParams.fromDate" md-placeholder="From Date"></md-datepicker> </md-input-container>
+        <md-input-container class="md-block" flex="25"> <label>To Date</label> <md-datepicker name="fromDate" ng-model="reportParams.toDate" md-placeholder="To Date" md-min-date="reportParams.fromDate"></md-datepicker> </md-input-container>
+    </div>
+    <div layout="row" layout-align="center center">
+        <md-button class="save-btn" aria-label="Save" data-ng-click="search()" data-ng-disabled="form.$invalid"> <md-tooltip>Search</md-tooltip> <i class="ti-search"></i> Search </md-button>
+        <md-button class="cancel-btn" aria-label="Cancel" href="/nav/@ViewBag.Group"> <md-tooltip>Cancel</md-tooltip> <i class="fas fa-reply"></i> Cancel </md-button>
+    </div>
+    <div layout="row" layout-sm="column" layout-xs="column">
+        <md-button class="add-btn" aria-label="Download" data-ng-click="generateExcell()" data-ng-disabled="searchDatas.length === 0"> <md-tooltip>Generate Excel</md-tooltip> <i class="fas fa-download"></i> Generate Excel </md-button>
+    </div>
+    <md-table-container>
+        <table md-table md-progress="promise">
+            <thead md-head>
+                <tr md-row>
+                    <th md-column class="center">Sl No</th>
+                    <th md-column><span class="pad-l-8">DISTRICT NAME</span></th>
+                    <th md-column><span class="pad-l-8">CHURCH NAME</span></th>
+                    <th md-column><span class="pad-l-8">ACCOMMODATION NAME</span></th>
+                    <th md-column><span class="pad-l-8">MISSIONARY LASTNAME</span></th>
+                    <th md-column><span class="pad-l-8">MISSIONARY FIRSTNAME</span></th>
+                    <th md-column><span class="pad-l-8">ADULT NO</span></th>
+                    <th md-column><span class="pad-l-8">CHILD NO</span></th>
+                    <th md-column><span class="pad-l-8">CHECKIN DATE</span></th>
+                    <th md-column><span class="pad-l-8">CHECKOUT DATE</span></th>
+                    <th md-column><span class="pad-l-8">ACCOMMODATION RESERVATION FEEDBACK</span></th>
+                </tr>
+            </thead>
+            <tbody md-body>
+                <tr class="md-row md-row-empty" ng-show="searchDatas.length === 0">
+                    <td class="md-cell" colspan="11">No Data Found</td>
+                </tr>
+                <tr md-row data-ng-repeat="item in searchDatas track by $index">
+                    <td md-cell class="center">{{$index+1}}</td>
+                    <td md-cell class="pad-l-8">{{item.districtName}}</td>
+                    <td md-cell class="pad-l-8">{{item.churchName}}</td>
+                    <td md-cell class="pad-l-8">{{item.accomodationDesc}}</td>
+                    <td md-cell class="pad-l-8">{{item.lastName}}</td>
+                    <td md-cell class="pad-l-8">{{item.firstName}}</td>
+                    <td md-cell class="pad-l-8">{{item.adultNo}}</td>
+                    <td md-cell class="pad-l-8">{{item.childNo}}</td>
+                    <td md-cell class="pad-l-8">{{item.checkinDate | date: 'dd/MM/yyyy'}}</td>
+                    <td md-cell class="pad-l-8">{{item.checkoutDate | date: 'dd/MM/yyyy'}}</td>
+                    <td md-cell class="pad-l-8">{{item.feedBack}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+</div>
+
+
+</form>
+</div>
+
+@section Scripts{
+
+    <script src="~/scripts/services/churchService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/reportsService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/accomodationBookingReportController.js" asp-append-version="true"></script>
+}

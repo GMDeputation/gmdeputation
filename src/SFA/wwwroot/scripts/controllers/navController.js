@@ -1,4 +1,4 @@
-﻿app.controller('navController', function ($scope, $rootScope, $window, $interval, $mdSidenav, $mdPanel, $translate) {
+﻿app.controller('navController', function ($scope, $rootScope, $window, $interval, $mdSidenav, $mdPanel, $translate, notificationService) {
     $scope.notifyCount = 0;
     $scope.notifications = [{}];
     $scope.navigateTo = function (category) {
@@ -15,7 +15,7 @@
     };
     $scope.changePass = function () {
         $window.location.href = '/user/changePassword';
-    };  
+    };
 
     $scope.openNotification = function (id, url) {
         notificationService.openByUserId(id).then(function (data) {
@@ -73,19 +73,19 @@
     var tick = function () {
         $scope.clock = Date.now();
     };
-    //var notification = function () {
-    //    notificationService.getUnOpenedNotification().then(function (resp) {
-    //        $scope.notifications = resp.data.notifications;
-    //        $scope.count = resp.data.count;
-    //    });
-    //    //messageLogService.getAllUnopened().then(function (messages) {
-    //    //    $scope.notifyCount = messages.data.length;
-    //    //});
-    //};
+    var notification = function () {
+        notificationService.getUnOpenedNotification().then(function (resp) {
+            $scope.notifications = resp.data.notifications;
+            $scope.count = resp.data.count;
+        });
+        //messageLogService.getAllUnopened().then(function (messages) {
+        //    $scope.notifyCount = messages.data.length;
+        //});
+    };
 
     tick();
-    //notification();
+    notification();
     $interval(tick, 1000);
-    //$interval(notification, 60000);
+    $interval(notification, 60000);
     //$interval(notify, 5000);
 });

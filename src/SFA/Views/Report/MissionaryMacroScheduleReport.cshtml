@@ -1,0 +1,111 @@
+﻿@{
+    ViewData["Title"] = "Missionary Wise Macro Schedule Report";
+}
+<div data-ng-controller="missionaryWiseScheduleReportsController">
+    <form name="form">
+    <!--Topbar section-->
+<div class="topbar">
+    <div class="md-toolbar-tools" layout="row">
+        <div class="topbar-title" flex>
+            <h2>Missionary Wise Macro Schedule Report</h2>
+            <i class="vertical-seperator" hide-sm hide-xs>&nbsp;</i> <span hide-sm hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / Missionary Wise Macro Schedule Report</span>
+        </div>
+        <div flex="none">
+            <md-button class="add-btn" aria-label="Back to home" href="/home"> <md-tooltip>Back to home</md-tooltip> <i class="ti-angle-double-left"></i> </md-button>
+        </div>
+    </div>
+</div>
+    <!--//End Topbar section-->
+    <!--Filter Section-->
+   <div class="container">
+    <div layout="row" layout-sm="column" layout-xs="column">
+        <md-input-container class="md-block" flex>
+            <label>Macroschedule on Week</label>
+            <md-select name="section" ng-model="reportParams.week">
+                BeginContext(1346, 1220, isLiteral: true);
+                <md-option ng-repeat="item in weeks" ng-value="item">{{item}}</md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container class="md-block" flex="25"> <label>Appoinment From Date</label> <md-datepicker name="toDate" ng-model="reportParams.eventFromDate" md-placeholder="Appoinment From Date"></md-datepicker> </md-input-container>
+        <md-input-container class="md-block" flex="25">
+            <label>Appoinment To Date</label> <md-datepicker name="toDate" ng-model="reportParams.eventToDate" md-placeholder="Appoinment To Date" md-min-date="reportParams.eventFromDate"></md-datepicker>
+        </md-input-container>
+    </div>
+    <div layout="row" layout-align="center center">
+        <md-button class="save-btn" aria-label="Save" data-ng-click="search()" data-ng-disabled="form.$invalid"> <md-tooltip>Search</md-tooltip> <i class="ti-search"></i> Search </md-button>
+        <md-button class="cancel-btn" aria-label="Cancel" href="/nav/@ViewBag.Group"> <md-tooltip>Cancel</md-tooltip> <i class="fas fa-reply"></i> Cancel </md-button>
+    </div>
+    <div layout="row" layout-sm="column" layout-xs="column">
+        <md-button class="add-btn" aria-label="Download" data-ng-click="generateExcell()" data-ng-disabled="searchDatas.length === 0"> <md-tooltip>Generate Excel</md-tooltip> <i class="fas fa-download"></i> Generate Excel </md-button>
+    </div>
+    <table md-table md-progress="promise">
+        <thead md-head>
+            <tr md-row>
+                <th md-column class="center"><span>Missionary Name</span></th>
+                <th md-column class="center"><span>MacroSchedule Details</span></th>
+            </tr>
+        </thead>
+        <tbody md-body>
+            <tr class="md-row md-row-empty" ng-show="searchDatas.length === 0">
+                <td class="md-cell" colspan="3">No Data Found</td>
+            </tr>
+            <tr md-row data-ng-repeat="item in searchDatas track by $index">
+                <td md-cell class="center">{{item.missionaryName}}</td>
+                <td md-cell class="center">
+                    <table md-table md-progress="promise">
+                        <thead md-head>
+                            <tr md-row>
+                                <th md-column class="center">Description</th>
+                                <th md-column class="center"><span>Service Details</span></th>
+                            </tr>
+                        </thead>
+                        <tbody md-body>
+                            <tr class="md-row md-row-empty" ng-show="item.macroSchedules.length === 0">
+                                <td class="md-cell" colspan="2">No Data Found</td>
+                            </tr>
+                            <tr md-row data-ng-repeat="detail in item.macroSchedules track by $index">
+                                <td md-cell class="center">{{detail.description}}</td>
+                                <td md-cell class="center">
+                                    <table md-table md-progress="promise">
+                                        <thead md-head>
+                                            <tr md-row>
+                                                <th md-column class="center">Sl No</th>
+                                                <th md-column class="center"><span>Church Name</span></th>
+                                                <th md-column class="center"><span>Appoinment Date</span></th>
+                                                <th md-column class="center"><span>Appoinment Time</span></th>
+                                                <th md-column class="center"><span>Service Type</span></th>
+                                                <th md-column class="center"><span>Pastor Name</span></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody md-body>
+                                            <tr class="md-row md-row-empty" ng-show="detail.appoinmentDetails.length === 0">
+                                                <td class="md-cell" colspan="6">No Data Found</td>
+                                            </tr>
+                                            <tr md-row data-ng-repeat="data in detail.appoinmentDetails track by $index">
+                                                <td md-cell class="center">{{$index+1}}</td>
+                                                <td md- cell class="center">{{data.churchName}}</td>
+                                                <td md-cell class="center">{{data.appoinmentDate | date: 'dd-MM-yyyy'}}</td>
+                                                <td md-cell class="center">{{data.time}}</td>
+                                                <td md-cell class="center">{{data.serviceType}}</td>
+                                                <td md-cell class="center">{{data.pastorName}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+</form>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/reportsService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/missionaryWiseScheduleReportsController.js" asp-append-version="true"></script>
+}

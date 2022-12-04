@@ -1,6 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Add";
 }
+
+
 <div data-ng-controller="churchAddController">
     <form name="form">
         <div class="topbar">
@@ -63,9 +65,8 @@
                 </md-input-container>
             </div>
             <div layout="row" layout-xs="column">
-                <md-input-container class="md-block" flex>
-                    <label>Complete Address</label>
-                    <input ng-model="church.address">
+                <md-input-container class="md-block" flex>                   
+                    <input ng-model="church.address" id="Address">
                 </md-input-container>
                 <md-input-container class="md-block" flex>
                     <label>Mailing Address</label>
@@ -123,4 +124,20 @@
     <script src="~/scripts/services/churchService.js" asp-append-version="true"></script>
     <script src="~/scripts/services/sectionService.js" asp-append-version="true"></script>
     <script src="~/scripts/controllers/churchAddController.js" asp-append-version="true"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI"></script>
+
+        <script type="text/javascript">  
+        google.maps.event.addDomListener(window, 'load', function () {  
+            var options = {  
+                //types: ['(cities)'],  
+                componentRestrictions: { country: "us" }  
+            };  
+  
+            var input = document.getElementById('Address');  
+            var places = new google.maps.places.Autocomplete(input, options);  
+  
+  
+        });  
+</script> 
 }
+

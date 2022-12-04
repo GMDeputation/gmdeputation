@@ -39,7 +39,7 @@ namespace SFA.Controllers
             HttpContext.Session.Clear();
 
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            //await _userService.SaveLogOut(userId);
+            await _userService.SaveLogOut(userId);
             return RedirectToAction("Index", "Login");
         }
 
@@ -63,7 +63,7 @@ namespace SFA.Controllers
                 return View("Index", vm);
             }
 
-            //await _userService.SaveLogIn(user.Id);
+            await _userService.SaveLogIn(user.Id);
             HttpContext.Session.Set<User>("SESSIONSFAUSER", user);
 
             var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);

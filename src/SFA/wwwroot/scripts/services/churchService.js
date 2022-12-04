@@ -2,6 +2,9 @@
     this.getAll = function () {
         return $http.get('/churches/all');
     };
+    this.getAllByUser = function () {
+        return $http.get('/churches/getAllByUser');
+    };
     this.get = function (id) {
         return $http.get('/churches/get/' + id).then(function (resp) {
             return resp.data;
@@ -19,6 +22,21 @@
     };
     this.getChurchByDistrict = function (id) {
         return $http.get('/churches/getChurchByDistrict/' + id).then(function (resp) {
+            return resp.data;
+        });
+    };
+    this.getChurchByDistrictAndMacroSchDtl = function (id, macroScheduleDetailId) {
+        return $http.get('/churches/getChurchByDistrictAndMacroSchDtl/' + id + '/' + macroScheduleDetailId).then(function (resp) {
+            return resp.data;
+        });
+    };
+    this.getChurchByDistrictAndSection = function (distId, secId) {
+        return $http.get('/churches/getChurchByDistrictAndSection/' + distId + '/' + secId).then(function (resp) {
+            return resp.data;
+        });
+    };
+    this.getChurchByDistrictAndSectionAndMacroSchDtl = function (distId, secId, macroScheduleDetailId) {
+        return $http.get('/churches/getChurchByDistrictAndSectionAndMacroSchDtl/' + distId + '/' + secId + '/' + macroScheduleDetailId).then(function (resp) {
             return resp.data;
         });
     };
