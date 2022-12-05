@@ -9,12 +9,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.Entities;
 using SFA.Services;
+using Microsoft.Extensions.Hosting;
 
 namespace SFA
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -24,7 +25,7 @@ namespace SFA
             Configuration = builder.Build();
             HostingEnvironment = env;
         }
-        public IHostingEnvironment HostingEnvironment { get; }
+        public IWebHostEnvironment HostingEnvironment { get; }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -78,11 +79,13 @@ namespace SFA
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IReportService, ReportService>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            //This is what was used for 2.1 Version
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -101,12 +104,24 @@ namespace SFA
             app.UseAuthentication();
             app.UseRequestLocalization();
 
-            app.UseMvc(routes =>
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Login}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                     name: "default",
+                     pattern: "{controller=Login}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
+                endpoints.MapControllers();
+
+
             });
+          //  app.UseMvc(routes =>
+           // {
+            //    routes.MapRoute(
+            //        name: "default",
+           //         template: "{controller=Login}/{action=Index}/{id?}");
+           // });
         }
     }
 }

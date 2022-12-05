@@ -91,7 +91,7 @@
                 $mdDialog.alert()
                     .clickOutsideToClose(false)
                     .title('Church Admin')
-                    .textContent('Please Search And Select correct Curch')
+                    .textContent('Please Search And Select correct Church')
                     .ariaLabel('Alert Dialog')
                     .ok('OK')
             ).then(function () {

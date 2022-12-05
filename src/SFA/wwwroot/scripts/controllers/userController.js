@@ -20,7 +20,7 @@
     //This is to require the Church to be included when adding a new user
     //10 is the ID for Pastor. 
     $scope.isOneContactRequired = function () {
-        if ($scope.user.roleId == 10)
+        if ($scope.dataAccessCode === "P")
             return true;
         else
             return false;
@@ -165,12 +165,12 @@
             }
             else { $scope.churchIdNull = false;}
         });
-        if ($scope.churchIdNull) {
+        if ($scope.churchIdNull && $scope.user.roleId === 10) {
             $mdDialog.show(
                 $mdDialog.alert()
                     .clickOutsideToClose(false)
                     .title('ENFINS Admin')
-                    .textContent('Please Search And Select correct Curch')
+                    .textContent('Please Search And Select correct Church')
                     .ariaLabel('Alert Dialog')
                     .ok('OK')
             ).then(function () {

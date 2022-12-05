@@ -402,19 +402,26 @@ namespace SFA.Services
         {
             try
             {
+                double latitude = 0.0;
+                double longitude = 0.0;
+
                 var existingEntity = await _context.TblUserNta.Where(m => m.Email.ToLower() == user.Email.ToLower()).FirstOrDefaultAsync();
                 if (existingEntity != null && user.Id == 0)
                 {
                     return -1;
                 }
 
-                var addressToGeoCode = user.Address;
+                if (user.Address != null)
+                {
+                    var addressToGeoCode = user.Address;
 
-                var locationService = new GoogleLocationService("AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI");
-                var point = locationService.GetLatLongFromAddress(addressToGeoCode);
+                    var locationService = new GoogleLocationService("AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI");
+                    var point = locationService.GetLatLongFromAddress(addressToGeoCode);
 
-                var latitude = point.Latitude;
-                var longitude = point.Longitude;
+                    latitude = point.Latitude;
+                    longitude = point.Longitude;
+                }
+               
 
                 var userEntity = new TblUserNta();        
                 if (user.Id == 0)
@@ -429,8 +436,8 @@ namespace SFA.Services
                     userEntity.InsertUser = loggedinUser.Id.ToString();
                     userEntity.Gender = user.Gender;
                     userEntity.IsEmailVerify = false;
-                    userEntity.Lat = latitude.ToString();
-                    userEntity.Long = longitude.ToString();
+                    userEntity.Lat = latitude == 0.0?null:latitude.ToString();
+                    userEntity.Long = longitude == 0.0 ? null : longitude.ToString();
                     userEntity.Phone = user.Phone;
                     userEntity.Zipcode = user.Zipcode;
                     userEntity.SectionId = user.SectionId;
@@ -443,14 +450,14 @@ namespace SFA.Services
                     userEntity.RoleId = user.RoleId;
 
                     var attributes = user.Attributes.Select(m => new TblUserAttributeNta
-                    {                        
+                    {
                         AttributeId = m.AttributeId,
                         AttributeValue = m.AttributeValue,
                         UserId = user.Id,
                         Notes = m.Notes,
                     }).ToList();
-
-                    userEntity.TblUserAttributeNta = attributes;
+                    if (attributes[0].AttributeId != 0)
+                        userEntity.TblUserAttributeNta = attributes;
 
                     var churches = user.Churches.Select(m => new TblUserChurchNta
                     {
@@ -459,8 +466,8 @@ namespace SFA.Services
                         RelationType = m.RelationType,
                         UserId = user.Id,
                     }).ToList();
-
-                    userEntity.TblUserChurchNta = churches;
+                    if (churches[0].ChurchId!=0)
+                        userEntity.TblUserChurchNta = churches;
 
                     var model = new TblUserPasswordNta
                     {                       

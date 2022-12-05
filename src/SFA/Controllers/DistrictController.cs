@@ -22,10 +22,10 @@ namespace SFA.Controllers
     public class DistrictController : Controller
     {
         private readonly IDistrictService _districtService = null;
-        private readonly IHostingEnvironment _environment = null;
+        private readonly IWebHostEnvironment _environment = null;
         private readonly SFADBContext _context = null;
 
-        public DistrictController(IDistrictService districtService, IHostingEnvironment environment, SFADBContext context)
+        public DistrictController(IDistrictService districtService, IWebHostEnvironment environment, SFADBContext context)
         {
             _districtService = districtService;
             _environment = environment;
