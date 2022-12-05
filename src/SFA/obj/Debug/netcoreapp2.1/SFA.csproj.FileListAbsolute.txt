@@ -359,3 +359,4 @@ C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\obj\Debug\netcorea
 C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\obj\Debug\netcoreapp2.1\Razor\Views\Report\MissionaryMacroScheduleReport.cshtml.g.cs
 C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\obj\Debug\netcoreapp2.1\Razor\Views\Report\PastorAppoinmentReport.cshtml.g.cs
 C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\obj\Debug\netcoreapp2.1\Razor\Views\Report\AccomodationBookingReport.cshtml.g.cs
+C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\obj\Debug\netcoreapp2.1\Razor\Views\User\DistrictChange.cshtml.g.cs

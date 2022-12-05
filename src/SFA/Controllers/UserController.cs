@@ -391,7 +391,8 @@ public class UserController : Controller
 		}
 		finally
 		{
-			((IDisposable)val)?.Dispose();
+			val.Dispose();
+		
 		}
 		PhysicalFileResult result = PhysicalFile(Path.Combine(text), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 		base.Response.Headers.Add("x-filename", fileInfo.Name);

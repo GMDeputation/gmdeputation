@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "w1AzSMsSc99kZhQJL96PudWYGCHpqmfAFewosz3fH7VSTveFK617nu4sc1G+ywo9bmUwn6sIFZ/7jsXEnEfJVw==",
+  "dgSpecHash": "N3RXS0ZqC0WTwZH7Hnzuo2j2fZVE4rLSI5UHpW12GLvLF0gOeqAUQCZnopB6jX4SwcPr7ymHpM9RTBZmft1/5Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\SEANR\\OneDrive\\Documents\\GitHub\\gmdeputation\\src\\SFA\\SFA.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\SEANR\\.nuget\\packages\\epplus.core\\1.5.4\\epplus.core.1.5.4.nupkg.sha512",
+    "C:\\Users\\SEANR\\.nuget\\packages\\googlemaps.locationservices\\1.2.0.5\\googlemaps.locationservices.1.2.0.5.nupkg.sha512",
     "C:\\Users\\SEANR\\.nuget\\packages\\libuv\\1.10.0\\libuv.1.10.0.nupkg.sha512",
     "C:\\Users\\SEANR\\.nuget\\packages\\messagepack\\1.7.3.4\\messagepack.1.7.3.4.nupkg.sha512",
     "C:\\Users\\SEANR\\.nuget\\packages\\microsoft.applicationinsights\\2.4.0\\microsoft.applicationinsights.2.4.0.nupkg.sha512",

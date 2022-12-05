@@ -42,6 +42,7 @@ namespace SFA.Models
         public string WorkPhoneNo { get; set; }
         public string TelePhoneNo { get; set; }
         public string Status { get; set; }
+        public int? StateId { get; set; }
         //public List<MenuAccess> Menus { get; set; }
         public List<GroupPermission> Groups { get; set; }
         public List<MenuPermission> Permissions { get; set; }

@@ -65,12 +65,13 @@
                 </md-input-container>
             </div>
             <div layout="row" layout-xs="column">
-                <md-input-container class="md-block" flex>                   
-                    <input ng-model="church.address" id="Address">
+                <md-input-container class="md-block" flex>  
+                    <label>Address</label>
+                    <input ng-model="church.address" id="Address" placeholder="Address">
                 </md-input-container>
                 <md-input-container class="md-block" flex>
                     <label>Mailing Address</label>
-                    <input ng-model="church.mailAddress">
+                    <input ng-model="church.mailAddress" id="MailAddress" placeholder="Mailing Address">
                 </md-input-container>
                 <md-input-container class="md-block" flex>
                     <label>Phone Number</label>
@@ -96,13 +97,13 @@
                     <label>Website</label>
                     <input ng-model="church.webSite">
                 </md-input-container>
-                <md-input-container class="md-block" flex>
-                    <label>Latitude</label>
-                    <input ng-model="church.lat">
+                <md-input-container  class="md-block" flex>
+                    <!--<label>Latitude</label>-->
+                    <input type="hidden" ng-model="church.lat">
                 </md-input-container>
                 <md-input-container class="md-block" flex>
-                    <label>Longtitude</label>
-                    <input ng-model="church.lon">
+                    <!--<label>Longtitude</label>-->
+                    <input type="hidden" ng-model="church.lon">
                 </md-input-container>
             </div>
             <div layout="row" layout-align="center center">
@@ -135,9 +136,16 @@
   
             var input = document.getElementById('Address');  
             var places = new google.maps.places.Autocomplete(input, options);  
-  
-  
+            if(places.value > 4)
+                document.getElementById('Address').value = places;
+
+            var input2 = document.getElementById('MailAddress');  
+            var places2 = new google.maps.places.Autocomplete(input2, options);  
+            if(places2.value > 4)
+                document.getElementById('MailAddress').value = places;
+
         });  
+  
 </script> 
 }
 

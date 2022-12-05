@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GoogleMaps.LocationServices;
 
 namespace SFA.Services
 {
@@ -190,15 +191,24 @@ namespace SFA.Services
                 return null;
             }
         }
+
         public async Task<string> Add(Church church, User loggedinUser)
         {
+            var addressToGeoCode = church.Address;
+
+            var locationService = new GoogleLocationService("AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI");
+            var point = locationService.GetLatLongFromAddress(addressToGeoCode);
+
+            var latitude = point.Latitude;
+            var longitude = point.Longitude;
+
             var churchEntities = new TblChurchNta
             {
                 ChurchName = church.ChurchName,
                 Address = church.Address,
                 Email = church.Email,
-                Lat = church.Lat,
-                Lon = church.Lon,
+                Lat = latitude.ToString(),
+                Lon = longitude.ToString(),
                 Directory = church.Directory,
                 ChurchType = church.ChurchType,
                 AccountNo = church.AccountNo,
@@ -227,6 +237,15 @@ namespace SFA.Services
         }
         public async Task<string> Edit(Church church, User loggedinUser)
         {
+
+            var addressToGeoCode = church.Address;
+
+            var locationService = new GoogleLocationService("AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI");
+            var point = locationService.GetLatLongFromAddress(addressToGeoCode);
+
+            var latitude = point.Latitude;
+            var longitude = point.Longitude;
+
             var churchEntities = await _context.TblChurchNta.FirstOrDefaultAsync(m => m.Id == church.Id);
             churchEntities.ChurchName = church.ChurchName;
             churchEntities.Address = church.Address;
@@ -236,8 +255,8 @@ namespace SFA.Services
             churchEntities.Directory = church.Directory;
             churchEntities.AccountNo = church.AccountNo;
             churchEntities.ChurchType = church.ChurchType;
-            churchEntities.Lat = church.Lat;
-            churchEntities.Lon = church.Lon;
+            churchEntities.Lat = latitude.ToString();
+            churchEntities.Lon = longitude.ToString();
             churchEntities.Phone = church.Phone;
             churchEntities.SectionId = church.SectionId;
             churchEntities.DistrictId = church.DistrictId;

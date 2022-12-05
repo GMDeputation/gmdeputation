@@ -82,8 +82,8 @@
 
                 <md-input-container class="md-block" flex>
                     <input type="hidden" value="@ViewBag.Id" ng-model="id"  />
-                   
-                    <input id="Address" name="address" ng-model="user.address" maxlength="150">
+                     <label>Address</label>
+                    <input id="Address" name="address" ng-model="user.address" maxlength="150" placeholder="Address">
                     <div ng-messages="form.address.$error" md-auto-hide="false">
                         <div ng-message="required">Address is required</div>
                     </div>
@@ -293,6 +293,10 @@
   
             var input = document.getElementById('Address');  
             var places = new google.maps.places.Autocomplete(input, options);  
+
+             if(places.value > 4)
+                document.getElementById('Address').value = places;
+
   
   
         });  

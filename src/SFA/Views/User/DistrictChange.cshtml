@@ -1,0 +1,99 @@
+﻿@{
+    ViewData["Title"] = "Change user District";
+}
+<div data-ng-controller="changeUserDistricController">
+  
+    <div class="topbar">
+        <div class="md-toolbar-tools" layout="row">
+            <div class="topbar-title" flex>
+                <h2>List of User</h2>
+                <i class="vertical-seperator" hide-sm hide-xs>&nbsp;</i> <span hide-sm hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / Users</span>
+            </div>
+            <div flex="none">
+                <md-button class="filter-btn" ng-click="filter()"> <md-tooltip>Search</md-tooltip> <i class="ti-filter"></i> <span hide-xs>Filter</span> </md-button>
+                <md-button class="add-btn" aria-label="Back to List" data-ng-click="backToList()"> <md-tooltip>Back to List</md-tooltip> <i class="ti-angle-double-left"></i><span hide-xs>Back to List</span> </md-button>
+            </div>
+        </div>
+    </div>
+            <div class="filter-grid" data-ng-show="showFilter">
+        <div layout="row" layout-xs="column">
+            <div class="filter-title" flex="none"><i class="ti-filter"></i> <span>Filter By</span></div>
+            <div flex>
+                <md-input-container class="md-block">
+                    <label>Search</label> <input data-ng-model="query.name" placeholder="Search By User Name , Role, Email, Phone No, District or Section" data-ng-model-options="filter.options" />
+                </md-input-container>
+            </div>
+            <div flex="none">
+                <md-button class="close-btn" ng-click="close()" ng-disabled="selected.length>0"> <md-tooltip>Close</md-tooltip> <i class="ti-close"></i> Close </md-button>
+            </div>
+        </div>
+    </div>
+    <!--//End Filter Section-->
+    <md-table-container>
+        <table md-table md-row-select ng-model="selectedUsers" multiple md-progress="promise">
+            <thead md-head md-order="query.order" md-on-reorder="search">
+                <tr md-row>
+                    <th md-column class="center">Sl No</th>
+                    <th md-column md-order-by="user"><span class="pad-l-8">User Id</span></th>
+                    <th md-column md-o rder-by="name"><span class="pad-l-8">Name</span></th>
+                    <th md-column md-order-by="role"><span class="pad-l-8">Role Name</span></th>
+                    <th md-column md-order-by="email"><span class="pad-l-8">Email</span></th>
+
+                    <th md-column><span class="pad-l-8">District</span></th>
+                    <th md-column><span class="pad-l-8">Section</span></th>
+                </tr>
+            </thead>
+            <tbody md-body>
+                <tr class="md-row md-row-empty" ng-show="users.length === 0">
+                    <td class="md-cell" colspan="8">No Data Found</td>
+                </tr>
+                <tr md-row md-select="user" md-select-id="user" md-auto-select data-ng-repeat="user in users track by $index">
+                    <td md-cell class="center">{{((query.page - 1) * query.limit) + ($index+1)}}</td>
+                    <td md-cell class="pad-l-8">{{user.userIdNo}}</td>
+                    <td md-cell class="pad-l-8">{{user.name}}</td>
+                    <td md-cell class="pad-l-8">{{user.roleName}}</td>
+                    <td md-cell class="pad-l-8">{{user.email}}</td>
+
+                    <td md-cell class="pad-l-8">
+                        <md-autocomplete
+                            flex
+                            class="padding-wrap"
+                            md-no-cache="true"
+                            md-selected-item="user.district"
+                            md-selected-item-change="selectedDistrictName(district,$index)"
+                            md-search-text="districtSearch"
+                            md-items="district in searchDistrict(districtSearch)"
+                            md-item-text="district.name"
+                            md-min-length="0"
+                            md-floating-label="District Name"
+                        >
+                            <md-item-template> <span md-highlight-text="districtSearch" md-highlight-flags="gi">{{district.name}}</span> </md-item-template> <md-not-found> No Data Found . </md-not-found>
+                        </md-autocomplete>
+                    </td>
+                    <td md-cell class="pad-l-8">
+                        <md-input-container class="md-block" flex>
+                            <label>Section</label>
+                            <md-select name="section" ng-model="user.sectionId"> <md-option ng-value="">None</md-option> <md-option ng-repeat="section in user.sections" ng-value="section.id">{{section.name}}</md-option> </md-select>
+                        </md-input-container>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+    <md-table-pagination md-limit="query.limit" md-limit-options="[20, 50, 100]" md-page="query.page" md-total="{{count}}" md-on-paginate="search" md-page-select></md-table-pagination>
+    <div class="container" ng-if="users.length > 0">
+        <div layout="row" layout-align="center center">
+            <md-button class="save-btn" aria-label="Save" data-ng-click="save()"> <md-tooltip>Save</md-tooltip> <i class="far fa-save"></i> Save </md-button>
+            <md-button class="cancel-btn" aria-label="Cancel" data-ng-click="backToList()"> <md-tooltip>Cancel</md-tooltip> <i class="ti-close"></i> Cancel </md-button>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/scripts/services/districtService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/sectionService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/roleService.js" asp-append-version="true"></script>
+    <script src="~/scripts/services/userService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/changeUserDistricController.js" asp-append-version="true"></script>
+
+}

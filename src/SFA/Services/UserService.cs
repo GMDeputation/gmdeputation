@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GoogleMaps.LocationServices;
+using Microsoft.EntityFrameworkCore;
 using SFA.Entities;
 using SFA.Models;
 using System;
@@ -169,7 +170,7 @@ namespace SFA.Services
                 FirstName = m.FirstName,
                 LastName = m.LastName,
                 Address = m.Address,
-                InsertDatetime = (DateTime)m.InsertDatetime,
+                InsertDatetime = m.InsertDatetime,
                 Gender = m.Gender,
                 ImageFile = m.ImageFile,
                 ImageSequence = m.ImageSequence,
@@ -179,11 +180,11 @@ namespace SFA.Services
                 Name = m.FirstName + " " + m.LastName,
                 Phone = m.Phone,
                 Zipcode = m.Zipcode,
-                SectionId = (int)m.SectionId,
-                SectionName = m.Section.Name,
-                DistrictId = (int)m.DistrictId,
+                SectionId = m.SectionId,
+                SectionName = m.Section?.Name,
+                DistrictId = m.DistrictId,
                 DistrictName = m.District?.Name,
-                CountryId = (int)m.CountryId,
+                CountryId = m.CountryId,
                 CountryName = m.Country?.Name,
                 UserName = m.UserName,
                 Email = m.Email,
@@ -407,6 +408,14 @@ namespace SFA.Services
                     return -1;
                 }
 
+                var addressToGeoCode = user.Address;
+
+                var locationService = new GoogleLocationService("AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI");
+                var point = locationService.GetLatLongFromAddress(addressToGeoCode);
+
+                var latitude = point.Latitude;
+                var longitude = point.Longitude;
+
                 var userEntity = new TblUserNta();        
                 if (user.Id == 0)
                 {      
@@ -420,8 +429,8 @@ namespace SFA.Services
                     userEntity.InsertUser = loggedinUser.Id.ToString();
                     userEntity.Gender = user.Gender;
                     userEntity.IsEmailVerify = false;
-                    userEntity.Lat = user.Lat;
-                    userEntity.Long = user.Long;
+                    userEntity.Lat = latitude.ToString();
+                    userEntity.Long = longitude.ToString();
                     userEntity.Phone = user.Phone;
                     userEntity.Zipcode = user.Zipcode;
                     userEntity.SectionId = user.SectionId;
@@ -482,8 +491,8 @@ namespace SFA.Services
                     userEntity.ImageSequence = user.ImageSequence;
                     userEntity.Address = user.Address;
                     userEntity.Gender = user.Gender;
-                    userEntity.Lat = user.Lat;
-                    userEntity.Long = user.Long;
+                    userEntity.Lat = latitude.ToString();
+                    userEntity.Long = longitude.ToString();
                     userEntity.Phone = user.Phone;
                     userEntity.Zipcode = user.Zipcode;
                     userEntity.SectionId = user.SectionId;

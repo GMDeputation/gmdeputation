@@ -29,6 +29,7 @@
       "SFA/1.0.0": {
         "dependencies": {
           "EPPlus.Core": "1.5.4",
+          "GoogleMaps.LocationServices": "1.2.0.5",
           "Microsoft.AspNetCore.All": "2.1.1",
           "Microsoft.AspNetCore.App": "2.1.1",
           "Microsoft.AspNetCore.Mvc": "2.1.1",
@@ -74,6 +75,17 @@
         },
         "compile": {
           "lib/netstandard2.0/EPPlus.Core.dll": {}
+        }
+      },
+      "GoogleMaps.LocationServices/1.2.0.5": {
+        "runtime": {
+          "lib/netstandard2.0/GoogleMaps.LocationServices.dll": {
+            "assemblyVersion": "1.2.0.5",
+            "fileVersion": "1.2.0.5"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/GoogleMaps.LocationServices.dll": {}
         }
       },
       "Microsoft.AspNetCore.App/2.1.1": {
@@ -4323,6 +4335,13 @@
       "sha512": "sha512-QGa4Qxm+9ND+tlgsa9bWWQrBZ096shez5DDhkUE5OsPqdQIO8kfMq2dAOBkOE1JrB0ZSFeIIspBoIsb9kCx3iA==",
       "path": "epplus.core/1.5.4",
       "hashPath": "epplus.core.1.5.4.nupkg.sha512"
+    },
+    "GoogleMaps.LocationServices/1.2.0.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0j3RL5+acxYgQNz72JdXJ1nUKxMGaY+6UvrOIOxZfp0qpJOUmo/ivCAm53atbnuy0z3vrZK+j9mZifh35UBqag==",
+      "path": "googlemaps.locationservices/1.2.0.5",
+      "hashPath": "googlemaps.locationservices.1.2.0.5.nupkg.sha512"
     },
     "Microsoft.AspNetCore.App/2.1.1": {
       "type": "package",

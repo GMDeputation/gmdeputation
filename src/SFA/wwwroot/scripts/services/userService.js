@@ -32,4 +32,38 @@
             return resp;
         });
     };
+
+    this.exportListData = function () {
+        return $http.get('/user/exportListData', {
+            responseType: 'arraybuffer'
+        }).then(function (resp) {
+            headers = resp.headers();
+            var filename = headers['x-filename'];
+            var contentType = headers['content-type'];
+
+            var linkElement = document.createElement('a');
+            try {
+                var blob = new Blob([resp.data], { type: contentType });
+                var url = window.URL.createObjectURL(blob);
+
+                linkElement.setAttribute('href', url);
+                linkElement.setAttribute("download", filename);
+
+                var clickEvent = new MouseEvent("click", {
+                    "view": window,
+                    "bubbles": true,
+                    "cancelable": false
+                });
+                linkElement.dispatchEvent(clickEvent);
+            } catch (ex) {
+                console.log(ex);
+            }
+        });
+    };
+
+    this.updateDistrictAndSection = function (users) {
+        return $http.post('/user/api/updateDistrictAndSection', users).then(function (resp) {
+            return resp;
+        });
+    };
 });

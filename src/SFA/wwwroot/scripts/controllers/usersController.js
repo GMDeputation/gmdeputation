@@ -1,4 +1,5 @@
-﻿app.controller('usersController', function ($scope, $window, $mdDialog, userService, roleService) {
+﻿/// <reference path="churchservicetimedetailcontroller.js" />
+app.controller('usersController', function ($scope, $window, $mdDialog, userService, roleService) {
     $scope.filter = {
         options: {
             debounce: 500
@@ -47,7 +48,7 @@
     $scope.search = function () {
         $scope.promise = userService.search($scope.query).then(success);
     };
-   
+
     $scope.detail = function (id) {
         if (id === undefined) {
             id = '0';
@@ -58,6 +59,45 @@
     $scope.import = function () {
         $window.location.href = '/user/export';
     };
+
+    $scope.changeDistrict = function () {
+        $window.location.href = '/user/changeDistrict';
+    };
+
+    $scope.export = function () {
+        var confirm = $mdDialog.confirm()
+            .title('Church Admin')
+            .textContent('Are You sure To Export All Users Data?')
+            .ariaLabel('Alert Dialog')
+            .cancel('No')
+            .ok('Yes');
+
+        $mdDialog.show(confirm).then(function () {
+            userService.exportListData().then(processSuccess, processError);
+        }, function () {
+            $mdDialog.hide();
+        });
+    };
+    function processSuccess(obj) {
+        $mdDialog.show(
+            $mdDialog.alert()
+                .clickOutsideToClose(false)
+                .title('Church Admin')
+                .textContent('Export Successfully.')
+                .ariaLabel('Alert Dialog')
+                .ok('OK')
+        );
+    }
+
+    function processError(error) {
+        $mdDialog.show(
+            $mdDialog.alert()
+                .clickOutsideToClose(false)
+                .title('Church Admin')
+                .textContent('Failed To Export')
+                .ok('OK')
+        );
+    }
 
     function success(resp) {
         $scope.users = resp.data.result;
