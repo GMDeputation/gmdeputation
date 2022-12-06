@@ -44,6 +44,21 @@
             reportsService.generateUserActivityReport($scope.searchDatas).then(processSuccess, processError);
         }
     };
+    $scope.generatePdf = function () {
+        if ($scope.searchDatas.length === 0) {
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .clickOutsideToClose(false)
+                    .title('Church Admin')
+                    .textContent('Data Not Found')
+                    .ariaLabel('Alert Dialog')
+                    .ok('OK')
+            );
+        }
+        else {
+            reportsService.generateUserActivityReportPdf($scope.searchDatas).then(processSuccess, processError);
+        }
+    };
     function processSuccess(obj) {
         $mdDialog.show(
             $mdDialog.alert()

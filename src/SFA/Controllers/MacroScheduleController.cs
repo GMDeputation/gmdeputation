@@ -22,10 +22,10 @@ namespace SFA.Controllers
     public class MacroScheduleController : Controller
     {
         private readonly IMacroScheduleService _macroScheduleService = null;
-        private readonly IHostingEnvironment _environment = null;
+        private readonly IWebHostEnvironment _environment = null;
         private readonly SFADBContext _context = null;
 
-        public MacroScheduleController(IMacroScheduleService macroScheduleService, IHostingEnvironment environment, SFADBContext context)
+        public MacroScheduleController(IMacroScheduleService macroScheduleService, IWebHostEnvironment environment, SFADBContext context)
         {
             _macroScheduleService = macroScheduleService;
             _environment = environment;

@@ -7,9 +7,13 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using SFA.Extensions;
@@ -25,9 +29,9 @@ namespace SFA.Controllers
 	{
 		private readonly IReportService _reportService;
 
-		private readonly IHostingEnvironment _environment;
+		private readonly IWebHostEnvironment _environment;
 
-		public ReportController(IReportService reportService, IHostingEnvironment environment)
+		public ReportController(IReportService reportService, IWebHostEnvironment environment)
 		{
 			_reportService = reportService;
 			_environment = environment;
@@ -105,6 +109,7 @@ namespace SFA.Controllers
 			reportParams.FromDate = TimeZoneInfo.ConvertTimeFromUtc(reportParams.FromDate.Value, destinationTimeZone);
 			reportParams.ToDate = TimeZoneInfo.ConvertTimeFromUtc(reportParams.ToDate.Value, destinationTimeZone);
 			return new JsonResult(await _reportService.GetUserActivityReport(reportParams));
+			
 		}
 
 		[HttpPost]
@@ -301,6 +306,101 @@ namespace SFA.Controllers
 			base.Response.Headers["Content-Disposition"] = new ContentDispositionHeaderValue("attachment")
 			{
 				FileName = fileInfo.Name
+			}.ToString();
+			return result;
+		}
+		[HttpPost]
+		[Route("userActivityReportPdf")]
+		public async Task<IActionResult> ExportToPdfUser([FromBody] List<UserReport> products)
+		{
+			string fileName = "";
+			string filepath = "";
+			if (products.Count > 0)
+			{
+				int pdfRowIndex = 1;
+				fileName = "Church Service Count Report2.pdf";
+				filepath = Environment.CurrentDirectory + ("\\") + "" + fileName;
+				Document document = new Document(PageSize.A4, 5f, 5f, 10f, 10f);
+				FileStream fs = new FileStream(filepath, FileMode.Create);
+				PdfWriter writer = PdfWriter.GetInstance(document, fs);
+				
+				document.Open();
+
+				Font font1 = FontFactory.GetFont(FontFactory.COURIER_BOLD, 10);
+				Font font2 = FontFactory.GetFont(FontFactory.COURIER, 8);
+
+				float[] columnDefinitionSize = { 2F, 2F, 5F, 2F, 2F, 5F, 5F };
+				PdfPTable table;
+				PdfPCell cell;
+
+				table = new PdfPTable(columnDefinitionSize)
+				{
+					WidthPercentage = 100
+					
+				};
+
+				cell = new PdfPCell
+				{
+					BackgroundColor = new BaseColor(0xC0, 0xC0, 0xC0)
+				};
+
+				table.AddCell(new Phrase("User Name", font1));
+				table.AddCell(new Phrase("Role", font1));
+				table.AddCell(new Phrase("Email", font1));
+				table.AddCell(new Phrase("Page", font1));
+				table.AddCell(new Phrase("Description", font1));
+				table.AddCell(new Phrase("Action", font1));
+				table.AddCell(new Phrase("Action Time", font1));
+				table.HeaderRows = 1;
+
+				foreach (UserReport data in products)
+				{
+					table.AddCell(new Phrase(data.Name.ToString(), font2));
+					table.AddCell(new Phrase(data.Role.ToString(), font2));
+					table.AddCell(new Phrase(data.Email.ToString(), font2));
+					table.AddCell(new Phrase(data.Page.ToString(), font2));
+					table.AddCell(new Phrase(data.Description.ToString(), font2));
+					table.AddCell(new Phrase(data.Action.ToString(), font2));
+					table.AddCell(new Phrase(data.ActionTime.ToString(), font2));
+
+					pdfRowIndex++;
+				}
+
+				document.Add(table);
+				document.Close();
+				document.CloseDocument();
+				document.Dispose();
+				writer.Close();
+				writer.Dispose();
+				fs.Close();
+				fs.Dispose();
+
+				FileStream sourceFile = new FileStream(filepath, FileMode.Open);
+				float fileSize = 0;
+				fileSize = sourceFile.Length;
+				byte[] getContent = new byte[Convert.ToInt32(Math.Truncate(fileSize))];
+				sourceFile.Read(getContent, 0, Convert.ToInt32(sourceFile.Length));
+				
+				Response.Clear();
+				//Response.Headers.Clear();
+				//Response.ContentType = "application/pdf";
+				//Response.Headers.Add("Content-Length", getContent.Length.ToString());
+				//Response.Headers.Add("Content-Disposition", "attachment; filename=" + fileName + ";");
+    //             await Response.Body.WriteAsync( getContent);
+				//Response.Body.Flush();
+				sourceFile.Close();
+				
+				
+				
+
+			}
+			string contentType = "";
+			new FileExtensionContentTypeProvider().TryGetContentType(filepath, out contentType);
+			PhysicalFileResult result = PhysicalFile(Path.Combine(filepath), contentType);
+			base.Response.Headers.Add("x-filename", fileName);
+			base.Response.Headers["Content-Disposition"] = new ContentDispositionHeaderValue("attachment")
+			{
+				FileName = fileName
 			}.ToString();
 			return result;
 		}

@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SFA.Entities;
 using SFA.Services;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft;
 
 namespace SFA
 {
@@ -59,6 +60,8 @@ namespace SFA
             services.AddDbContext<SFADBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DataConnection")));
 
+            services.AddControllers().AddNewtonsoftJson();
+
             services.AddScoped<IMenuGroupService, MenuGroupService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IMenuService, MenuService>();
@@ -82,6 +85,8 @@ namespace SFA
             //This is what was used for 2.1 Version
             //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddRazorPages();
+            
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -22,10 +22,10 @@ namespace SFA.Controllers
     public class StateController : Controller
     {
         private readonly IStateService _stateService = null;
-        private readonly IHostingEnvironment _environment = null;
+        private readonly IWebHostEnvironment _environment = null;
         private readonly SFADBContext _context = null;
 
-        public StateController(IStateService stateService, IHostingEnvironment environment, SFADBContext context)
+        public StateController(IStateService stateService, IWebHostEnvironment environment, SFADBContext context)
         {
             _stateService = stateService;
             _environment = environment;

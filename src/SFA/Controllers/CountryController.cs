@@ -23,10 +23,10 @@ namespace SFA.Controllers
     public class CountryController : Controller
     {
         private readonly ICountryService _countryService = null;
-        private readonly IHostingEnvironment _environment = null;
+        private readonly IWebHostEnvironment _environment = null;
         private readonly SFADBContext _context = null;
 
-        public CountryController(ICountryService countryService, IHostingEnvironment environment, SFADBContext context)
+        public CountryController(ICountryService countryService, IWebHostEnvironment environment, SFADBContext context)
         {
             _countryService = countryService;
             _environment = environment;

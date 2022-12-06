@@ -23,10 +23,10 @@ namespace SFA.Controllers
     public class ServiceTypeController : Controller
     {
         private readonly IServiceTypeService _serviceTypeService = null;
-        private readonly IHostingEnvironment _environment = null;
+        private readonly IWebHostEnvironment _environment = null;
         private readonly SFADBContext _context = null;
 
-        public ServiceTypeController(IServiceTypeService serviceTypeService, IHostingEnvironment environment, SFADBContext context)
+        public ServiceTypeController(IServiceTypeService serviceTypeService, IWebHostEnvironment environment, SFADBContext context)
         {
             _serviceTypeService = serviceTypeService;
             _environment = environment;

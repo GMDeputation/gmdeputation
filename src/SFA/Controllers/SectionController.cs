@@ -22,10 +22,10 @@ namespace SFA.Controllers
     public class SectionController : Controller
     {
         private readonly ISectionService _sectionService = null;
-        private readonly IHostingEnvironment _environment = null;
+        private readonly IWebHostEnvironment _environment = null;
         private readonly SFADBContext _context = null;
 
-        public SectionController(ISectionService sectionService, IHostingEnvironment environment, SFADBContext context)
+        public SectionController(ISectionService sectionService, IWebHostEnvironment environment, SFADBContext context)
         {
             _sectionService = sectionService;
             _environment = environment;

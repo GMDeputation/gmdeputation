@@ -22,10 +22,10 @@ namespace SFA.Controllers
     public class ChurchController : Controller
     {
         private readonly IChurchService _churchService = null;
-        private readonly IHostingEnvironment _environment = null;
+        private readonly IWebHostEnvironment _environment = null;
         private readonly SFADBContext _context = null;
 
-        public ChurchController(IChurchService churchService, IHostingEnvironment environment, SFADBContext context)
+        public ChurchController(IChurchService churchService, IWebHostEnvironment environment, SFADBContext context)
         {
             _churchService = churchService;
             _environment = environment;

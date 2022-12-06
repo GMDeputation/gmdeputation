@@ -5,13 +5,16 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SFA.Entities;
 using SFA.Models;
 using SFA.Services;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.IO;
 
 namespace SFA.Services
 {
@@ -47,7 +50,8 @@ namespace SFA.Services
 		{
 			_context = context;
 		}
-
+	
+		
 		public async Task<List<UserReport>> GetUserActivityReport(ReportParams reportParams)
 		{
 			List<UserReport> userDataList = new List<UserReport>();
@@ -56,7 +60,7 @@ namespace SFA.Services
 			cmd.CommandText = "USP_UserActivity";
 			cmd.Parameters.Add(new SqlParameter("@FromDate", SqlDbType.Date)
 			{
-				Value = reportParams.FromDate
+				Value = reportParams.FromDate.Value
 			});
 			cmd.Parameters.Add(new SqlParameter("@ToDate", SqlDbType.Date)
 			{

@@ -29,11 +29,11 @@ public class UserController : Controller
 {
 	private readonly IUserService _userService;
 
-	private readonly IHostingEnvironment _environment;
+	private readonly IWebHostEnvironment _environment;
 
 	private readonly SFADBContext _context;
 
-	public UserController(IUserService userService, IHostingEnvironment environment, SFADBContext context)
+	public UserController(IUserService userService, IWebHostEnvironment environment, SFADBContext context)
 	{
 		_userService = userService;
 		_environment = environment;

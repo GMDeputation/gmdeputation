@@ -4,6 +4,34 @@
         return $http.post('/reports/getUserActivityData', reportParams);
     };
 
+    this.generateUserActivityReportPdf = function (datas) {
+        return $http.post('/reports/userActivityReportPdf', datas, {
+            responseType: 'arraybuffer'
+        }).then(function (resp) {
+            headers = resp.headers();
+            var filename = headers['x-filename'];
+            var contentType = headers['content-type'];
+
+            var linkElement = document.createElement('a');
+            try {
+                var blob = new Blob([resp.data], { type: contentType });
+                var url = window.URL.createObjectURL(blob);
+
+                linkElement.setAttribute('href', url);
+                linkElement.setAttribute("download", filename);
+
+                var clickEvent = new MouseEvent("click", {
+                    "view": window,
+                    "bubbles": true,
+                    "cancelable": false
+                });
+                linkElement.dispatchEvent(clickEvent);
+            } catch (ex) {
+                console.log(ex);
+            }
+        });
+    };
+
     this.generateUserActivityReport = function (datas) {
         return $http.post('/reports/userActivityReport', datas, {
             responseType: 'arraybuffer'
@@ -31,6 +59,8 @@
             }
         });
     };
+
+
 
     this.getChurchServiceCountReportData = function (reportParams) {
         return $http.post('/reports/getChurchServiceCountReportData', reportParams);

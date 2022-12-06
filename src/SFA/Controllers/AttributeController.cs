@@ -23,10 +23,10 @@ namespace SFA.Controllers
     public class AttributeController : Controller
     {
         private readonly IAttributeService _attributeService = null;
-        private readonly IHostingEnvironment _environment = null;
+        private readonly IWebHostEnvironment _environment = null;
         private readonly SFADBContext _context = null;
 
-        public AttributeController(IAttributeService attributeService, IHostingEnvironment environment, SFADBContext context)
+        public AttributeController(IAttributeService attributeService, IWebHostEnvironment environment, SFADBContext context)
         {
             _attributeService = attributeService;
             _environment = environment;

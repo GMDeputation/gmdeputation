@@ -137,3 +137,15 @@ C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\obj\Debug\netcorea
 C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\obj\Debug\netcoreapp3.1\SFA.dll
 C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\obj\Debug\netcoreapp3.1\SFA.pdb
 C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\obj\Debug\netcoreapp3.1\SFA.genruntimeconfig.cache
+C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
+C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\bin\Debug\netcoreapp3.1\ClosedXML.dll
+C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\bin\Debug\netcoreapp3.1\DocumentFormat.OpenXml.dll
+C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\bin\Debug\netcoreapp3.1\ExcelNumberFormat.dll
+C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\bin\Debug\netcoreapp3.1\Irony.dll
+C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\bin\Debug\netcoreapp3.1\itextsharp.dll
+C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\bin\Debug\netcoreapp3.1\SixLabors.Fonts.dll
+C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\bin\Debug\netcoreapp3.1\System.IO.Packaging.dll
+C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\bin\Debug\netcoreapp3.1\XLParser.dll
