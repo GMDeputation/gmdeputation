@@ -2264,7 +2264,6 @@ var $$AnimateQueueProvider = ['$animateProvider', /** @this */ function($animate
     }
 
     // Wait until all directive and route-related templates are
-           ed and
     // compiled. The $templateRequest.totalPendingRequests variable keeps track of
     // all of the remote templates being currently downloaded. If there are no
     // templates currently downloading then the watcher will still fire anyway.

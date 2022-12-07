@@ -108,6 +108,41 @@
             reportsService.generateChurchServiceCountReport($scope.searchDatas).then(processSuccess, processError);
         }
     };
+
+    $scope.generatePdf = function () {
+        if ($scope.searchDatas.length === 0) {
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .clickOutsideToClose(false)
+                    .title('Church Admin')
+                    .textContent('Data Not Found')
+                    .ariaLabel('Alert Dialog')
+                    .ok('OK')
+            );
+        }
+        else {
+            reportsService.generateChurchServiceCountReportPdf($scope.searchDatas).then(processSuccess, processError);
+        }
+    };
+
+
+    $scope.generateWord = function () {
+        if ($scope.searchDatas.length === 0) {
+            $mdDialog.show(
+                $mdDialog.alert()
+                    .clickOutsideToClose(false)
+                    .title('Church Admin')
+                    .textContent('Data Not Found')
+                    .ariaLabel('Alert Dialog')
+                    .ok('OK')
+            );
+        }
+        else {
+            reportsService.generateChurchServiceCountReportWord($scope.searchDatas).then(processSuccess, processError);
+        }
+    };
+
+
     function processSuccess(obj) {
         $mdDialog.show(
             $mdDialog.alert()

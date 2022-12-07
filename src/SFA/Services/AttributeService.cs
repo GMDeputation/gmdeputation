@@ -133,7 +133,7 @@ namespace SFA.Services
 
             foreach (var detail in attribute.Attributes)
             {
-                if (detail.Id != null)
+                if (detail.Id == 0)
                 {
                     var currAttribute = attributeEntity.TblAttributeNta.FirstOrDefault(m => m.Id == detail.Id);
                     var newAttribute = attribute.Attributes.FirstOrDefault(m => m.Id == detail.Id);

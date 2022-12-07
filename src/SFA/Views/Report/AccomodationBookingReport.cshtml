@@ -42,6 +42,8 @@
     </div>
     <div layout="row" layout-sm="column" layout-xs="column">
         <md-button class="add-btn" aria-label="Download" data-ng-click="generateExcell()" data-ng-disabled="searchDatas.length === 0"> <md-tooltip>Generate Excel</md-tooltip> <i class="fas fa-download"></i> Generate Excel </md-button>
+        <md-button class="add-btn" aria-label="Download" data-ng-click="generatePdf()" data-ng-disabled="searchDatas.length === 0"> <md-tooltip>Generate PDF</md-tooltip> <i class="fas fa-download"></i> Generate PDF </md-button>
+        <md-button class="add-btn" aria-label="Download" data-ng-click="generateWord()" data-ng-disabled="searchDatas.length === 0"> <md-tooltip>Generate Word</md-tooltip> <i class="fas fa-download"></i> Generate Word </md-button>
     </div>
     <md-table-container>
         <table md-table md-progress="promise">
