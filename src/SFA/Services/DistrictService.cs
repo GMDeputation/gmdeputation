@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Office2010.Excel;
+using Org.BouncyCastle.Utilities.Collections;
 
 namespace SFA.Services
 {
@@ -29,14 +31,15 @@ namespace SFA.Services
 
         public async Task<List<District>> GetAll()
         {
-            var districtEntities = await _context.TblDistrictNta.OrderBy(m => m.Name).ToListAsync();
+            var districtEntities = await _context.TblDistrictNta.Include(m => m.TblStateDistrictNta).ThenInclude(m => m.State).OrderBy(m => m.Name).ToListAsync();
             return districtEntities.Select(m => new District
             {
                 Id = m.Id,
                 Code = m.Code,
                 Name = m.Name,
                 Alias = m.Alias,
-                Website = m.Website
+                Website = m.Website,
+                StateName = m.TblStateDistrictNta.Count() > 0 ? m.TblStateDistrictNta.Where(m => m.StateId == m.State.Id).FirstOrDefault()?.State.Alias + " - " + m.TblStateDistrictNta.Where(m => m.StateId == m.State.Id).FirstOrDefault()?.State.Name : null
             }).ToList();
         }
         public async Task<District> GetById(int id)
@@ -68,25 +71,13 @@ namespace SFA.Services
                 Website = a.District.Website
             }).OrderBy(a => a.Name).ToList();
         }
+
         public async Task<QueryResult<District>> Search(DistrictQuery query)
         {
             try
             {
                 var skip = (query.Page - 1) * query.Limit;
-                var districtQuery = _context.TblDistrictNta.Include(m => m.TblUserNta).ThenInclude(m => m.Role).AsNoTracking().AsQueryable();
-
-                //if (query.CountryId != int.Empty)
-                //{
-                //    districtQuery = districtQuery.Where(m => m.TblStateDistrict.State.CountryId == query.CountryId);
-                //}
-                //if (query.StateId != int.Empty)
-                //{
-                //    districtQuery = districtQuery.Where(m => m.StateId == query.StateId);
-                //}
-                if (!string.IsNullOrEmpty(query.Filter))
-                {
-                    districtQuery = districtQuery.Where(m => m.Name.Contains(query.Filter) || m.Code.Contains(query.Filter) || m.Alias.Contains(query.Filter));
-                }
+                var districtQuery = _context.TblDistrictNta.Include(m => m.TblStateDistrictNta).ThenInclude(m => m.State).Include(m => m.TblUserNta).ThenInclude(m => m.Role).AsNoTracking().AsQueryable();
                 var count = await districtQuery.CountAsync();
 
                 switch (query.Order.ToLower())
@@ -103,18 +94,11 @@ namespace SFA.Services
                     case "-alias":
                         districtQuery = districtQuery.OrderByDescending(m => m.Alias);
                         break;
-                    case "website":
-                        districtQuery = districtQuery.OrderBy(m => m.Website);
-                        break;
-                    case "-website":
-                        districtQuery = districtQuery.OrderByDescending(m => m.Website);
-                        break;
                     default:
                         districtQuery = query.Order.StartsWith("-") ? districtQuery.OrderByDescending(m => m.Name) : districtQuery.OrderBy(m => m.Name);
                         break;
                 }
                 var districtEntities = await districtQuery.Skip(skip).Take(query.Limit).ToListAsync();
-                //var stat
                 var districts = districtEntities.Select(m => new District
                 {
                     Id = m.Id,
@@ -122,6 +106,7 @@ namespace SFA.Services
                     Code = m.Code,
                     Alias = m.Alias,
                     Website = m.Website,
+                    StateName = m.TblStateDistrictNta.Count() > 0 ? m.TblStateDistrictNta.Where(m => m.StateId == m.State.Id).FirstOrDefault()?.State.Alias + " - " + m.TblStateDistrictNta.Where(m => m.StateId == m.State.Id).FirstOrDefault()?.State.Name : null,
                     DGMDUserName = m.TblUserNta.Count() > 0 ? m.TblUserNta.Where(n => n.Role.DataAccessCode == "D").FirstOrDefault()?.FirstName + "  " + m.TblUserNta.Where(n => n.Role.DataAccessCode == "D").FirstOrDefault()?.LastName : null,
                     SGMDUserName = m.TblUserNta.Count() > 0 ? m.TblUserNta.Where(n => n.Role.DataAccessCode == "S").FirstOrDefault()?.FirstName + "  " + m.TblUserNta.Where(n => n.Role.DataAccessCode == "S").FirstOrDefault()?.LastName : null
                 }).ToList();
