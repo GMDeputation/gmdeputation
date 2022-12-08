@@ -134,6 +134,8 @@ public class UserController : Controller
 	[Route("export-section")]
 	public async Task<IActionResult> ExportSection([FromForm] User user)
 	{
+		var loggedinUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");
+		StringBuilder Errors = new StringBuilder();
 		IFormFileCollection files = base.Request.Form.Files;
 		IFormFile formFile = files[0];
 		string jsonString2 = "";
@@ -141,6 +143,7 @@ public class UserController : Controller
 		try
 		{
 			string text = ((formFile != null) ? Path.GetExtension(formFile.FileName) : null);
+			//Checking if it is an Excel File
 			if (formFile != null && (text.Equals(".xls", StringComparison.OrdinalIgnoreCase) || text.Equals(".xlsx", StringComparison.OrdinalIgnoreCase) || text.Equals(".XLSX", StringComparison.OrdinalIgnoreCase) || text.Equals(".XLS", StringComparison.OrdinalIgnoreCase)))
 			{
 				_ = formFile.FileName;
@@ -149,7 +152,7 @@ public class UserController : Controller
 				{
 					Directory.CreateDirectory(uploadPath);
 				}
-				string text2 = DateTime.Now.Ticks.ToString();
+				string text2 = DateTime.Now.ToString() + "_" + loggedinUser.Id.ToString() + "_" + loggedinUser.Name;
 				string saveFileName = text2 + Path.GetExtension(formFile.FileName);
 				using (FileStream fileStream = new FileStream(Path.Combine(uploadPath, saveFileName), FileMode.Create))
 				{
@@ -172,134 +175,214 @@ public class UserController : Controller
 					List<TblStateNta> source = await _context.TblStateNta.ToListAsync();
 					for (int row = 2; row <= rowCount; row++)
 					{
-						if (((ExcelRangeBase)worksheet.Cells[row, 1]).Value != null || ((ExcelRangeBase)worksheet.Cells[row, 3]).Value != null || ((ExcelRangeBase)worksheet.Cells[row, 4]).Value != null || ((ExcelRangeBase)worksheet.Cells[row, 7]).Value != null || ((ExcelRangeBase)worksheet.Cells[row, 13]).Value != null || ((ExcelRangeBase)worksheet.Cells[row, 15]).Value != null || ((ExcelRangeBase)worksheet.Cells[row, 18]).Value != null)
+						//Make sure there is data in the first column -- If there isnt then we will ignore that under the assumption we read in a blank row.
+						if (((ExcelRangeBase)worksheet.Cells[row, 1]).Value != null)
 						{
-							if (((ExcelRangeBase)worksheet.Cells[row, 1]).Value == null || ((ExcelRangeBase)worksheet.Cells[row, 3]).Value == null || ((ExcelRangeBase)worksheet.Cells[row, 4]).Value == null || ((ExcelRangeBase)worksheet.Cells[row, 7]).Value == null || ((ExcelRangeBase)worksheet.Cells[row, 13]).Value == null || ((ExcelRangeBase)worksheet.Cells[row, 15]).Value == null || ((ExcelRangeBase)worksheet.Cells[row, 18]).Value == null)
+							//Doing a check on the data and making sure there is no data in the 15th column. If there is something is off.
+							if (((ExcelRangeBase)worksheet.Cells[row, 15]).Value != null)
 							{
-								jsonString2 = "Excel Format is not right or data are not proper. Kindly upload the right format as per given format";
-								return Json(jsonString2);
+								//jsonString2 = "Excel Format is not right or data are not proper. Kindly upload the right format as per given format";
+								//return Json(jsonString2);
+								continue;
 							}
-							if (existingEntity.Select((TblUserNta m) => m.UserName.ToLower()).Contains(((ExcelRangeBase)worksheet.Cells[row, 13]).Value.ToString().ToLower()))
+							//Makinf ssure the email does not already exists in the database. 
+							if (existingEntity.Select((TblUserNta m) => m.Email.ToLower()).Contains(((ExcelRangeBase)worksheet.Cells[row,4]).Value.ToString().ToLower()))
 							{
-								jsonString2 = "User Email Should be unique Or not right in " + row + " th row of excel sheet. Kindly check User Email";
-								return Json(jsonString2);
-							}
-							if (!roleEntities.Select((TblRoleNta m) => m.Name).Contains(((ExcelRangeBase)worksheet.Cells[row, 15]).Value.ToString()))
+								Errors.AppendLine("User Email Should be unique Or not right in " + row + " th row of excel sheet. Kindly check User Email");
+								//jsonString2 = "User Email Should be unique Or not right in " + row + " th row of excel sheet. Kindly check User Email";
+								//return Json(jsonString2);
+								continue;
+							}							
+							if (!roleEntities.Select((TblRoleNta m) => m.Id.ToString()).Contains(((ExcelRangeBase)worksheet.Cells[row, 10]).Value.ToString()))
 							{
-								jsonString2 = "Role not right in " + row + " th row of excel sheet. Kindly check Role Name";
-								return Json(jsonString2);
-							}
-							if (((ExcelRangeBase)worksheet.Cells[row, 8]).Value != null && !districtEntities.Select((TblDistrictNta m) => m.Code).Contains(((ExcelRangeBase)worksheet.Cells[row, 8]).Value.ToString()))
-							{
-								jsonString2 = "District Code is not right in " + row + " th row of excel sheet. Kindly check District code";
-								return Json(jsonString2);
-							}
-							int? districtId = ((((ExcelRangeBase)worksheet.Cells[row, 8]).Value != null) ? new int?(districtEntities.Where((TblDistrictNta m) => m.Code == ((ExcelRangeBase)worksheet.Cells[row, 8]).Value.ToString()).FirstOrDefault().Id) : null);
-							if (((ExcelRangeBase)worksheet.Cells[row, 9]).Value != null && districtId.HasValue && districtId != 0 && !(from m in sectionEntities.Where(delegate (TblSectionNta m)
-							{
-								int districtId3 = m.DistrictId;
-								int? guid3 = districtId;
-								return districtId3 == guid3;
-							})
-																																	   select m.Name).Contains(((ExcelRangeBase)worksheet.Cells[row, 9]).Value.ToString()))
-							{
-								jsonString2 = "Section Name is not found under " + ((ExcelRangeBase)worksheet.Cells[row, 8]).Value.ToString() + " District " + row + " th row of excel sheet. Kindly check Section Name";
-								return Json(jsonString2);
-							}
-							if (((ExcelRangeBase)worksheet.Cells[row, 16]).Value != null && !countryEntities.Select((TblCountryNta m) => m.Alpha2Code).Contains(((ExcelRangeBase)worksheet.Cells[row, 16]).Value.ToString()))
-							{
-								jsonString2 = "Country Alpha Code is not right in " + row + " th row of excel sheet. Kindly check Country Alpha Code";
-								return Json(jsonString2);
-							}
-							if (((ExcelRangeBase)worksheet.Cells[row, 17]).Value != null && !source.Select((TblStateNta m) => m.Alias).Contains(((ExcelRangeBase)worksheet.Cells[row, 17]).Value.ToString()))
-							{
-								jsonString2 = "State Code is not right in " + row + " th row of excel sheet. Kindly check State Code";
-								return Json(jsonString2);
-							}
+								Errors.AppendLine("Role not right in " + row + " th row of excel sheet. Kindly check Role ID");
+								//jsonString2 = "Role not right in " + row + " th row of excel sheet. Kindly check Role ID";
+								//return Json(jsonString2);
+								continue;
+							}	
+							//Looking into Section table for the district ID. If it does not find it district ID will be null
+							var districtId = ((((ExcelRangeBase)worksheet.Cells[row, 8]).Value != null) ? new int?(sectionEntities.Where((TblSectionNta m) => m.Id.ToString() == ((ExcelRangeBase)worksheet.Cells[row, 8]).Value.ToString()).FirstOrDefault().DistrictId) : null);
+							
+							//if (((ExcelRangeBase)worksheet.Cells[row, 9]).Value != null && districtId.HasValue && districtId != 0 && !(from m in sectionEntities.Where(delegate (TblSectionNta m)
+							//{
+							//	int districtId3 = m.DistrictId;
+							//	int? guid3 = districtId;
+							//	return districtId3 == guid3;
+							//})
+							//select m.Name).Contains(((ExcelRangeBase)worksheet.Cells[row, 9]).Value.ToString()))
+							//{
+							//	jsonString2 = "Section Name is not found under " + ((ExcelRangeBase)worksheet.Cells[row, 8]).Value.ToString() + " District " + row + " th row of excel sheet. Kindly check Section Name";
+							//	return Json(jsonString2);
+							//}
+							//if (((ExcelRangeBase)worksheet.Cells[row, 16]).Value != null && !countryEntities.Select((TblCountryNta m) => m.Alpha2Code).Contains(((ExcelRangeBase)worksheet.Cells[row, 16]).Value.ToString()))
+							//{
+							//	jsonString2 = "Country Alpha Code is not right in " + row + " th row of excel sheet. Kindly check Country Alpha Code";
+							//	return Json(jsonString2);
+							//}
+							//if (((ExcelRangeBase)worksheet.Cells[row, 17]).Value != null && !source.Select((TblStateNta m) => m.Alias).Contains(((ExcelRangeBase)worksheet.Cells[row, 17]).Value.ToString()))
+							//{
+							//	jsonString2 = "State Code is not right in " + row + " th row of excel sheet. Kindly check State Code";
+							//	return Json(jsonString2);
+							//}
 
-							TblRoleNta tblRole = roleEntities.Where((TblRoleNta m) => m.Name.Contains(((ExcelRangeBase)worksheet.Cells[row, 15]).Value.ToString())).FirstOrDefault();
+							TblRoleNta tblRole = roleEntities.Where((TblRoleNta m) => m.Id.ToString().Contains(((ExcelRangeBase)worksheet.Cells[row, 10]).Value.ToString())).FirstOrDefault();
+
+							var firstName = ((ExcelRangeBase)worksheet.Cells[row, 1]).Value.ToString();
+							var middleName = ((((ExcelRangeBase)worksheet.Cells[row, 2]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 2]).Value.ToString() : null);
+							var lastName = ((ExcelRangeBase)worksheet.Cells[row, 3]).Value.ToString();
+							var email = ((ExcelRangeBase)worksheet.Cells[row, 4]).Value.ToString();
+							if(!IsValidEmail(email))
+                            {
+								Errors.AppendLine(email + ": Is not valid");
+								continue;
+							}
+							var gender = ((((ExcelRangeBase)worksheet.Cells[row, 5]).Value == null) ? null : ((ExcelRangeBase)worksheet.Cells[row, 5]).Value?.ToString());
+							var address = ((((ExcelRangeBase)worksheet.Cells[row, 6]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 6]).Value.ToString() : null);
+							var zipCode = ((ExcelRangeBase)worksheet.Cells[row, 7]).Value;
+							var sectionId = (((((ExcelRangeBase)worksheet.Cells[row, 8]).Value == null) ? null : ((ExcelRangeBase)worksheet.Cells[row, 8]).Value.ToString()));
+							int? sectionIdInt = null;
+							if (sectionId != null || sectionId != "")
+								sectionIdInt = Convert.ToInt32(sectionId);				
+				
+							var stateId = ((((ExcelRangeBase)worksheet.Cells[row, 9]).Value != null) ? new int?(source.Where((TblStateNta m) => m.Alias != null && m.Alias.ToString().ToUpper() == ((ExcelRangeBase)worksheet.Cells[row, 9]).Value.ToString().ToUpper()).FirstOrDefault().Id) : null);
+							var roleId = roleEntities.Where((TblRoleNta m) => m.Id.ToString().Contains(((ExcelRangeBase)worksheet.Cells[row, 10]).Value.ToString())).FirstOrDefault().Id;
+							var city = ((((ExcelRangeBase)worksheet.Cells[row, 11]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 11]).Value.ToString() : null);
+							var workPhoneNum = ((((ExcelRangeBase)worksheet.Cells[row, 12]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 12]).Value.ToString() : null);
+							var landLine = ((((ExcelRangeBase)worksheet.Cells[row, 13]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 13]).Value.ToString() : null);
+							var mobilePhone = ((((ExcelRangeBase)worksheet.Cells[row, 14]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 14]).Value.ToString() : null);
+							var countryId = ((((ExcelRangeBase)worksheet.Cells[row, 9]).Value != null) ? new int?(source.Where((TblStateNta m) => m.Alias != null && m.Alias.ToString().ToUpper() == ((ExcelRangeBase)worksheet.Cells[row, 9]).Value.ToString()).FirstOrDefault().CountryId) : null);
 							TblUserNta formModel = new TblUserNta
 							{
 
-								FirstName = ((ExcelRangeBase)worksheet.Cells[row, 1]).Value.ToString(),
-								MiddleName = ((((ExcelRangeBase)worksheet.Cells[row, 2]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 2]).Value.ToString() : null),
-								LastName = ((ExcelRangeBase)worksheet.Cells[row, 3]).Value.ToString(),
-								Gender = ((((ExcelRangeBase)worksheet.Cells[row, 4]).Value == null) ? null : ((ExcelRangeBase)worksheet.Cells[row, 4]).Value?.ToString()),
-								Address = ((((ExcelRangeBase)worksheet.Cells[row, 5]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 5]).Value.ToString() : null),
-								City = ((((ExcelRangeBase)worksheet.Cells[row, 6]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 6]).Value.ToString() : null),
-								Zipcode = ((ExcelRangeBase)worksheet.Cells[row, 7]).Value.ToString(),
-								DistrictId = ((((ExcelRangeBase)worksheet.Cells[row, 8]).Value != null) ? districtId : null),
-								SectionId = ((((ExcelRangeBase)worksheet.Cells[row, 9]).Value != null) ? new int?(sectionEntities.Where(delegate (TblSectionNta m)
-								{
-									int districtId2 = m.DistrictId;
-									int? guid2 = districtId;
-									return districtId2 == guid2 && m.Name.Contains(((ExcelRangeBase)worksheet.Cells[row, 9]).Value.ToString());
-								}).FirstOrDefault().Id) : null),
-								TelePhoneNo = ((((ExcelRangeBase)worksheet.Cells[row, 10]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 10]).Value.ToString() : null),
-								WorkPhoneNo = ((((ExcelRangeBase)worksheet.Cells[row, 11]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 11]).Value.ToString() : null),
-								Phone = ((((ExcelRangeBase)worksheet.Cells[row, 12]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 12]).Value.ToString() : null),
-								Email = ((ExcelRangeBase)worksheet.Cells[row, 13]).Value.ToString(),
-								UserName = ((ExcelRangeBase)worksheet.Cells[row, 13]).Value.ToString(),
-								RoleId = roleEntities.Where((TblRoleNta m) => m.Name.Contains(((ExcelRangeBase)worksheet.Cells[row, 15]).Value.ToString())).FirstOrDefault().Id,
-								CountryId = ((((ExcelRangeBase)worksheet.Cells[row, 16]).Value != null) ? new int?(countryEntities.Where((TblCountryNta m) => m.Alpha2Code != null && m.Alpha2Code == ((ExcelRangeBase)worksheet.Cells[row, 16]).Value.ToString()).FirstOrDefault().Id) : null),
-								StateId = ((((ExcelRangeBase)worksheet.Cells[row, 17]).Value != null) ? new int?(source.Where((TblStateNta m) => m.Alias != null && m.Alias == ((ExcelRangeBase)worksheet.Cells[row, 17]).Value.ToString()).FirstOrDefault().Id) : null),
-								IsActive = ((((ExcelRangeBase)worksheet.Cells[row, 14]).Value != null && ((ExcelRangeBase)worksheet.Cells[row, 14]).Value.ToString() == "Active") ? true : false),
-								InsertDatetime = DateTime.Now
+								FirstName = firstName,
+
+								MiddleName = middleName,
+
+								LastName = lastName,
+
+								UserName = email,
+
+								Email = email,
+
+								Gender = gender,
+
+								Address = address,
+
+								Zipcode = zipCode.ToString(),
+
+								SectionId = sectionIdInt,
+
+								StateId = stateId,
+
+								RoleId = roleId,
+
+								City = city,
+
+								WorkPhoneNo = workPhoneNum,
+
+								TelePhoneNo = landLine,
+
+								Phone = mobilePhone,						
+
+								//We are looking up the country based on the state ID that is why we are looking at the state value here and extracting the Country ID from that table. 
+								CountryId = countryId,
+
+								//This was another lookup that happened previous. We know the district because we know the section
+								DistrictId = districtId,
+
+								IsActive = true,
+								InsertDatetime = DateTime.Now,
+								InsertUser = loggedinUser.Id.ToString(),
+								
 							};
-							formModel.TblUserPasswordNta.Add(new TblUserPasswordNta
+
+
+							//Adding User into Database Here
+							_context.TblUserNta.AddRange(formModel);
+
+							try
+							{
+								await _context.SaveChangesAsync();
+							}
+							catch(Exception ex)
+                            {
+								Errors.AppendLine(ex.ToString());
+
+							}
+
+
+							//We now need to add the password for that user. 
+							TblUserPasswordNta tmpInsert = (new TblUserPasswordNta
 							{
 								UserId = formModel.Id,
 								Password = "123",
 								InsertDatetime = DateTime.Now,
+								InsertUser = loggedinUser.Id.ToString(),
 							});
-							List<TblUserNta> list = model.Where((TblUserNta m) => m.Email == formModel.Email).ToList();
-							List<TblUserNta> list2 = existingEntity.Where((TblUserNta m) => m.Email == formModel.Email).ToList();
-							if (list.Count > 0 || list2.Count > 0)
-							{
-								model.Remove(formModel);
-							}
-							else
-							{
-								model.Add(formModel);
-							}
-						}
-					}
-					foreach (TblUserNta item in model)
-					{
-						StringBuilder stringBuilder = new StringBuilder();
-						stringBuilder.AppendLine(string.Format("<p> Hi " + item.FirstName + " " + item.MiddleName + " " + item.LastName + "</p>"));
-						stringBuilder.AppendLine(string.Format("<p style='margin-left:30px'>Your can login on UPCI GLOBAL MISSIONS DEPUTATION using the below credentials. </p><p>Email: " + item.Email + "</p><p>Default Password: " + item.TblUserPasswordNta.FirstOrDefault().Password + "<br><p>Kindly click <a href='https://gmdeputation.com/'>UPCI GLOBAL MISSIONS DEPUTATION</a> to login.</p>"));
-						try
-						{
-							MimeMessage emailMessage = new MimeMessage();
-							emailMessage.From.Add((InternetAddress)new MailboxAddress("UPCI GLOBAL MISSIONS DEPUTATION", "notify@realchurch.eu"));
-							emailMessage.To.Add((InternetAddress)new MailboxAddress("Verify Email", item.Email));
-							emailMessage.Subject = ("New User Creation and Verify Email");
-							TextPart val = new TextPart("html");
-							val.Text = (stringBuilder.ToString());
-							emailMessage.Body = ((MimeEntity)val);
-							SmtpClient client = new SmtpClient();
+							//Adding Password for User into Database Here
+							_context.TblUserPasswordNta.AddRange(tmpInsert);
 							try
-							{
-								client.LocalDomain = ("smtp.easyname.com");
-								await ((MailService)client).ConnectAsync("smtp.easyname.com", 465, (SecureSocketOptions)1, default(CancellationToken)).ConfigureAwait(continueOnCapturedContext: false);
-								await ((MailService)client).AuthenticateAsync((ICredentials)new NetworkCredential("notify@realchurch.eu", "0.etx6z6qcup"), default(CancellationToken));
-								await ((MailTransport)client).SendAsync(emailMessage, default(CancellationToken), (ITransferProgress)null).ConfigureAwait(continueOnCapturedContext: false);
-								await ((MailService)client).DisconnectAsync(true, default(CancellationToken)).ConfigureAwait(continueOnCapturedContext: false);
+                            {
+								await _context.SaveChangesAsync();
 							}
-							finally
-							{
-								((IDisposable)client)?.Dispose();
-							}
+							catch (Exception ex)
+                            {
+								Errors.AppendLine(ex.ToString());
+                            }
+							
+
+
+							//List<TblUserNta> list = model.Where((TblUserNta m) => m.Email == formModel.Email).ToList();
+							//List<TblUserNta> list2 = existingEntity.Where((TblUserNta m) => m.Email == formModel.Email).ToList();
+							//if (list.Count > 0 || list2.Count > 0)
+							//{
+							//	model.Remove(formModel);
+							//}
+							//else
+							//{
+							//	model.Add(formModel);
+							//}
+
 						}
-						catch (Exception value)
-						{
-							return StatusCode(500, value);
-						}
+						//This means the data import read in a blank link and we are going to ingore
+						else
+							continue;
 					}
-					_context.TblUserNta.AddRange(model);
-					await _context.SaveChangesAsync();
-					return Json(jsonString2);
+
+                        //StringBuilder stringBuilder = new StringBuilder();
+                        //stringBuilder.AppendLine(string.Format("<p> Hi " + firs + " " + item.MiddleName + " " + item.LastName + "</p>"));
+                        //stringBuilder.AppendLine(string.Format("<p style='margin-left:30px'>Your can login on UPCI GLOBAL MISSIONS DEPUTATION using the below credentials. </p><p>Email: " + item.Email + "</p><p>Default Password: " + item.TblUserPasswordNta.FirstOrDefault().Password + "<br><p>Kindly click <a href='https://gmdeputation.com/'>UPCI GLOBAL MISSIONS DEPUTATION</a> to login.</p>"));
+                        //try
+                        //{
+                        //    MimeMessage emailMessage = new MimeMessage();
+                        //    emailMessage.From.Add((InternetAddress)new MailboxAddress("UPCI GLOBAL MISSIONS DEPUTATION", "notify@realchurch.eu"));
+                        //    emailMessage.To.Add((InternetAddress)new MailboxAddress("Verify Email", item.Email));
+                        //    emailMessage.Subject = ("New User Creation and Verify Email");
+                        //    TextPart val = new TextPart("html");
+                        //    val.Text = (stringBuilder.ToString());
+                        //    emailMessage.Body = ((MimeEntity)val);
+                        //    SmtpClient client = new SmtpClient();
+                        //    try
+                        //    {
+                        //        client.LocalDomain = ("smtp.easyname.com");
+                        //        await ((MailService)client).ConnectAsync("smtp.easyname.com", 465, (SecureSocketOptions)1, default(CancellationToken)).ConfigureAwait(continueOnCapturedContext: false);
+                        //        await ((MailService)client).AuthenticateAsync((ICredentials)new NetworkCredential("notify@realchurch.eu", "0.etx6z6qcup"), default(CancellationToken));
+                        //        await ((MailTransport)client).SendAsync(emailMessage, default(CancellationToken), (ITransferProgress)null).ConfigureAwait(continueOnCapturedContext: false);
+                        //        await ((MailService)client).DisconnectAsync(true, default(CancellationToken)).ConfigureAwait(continueOnCapturedContext: false);
+                        //    }
+                        //    finally
+                        //    {
+                        //        ((IDisposable)client)?.Dispose();
+                        //    }
+                        //}
+                        //catch (Exception value)
+                        //{
+                        //    return StatusCode(500, value);
+                        //}
+                    
+                    //_context.TblUserNta.AddRange(model);
+                    //await _context.SaveChangesAsync();
+                    return Json(jsonString2);
 				}
 				finally
 				{
@@ -311,6 +394,24 @@ public class UserController : Controller
 		catch (Exception value2)
 		{
 			return StatusCode(500, value2);
+		}
+	}
+	bool IsValidEmail(string email)
+	{
+		var trimmedEmail = email.Trim();
+
+		if (trimmedEmail.EndsWith("."))
+		{
+			return false; // suggested by @TK-421
+		}
+		try
+		{
+			var addr = new System.Net.Mail.MailAddress(email);
+			return addr.Address == trimmedEmail;
+		}
+		catch
+		{
+			return false;
 		}
 	}
 

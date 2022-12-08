@@ -26,7 +26,7 @@
     $scope.save = function () {
         var fd = new FormData();
 
-        fd.append('files', $scope.file);
+        fd.append('files', $scope.file);       
         userService.export(fd).then(processSuccess, processError);
     };
 
