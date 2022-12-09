@@ -137,7 +137,7 @@ namespace SFA.Controllers
                     }
                     //if (file.Length > 0)
                     //{
-                    var fileSequence = DateTime.Now.Ticks.ToString();
+                    var fileSequence = DateTime.Now.ToString().Replace("/","").Replace(":","").Replace(" ","") + "_" + loggedinUser.Id.ToString() + "_" + loggedinUser.Name;
                     var saveFileName = fileSequence + Path.GetExtension(file.FileName);
                     using (var fileStream = new FileStream(Path.Combine(uploadPath, saveFileName), FileMode.Create))
                     {
@@ -161,7 +161,7 @@ namespace SFA.Controllers
                        // var countryCodes = await _context.TblCountry.ToListAsync();
                         for (int row = 2; row <= rowCount; row++)
                         {
-                            if (worksheet.Cells[row, 1].Value != null && worksheet.Cells[row, 2].Value != null && !worksheet.Cells[row, 1].Value.ToString().Contains("Country Name", StringComparison.OrdinalIgnoreCase))
+                            if (worksheet.Cells[row, 1].Value != null)
                             {
                                 //if (!countryCodes.Select(m => m.Code).Contains(worksheet.Cells[row, 1].Value.ToString()))
                                 //{
@@ -183,17 +183,28 @@ namespace SFA.Controllers
                                 };
 
                                 //model = formModel;
-                                var currentList = model.Where(m => m.Name == formModel.Name).ToList();
-                                var existingList = existingEntity.Where(m => m.Name == formModel.Name).ToList();
-                                if (currentList.Count > 0 || existingList.Count > 0)
+                                //var currentList = model.Where(m => m.Name == formModel.Name).ToList();
+                                //var existingList = existingEntity.Where(m => m.Name == formModel.Name).ToList();
+                                //if (currentList.Count > 0 || existingList.Count > 0)
+                                //{
+                                //    model.Remove(formModel);
+                                //}
+                                //else
+                                //{
+                                //    maxNumber++;
+                                //    model.Add(formModel);
+                                //}
+                                _context.TblCountryNta.AddRange(formModel);
+                                try
                                 {
-                                    model.Remove(formModel);
+                                    await _context.SaveChangesAsync();
                                 }
-                                else
+                                catch(Exception ex)
                                 {
-                                    maxNumber++;
-                                    model.Add(formModel);
+                                    Console.WriteLine(ex.Message);
                                 }
+                                
+                                
                             }
                             else
                             {

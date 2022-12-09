@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using GoogleMaps.LocationServices;
 using MailKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
@@ -134,6 +135,8 @@ public class UserController : Controller
 	[Route("export-section")]
 	public async Task<IActionResult> ExportSection([FromForm] User user)
 	{
+		var latitude = "";
+		var longitude = "";
 		var loggedinUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");
 		StringBuilder Errors = new StringBuilder();
 		IFormFileCollection files = base.Request.Form.Files;
@@ -152,7 +155,7 @@ public class UserController : Controller
 				{
 					Directory.CreateDirectory(uploadPath);
 				}
-				string text2 = DateTime.Now.ToString() + "_" + loggedinUser.Id.ToString() + "_" + loggedinUser.Name;
+				string text2 = DateTime.Now.ToString().Replace("/", "").Replace(":", "").Replace(" ", "") + "_" + loggedinUser.Id.ToString() + "_" + loggedinUser.Name;
 				string saveFileName = text2 + Path.GetExtension(formFile.FileName);
 				using (FileStream fileStream = new FileStream(Path.Combine(uploadPath, saveFileName), FileMode.Create))
 				{
@@ -166,6 +169,8 @@ public class UserController : Controller
 				{
 					ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
 					int rowCount = worksheet.Dimension.Rows;
+					int numberInserts = 0;
+					int numberFailed = 0;
 					_ = string.Empty;
 					List<TblUserNta> existingEntity = await _context.TblUserNta.Include((TblUserNta m) => m.District).ToListAsync();
 					List<TblRoleNta> roleEntities = await _context.TblRoleNta.ToListAsync();
@@ -178,30 +183,47 @@ public class UserController : Controller
 						//Make sure there is data in the first column -- If there isnt then we will ignore that under the assumption we read in a blank row.
 						if (((ExcelRangeBase)worksheet.Cells[row, 1]).Value != null)
 						{
+							numberInserts++;
 							//Doing a check on the data and making sure there is no data in the 15th column. If there is something is off.
 							if (((ExcelRangeBase)worksheet.Cells[row, 15]).Value != null)
 							{
+								Errors.AppendLine("Row Number:" + row + " Excel Format is not right or data are not proper. Kindly upload the right format as per given format");
 								//jsonString2 = "Excel Format is not right or data are not proper. Kindly upload the right format as per given format";
 								//return Json(jsonString2);
+								numberFailed++;
 								continue;
 							}
 							//Makinf ssure the email does not already exists in the database. 
 							if (existingEntity.Select((TblUserNta m) => m.Email.ToLower()).Contains(((ExcelRangeBase)worksheet.Cells[row,4]).Value.ToString().ToLower()))
 							{
-								Errors.AppendLine("User Email Should be unique Or not right in " + row + " th row of excel sheet. Kindly check User Email");
+								Errors.AppendLine("Row Number:" + row + " User Email Should be unique Or not right in " + row + " th row of excel sheet. Kindly check User Email");
 								//jsonString2 = "User Email Should be unique Or not right in " + row + " th row of excel sheet. Kindly check User Email";
 								//return Json(jsonString2);
+								numberFailed++;
 								continue;
 							}							
 							if (!roleEntities.Select((TblRoleNta m) => m.Id.ToString()).Contains(((ExcelRangeBase)worksheet.Cells[row, 10]).Value.ToString()))
 							{
-								Errors.AppendLine("Role not right in " + row + " th row of excel sheet. Kindly check Role ID");
+								Errors.AppendLine("Row Number:" + row + " Role not right in " + row + " th row of excel sheet. Kindly check Role ID");
 								//jsonString2 = "Role not right in " + row + " th row of excel sheet. Kindly check Role ID";
 								//return Json(jsonString2);
+								numberFailed++;
 								continue;
-							}	
+							}
 							//Looking into Section table for the district ID. If it does not find it district ID will be null
-							var districtId = ((((ExcelRangeBase)worksheet.Cells[row, 8]).Value != null) ? new int?(sectionEntities.Where((TblSectionNta m) => m.Id.ToString() == ((ExcelRangeBase)worksheet.Cells[row, 8]).Value.ToString()).FirstOrDefault().DistrictId) : null);
+							//Looking into Section table for the district ID. If it does not find it district ID will be null
+							int? districtId = null;
+							try
+							{
+								districtId = ((((ExcelRangeBase)worksheet.Cells[row, 8]).Value != null) ? new int?(sectionEntities.Where((TblSectionNta m) => m.Id.ToString() == ((ExcelRangeBase)worksheet.Cells[row, 8]).Value.ToString()).FirstOrDefault().DistrictId) : null);
+							}
+							catch (Exception ex)
+							{
+								Errors.AppendLine("Row Number:" + row + " Failed to retirve District ID. Please verify Section ID is valid.");
+								numberFailed++;
+								Console.WriteLine(ex.Message);
+								continue;
+							}							
 							
 							//if (((ExcelRangeBase)worksheet.Cells[row, 9]).Value != null && districtId.HasValue && districtId != 0 && !(from m in sectionEntities.Where(delegate (TblSectionNta m)
 							//{
@@ -233,11 +255,33 @@ public class UserController : Controller
 							var email = ((ExcelRangeBase)worksheet.Cells[row, 4]).Value.ToString();
 							if(!IsValidEmail(email))
                             {
-								Errors.AppendLine(email + ": Is not valid");
+								Errors.AppendLine("Row Number:" + row + " " +email + ": Is not valid");
+								numberFailed++;
 								continue;
 							}
 							var gender = ((((ExcelRangeBase)worksheet.Cells[row, 5]).Value == null) ? null : ((ExcelRangeBase)worksheet.Cells[row, 5]).Value?.ToString());
 							var address = ((((ExcelRangeBase)worksheet.Cells[row, 6]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 6]).Value.ToString() : null);
+							if(address != null)
+                            {								
+
+								var locationService = new GoogleLocationService("AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI");
+								MapPoint point = null;
+								try
+                                {
+
+									point = locationService.GetLatLongFromAddress(address);
+								}								
+								catch(Exception ex)
+                                {
+									Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Address: Please verify address syntax and validity");
+									numberFailed++;
+									Console.WriteLine(ex.Message);
+									continue;
+								}
+
+								latitude = point.Latitude.ToString();
+								longitude = point.Longitude.ToString();
+							}
 							var zipCode = ((ExcelRangeBase)worksheet.Cells[row, 7]).Value;
 							var sectionId = (((((ExcelRangeBase)worksheet.Cells[row, 8]).Value == null) ? null : ((ExcelRangeBase)worksheet.Cells[row, 8]).Value.ToString()));
 							int? sectionIdInt = null;
@@ -282,13 +326,17 @@ public class UserController : Controller
 
 								TelePhoneNo = landLine,
 
-								Phone = mobilePhone,						
+								Phone = mobilePhone,
 
 								//We are looking up the country based on the state ID that is why we are looking at the state value here and extracting the Country ID from that table. 
 								CountryId = countryId,
 
 								//This was another lookup that happened previous. We know the district because we know the section
 								DistrictId = districtId,
+
+								Lat = latitude,
+
+								Long = longitude,
 
 								IsActive = true,
 								InsertDatetime = DateTime.Now,
@@ -306,7 +354,9 @@ public class UserController : Controller
 							}
 							catch(Exception ex)
                             {
-								Errors.AppendLine(ex.ToString());
+								Errors.AppendLine("Row Number:" + row + " " + ex.ToString());
+								numberFailed++;
+								continue;
 
 							}
 
@@ -327,7 +377,9 @@ public class UserController : Controller
 							}
 							catch (Exception ex)
                             {
-								Errors.AppendLine(ex.ToString());
+								Errors.AppendLine("Row Number:" + row + " " + ex.ToString());
+								numberFailed++;
+								continue;
                             }
 							
 
@@ -382,7 +434,15 @@ public class UserController : Controller
                     
                     //_context.TblUserNta.AddRange(model);
                     //await _context.SaveChangesAsync();
-                    return Json(jsonString2);
+					if(Errors.Length==0)
+                    {
+						return Json(jsonString2);
+					}
+					else
+                    {
+						return Json(numberInserts + "Attempted to be added: " + numberFailed + "Failed:Errors are as follows:\n" + Errors);
+                    }
+                   
 				}
 				finally
 				{
