@@ -145,7 +145,7 @@ namespace SFA.Controllers
                     }
                     //if (file.Length > 0)
                     //{
-                    var fileSequence = DateTime.Now.Ticks.ToString();
+                    var fileSequence = DateTime.Now.ToString().Replace("/", "").Replace(":", "").Replace(" ", "") + "_" + loggedinUser.Id.ToString() + "_" + loggedinUser.Name;
                     var saveFileName = fileSequence + Path.GetExtension(file.FileName);
                     using (var fileStream = new FileStream(Path.Combine(uploadPath, saveFileName), FileMode.Create))
                     {
@@ -169,20 +169,26 @@ namespace SFA.Controllers
                         var districtCodes = await _context.TblDistrictNta.ToListAsync();
                         for (int row = 2; row <= rowCount; row++)
                         {
-                            if (worksheet.Cells[row, 1].Value != null && worksheet.Cells[row, 2].Value != null && !worksheet.Cells[row, 1].Value.ToString().Contains("District Code", StringComparison.OrdinalIgnoreCase))
+                            if (worksheet.Cells[row, 1].Value != null)
                             {
-                                if (!districtCodes.Select(m => m.Code).Contains(worksheet.Cells[row, 1].Value.ToString()))
+                                if (!districtCodes.Select(m => m.Id.ToString()).Contains(worksheet.Cells[row, 2].Value.ToString()))
                                 {
-                                    jsonString = "District Code is not right in " + row + " th row of excel sheet. Kindly check District code";
+                                    jsonString = "District ID does not exists in district table  at" + row + " th row of excel sheet. Kindly check District ID";
                                     return Json(jsonString);
                                 }
+                                var districtID = worksheet.Cells[row, 2].Value;
+                                //0 will cause the insert  to fail for the foreign key relationship will fail in the database
+                                int districtIDAsInt = 0; ;
+
+                                if (districtID != null)
+                                    districtIDAsInt = Convert.ToInt32(districtID);
 
                                 var formModel = new TblSectionNta
                                 {
                                     InsertDatetime = DateTime.Now,
                                     InsertUser = loggedinUser.Id.ToString(),                                
-                                    DistrictId = districtCodes.Where(m => m.Code == worksheet.Cells[row, 1].Value.ToString()).FirstOrDefault().Id,                                 
-                                    Name = worksheet.Cells[row, 2].Value.ToString()
+                                    DistrictId = districtIDAsInt,                                 
+                                    Name = worksheet.Cells[row, 1].Value.ToString()
                                 };
                                 //model = formModel;
                                 var currentList = model.Where(m => m.Name == formModel.Name).ToList();
@@ -198,7 +204,7 @@ namespace SFA.Controllers
                             }
                             else
                             {
-                                jsonString = "Excel Format is not right. Kindly upload the right format as per given format";
+                                jsonString = "First Column is not filled in one of the columns. Please fix import file";
                                 return Json(jsonString);
                             }
 

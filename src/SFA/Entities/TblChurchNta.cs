@@ -17,7 +17,7 @@ namespace SFA.Entities
             TblAppointmentNta = new HashSet<TblAppointmentNta>();
 
         }
-
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [StringLength(50)]
         public string ChurchIdNo { get; set; }

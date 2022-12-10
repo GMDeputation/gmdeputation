@@ -354,7 +354,7 @@ public class UserController : Controller
 							}
 							catch(Exception ex)
                             {
-								Errors.AppendLine("Row Number:" + row + " " + ex.ToString());
+								Errors.AppendLine("Row Number:" + row + " " + ex.InnerException.Message);
 								numberFailed++;
 								continue;
 
@@ -377,23 +377,11 @@ public class UserController : Controller
 							}
 							catch (Exception ex)
                             {
-								Errors.AppendLine("Row Number:" + row + " " + ex.ToString());
+								Errors.AppendLine("Row Number:" + row + " " + ex.InnerException.Message);
 								numberFailed++;
 								continue;
                             }
 							
-
-
-							//List<TblUserNta> list = model.Where((TblUserNta m) => m.Email == formModel.Email).ToList();
-							//List<TblUserNta> list2 = existingEntity.Where((TblUserNta m) => m.Email == formModel.Email).ToList();
-							//if (list.Count > 0 || list2.Count > 0)
-							//{
-							//	model.Remove(formModel);
-							//}
-							//else
-							//{
-							//	model.Add(formModel);
-							//}
 
 						}
 						//This means the data import read in a blank link and we are going to ingore

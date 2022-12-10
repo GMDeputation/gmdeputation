@@ -33,3 +33,5 @@ src/SFA/obj/project.assets.json
 src/SFA/obj/Debug/netcoreapp3.1/staticwebassets/SFA.StaticWebAssets.xml
 /src/.vs/
 src/SFA/obj/Debug
+src/.vs/SFA/v17/.suo
+src/SFA/bin/

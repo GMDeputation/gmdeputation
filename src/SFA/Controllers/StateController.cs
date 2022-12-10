@@ -196,10 +196,11 @@ namespace SFA.Controllers
                                 try
                                 {
                                     await _context.SaveChangesAsync();
+                                    maxNumber++;
                                 }
                                 catch (Exception ex)
                                 {
-                                    Console.WriteLine(ex.Message);
+                                    Console.WriteLine(ex.InnerException.Message);
                                 }
                                 
                                 //model = formModel;

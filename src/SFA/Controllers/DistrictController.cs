@@ -14,6 +14,7 @@ using SFA.Entities;
 using System.IO;
 using OfficeOpenXml;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace SFA.Controllers
 {
@@ -127,6 +128,7 @@ namespace SFA.Controllers
         {
             var jsonString = "";
             var loggedinUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");
+            StringBuilder Errors = new StringBuilder();
             try
             {
 
@@ -142,7 +144,7 @@ namespace SFA.Controllers
                     }
                     //if (file.Length > 0)
                     //{
-                    var fileSequence = DateTime.Now.Ticks.ToString();
+                    var fileSequence = DateTime.Now.ToString().Replace("/", "").Replace(":", "").Replace(" ", "") + "_" + loggedinUser.Id.ToString() + "_" + loggedinUser.Name;
                     var saveFileName = fileSequence + Path.GetExtension(file.FileName);
                     using (var fileStream = new FileStream(Path.Combine(uploadPath, saveFileName), FileMode.Create))
                     {
@@ -157,8 +159,10 @@ namespace SFA.Controllers
                     using (ExcelPackage package = new ExcelPackage(File))
                     {
                         ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
-                        int rowCount = worksheet.Dimension.Rows;
+                        int rowCount = worksheet.Dimension.End.Row;
                         int ColCount = worksheet.Dimension.Columns;
+                        int numberInserts = 0;
+                        int numberFailed = 0;
 
                         var rawText = string.Empty;
                         var existingEntity = await _context.TblDistrictNta.ToListAsync();
@@ -166,47 +170,113 @@ namespace SFA.Controllers
                         var stateCodes = await _context.TblStateNta.ToListAsync();
                         for (int row = 2; row <= rowCount; row++)
                         {
-                            if (worksheet.Cells[row, 1].Value != null && worksheet.Cells[row, 2].Value != null && !worksheet.Cells[row, 1].Value.ToString().Contains("District Name", StringComparison.OrdinalIgnoreCase))
+                            
+                            if (worksheet.Cells[row, 1].Value != null)
                             {
-                                //if (!stateCodes.Select(m => m.Alias).Contains(worksheet.Cells[row, 3].Value.ToString()))
-                                //{
-                                //    jsonString = "State Code is not right in " + row + " th row of excel sheet. Kindly check state code";
-                                //    return Json(jsonString);
-                                //}
+                                numberInserts++;
 
+
+                                var states = worksheet.Cells[row, 4].Value;
+
+                                //Grabbing the value and splitting it. We are expecting it to be interger(s) comma seperated
+                                List<string> statesSplit = new List<string>();
+                                if (states != null)
+                                {
+                                    statesSplit = states.ToString().Split(',').ToList();
+                                }
+                                
+                                List<int> statesSplitAsInt = new List<int>();
+
+                                //We need to convert string to INT. Wild! 
+                                foreach (var state in statesSplit)
+                                {
+
+                                    var stateInt = Convert.ToInt32(state);
+                                    statesSplitAsInt.Add(stateInt);
+
+                                }
+
+                                if(statesSplit.Count != statesSplit.Count)
+                                {
+                                    Errors.AppendLine("Row Number:" + row + "State Code has other characters besides for integers  at  " + row + " th row of excel sheet. Kindly check state code");
+                                    jsonString = "State Code has other characters besides for integers  at  " + row + " th row of excel sheet. Kindly check state code";
+                                    numberFailed++;
+
+                                    continue;              
+                                }
+                                var name = worksheet.Cells[row, 1].Value.ToString();
+                                var alias = worksheet.Cells[row, 2].Value.ToString();
+                                var website = worksheet.Cells[row, 3].Value;
                                 var formModel = new TblDistrictNta
                                 {
                                     InsertDatetime = DateTime.Now,
-                                    InsertUser = loggedinUser.Id.ToString(),                           
-                                    //StateId = stateCodes.Where(m => m.Alias == worksheet.Cells[row, 3].Value.ToString()).FirstOrDefault().Id,
+                                    InsertUser = loggedinUser.Id.ToString(),                                                               
                                     CodeVal = maxNumber,                    
-                                    Name = worksheet.Cells[row, 1].Value.ToString(),
-                                    Alias = worksheet.Cells[row, 2].Value.ToString()
+                                    Name = name,
+                                    Alias = alias,
+                                    Website = website == null? null : website.ToString(),
                                 };
-                                //maxNumber++;
-                                //model = formModel;
-                                var currentList = model.Where(m => m.Name == formModel.Name).ToList();
-                                var existingList = existingEntity.Where(m => m.Name == formModel.Name).ToList();
-                                if (currentList.Count > 0 || existingList.Count > 0)
+                                
+
+                                _context.TblDistrictNta.AddRange(formModel);
+                                try
                                 {
-                                    model.Remove(formModel);
-                                }
-                                else
-                                {
+                                    await _context.SaveChangesAsync();
                                     maxNumber++;
-                                    model.Add(formModel);
                                 }
+                                catch(Exception ex)
+                                {
+                                    Errors.AppendLine("Row Number:" + row + ex.InnerException.Message);
+                                    Console.WriteLine(ex.InnerException.Message);
+                                    numberFailed++;
+                                    continue;
+                                }
+                                
+
+                                //This is making the correlation for state and district.
+                                foreach (var state in statesSplitAsInt)
+                                {
+                                    var stateDistrictFormModel = new TblStateDistrictNta
+                                    {
+                                        DistrictId = formModel.Id,
+                                        StateId = state,
+                                        InsertUser = loggedinUser.Id.ToString(),
+                                        InsertDatetime = DateTime.Now
+
+                                    };
+                                    _context.TblStateDistrictNta.AddRange(stateDistrictFormModel);
+                                    try
+                                    {
+                                        await _context.SaveChangesAsync();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Errors.AppendLine("Row Number:" + row + ex.InnerException.Message + "NOTE:DISTRICT WAS ADDED BUT RELATIONSHIP FOR STATE DISTRICT FAILED");
+                                        Console.WriteLine(ex.InnerException.Message);
+                                        numberFailed++;
+                                        continue;
+                                    }
+
+                                }                              
+                                     
                             }
+                            //This is for when files come in with added rows that the user does not realize they added. Since the value is blank
+                            //for the first column we are going to just ignore it. User error
                             else
                             {
-                                jsonString = "Excel Format is not right. Kindly upload the right format as per given format";
-                                return Json(jsonString);
+                                continue;
                             }
 
+
                         }
-                        _context.TblDistrictNta.AddRange(model);
-                        await _context.SaveChangesAsync();
-                        return Json(jsonString);
+                        if (Errors.Length == 0)
+                        {
+                            return Json(jsonString);
+                        }
+                        else
+                        {
+                            return Json(numberInserts + "Attempted to be added: " + numberFailed + "Failed:Errors are as follows:\n" + Errors);
+                        }
                     }
 
                 }

@@ -14,6 +14,8 @@ using SFA.Entities;
 using System.IO;
 using OfficeOpenXml;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
+using GoogleMaps.LocationServices;
 
 namespace SFA.Controllers
 {
@@ -135,6 +137,24 @@ namespace SFA.Controllers
             var result = await _churchService.Edit(church, loggedinUser);
             return new JsonResult(result);
         }
+        bool IsValidEmail(string email)
+        {
+            var trimmedEmail = email.Trim();
+
+            if (trimmedEmail.EndsWith("."))
+            {
+                return false; // suggested by @TK-421
+            }
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == trimmedEmail;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         [HttpPost]
         [Route("export")]
@@ -142,9 +162,11 @@ namespace SFA.Controllers
         {
             var jsonString = "";
             var loggedinUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");
+            StringBuilder Errors = new StringBuilder();
             try
             {
-
+                int numberInserts = 0;
+                int numberFailed = 0;
                 var extention = (file != null) ? Path.GetExtension(file.FileName) : null;
                 if (file != null && (extention.Equals(".xls", StringComparison.OrdinalIgnoreCase) || extention.Equals(".xlsx", StringComparison.OrdinalIgnoreCase) || extention.Equals(".XLSX", StringComparison.OrdinalIgnoreCase) || extention.Equals(".XLS", StringComparison.OrdinalIgnoreCase)))
                 {
@@ -155,18 +177,14 @@ namespace SFA.Controllers
                     {
                         Directory.CreateDirectory(uploadPath);
                     }
-                    //if (file.Length > 0)
-                    //{
-                    var fileSequence = DateTime.Now.Ticks.ToString();
+
+                    var fileSequence = DateTime.Now.ToString().Replace("/", "").Replace(":", "").Replace(" ", "") + "_" + loggedinUser.Id.ToString() + "_" + loggedinUser.Name;
                     var saveFileName = fileSequence + Path.GetExtension(file.FileName);
                     using (var fileStream = new FileStream(Path.Combine(uploadPath, saveFileName), FileMode.Create))
                     {
                         await file.CopyToAsync(fileStream);
                     }
-                    //banner.FileName = fileName;
-                    //banner.FileSequence = fileSequence;
-                    //}
-                    //var path = fileName1;
+
                     var model = new List<TblChurchNta>();
                     FileInfo File = new FileInfo(Path.Combine(uploadPath, saveFileName));
                     using (ExcelPackage package = new ExcelPackage(File))
@@ -177,68 +195,118 @@ namespace SFA.Controllers
 
                         var rawText = string.Empty;
                         var existingEntity = await _context.TblChurchNta.Include(m => m.Section).ToListAsync();
-                        //var maxNumber = existingEntity.Count() == 0 ? 1 : existingEntity.OrderByDescending(m => m.CodeVal).FirstOrDefault().CodeVal + 1;
                         var districtEntities = await _context.TblDistrictNta.ToListAsync();
                         var sectionEntities = await _context.TblSectionNta.ToListAsync();
+                        var latitude = "";
+                        var longitude = "";
                         for (int row = 2; row <= rowCount; row++)
                         {
-                            if (worksheet.Cells[row, 1].Value != null && worksheet.Cells[row, 2].Value != null && !worksheet.Cells[row, 2].Value.ToString().Contains("Section Description", StringComparison.OrdinalIgnoreCase))
+                            numberInserts++;
+                            if (worksheet.Cells[row, 1].Value != null)
                             {
-                                if (!districtEntities.Select(m => m.Name).Contains(worksheet.Cells[row, 1].Value.ToString()))
+                                //Making sure that the section ID exists in the database. This is required for there is a FK relationship 
+                                if (!sectionEntities.Select(m => m.Id.ToString()).Contains(worksheet.Cells[row, 7].Value.ToString()))
                                 {
-                                    jsonString = "District Name is not right in " + row + " th row of excel sheet. Kindly check District Name";
-                                    return Json(jsonString);
+                                    Errors.AppendLine("Row Number:" + row + "Section Name is not right in " + row + " th row of excel sheet. Kindly check District Name");
+                                    jsonString = "Section Name is not right in " + row + " th row of excel sheet. Kindly check District Name";
+                                    numberFailed++;
+                                    continue;                               
                                 }
+                                //This will not be null because we know we found a section above. No need to have another check
+                                //District ID is a FK of the Section table
+                                int districtId = sectionEntities.Where(m => m.Id.ToString() == worksheet.Cells[row, 7].Value.ToString()).FirstOrDefault().DistrictId;
 
-                                int districtId = districtEntities.Where(m => m.Name == worksheet.Cells[row, 1].Value.ToString()).FirstOrDefault().Id;
-
-                                if (worksheet.Cells[row, 2].Value != null && !sectionEntities.Where(m => m.DistrictId == districtId).Select(m => m.Name).Contains(worksheet.Cells[row, 2].Value.ToString()))
+                                var churchIdNumber = worksheet.Cells[row, 1].Value.ToString();
+                                var churchName = worksheet.Cells[row, 2].Value.ToString();
+                                var address = worksheet.Cells[row, 3].Value?.ToString();
+                                if (address != null)
                                 {
-                                    jsonString = "Section Name is not found under " + worksheet.Cells[row, 8].Value.ToString() + " District " + row + " th row of excel sheet. Kindly check Section Name";
-                                    return Json(jsonString);
+
+                                    var locationService = new GoogleLocationService("AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI");
+                                    MapPoint point = null;
+                                    try
+                                    {
+
+                                        point = locationService.GetLatLongFromAddress(address);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Address: Please verify address syntax and validity");
+                                        numberFailed++;
+                                        Console.WriteLine(ex.Message);
+                                        continue;
+                                    }
+
+                                    latitude = point.Latitude.ToString();
+                                    longitude = point.Longitude.ToString();
                                 }
+                                var mailAddress = worksheet.Cells[row, 4].Value?.ToString();
+                                var churchType = worksheet.Cells[row, 5].Value?.ToString();
+                                var accountNumber = worksheet.Cells[row, 6].Value?.ToString();
+                                var sectionID = sectionEntities.Where(m => m.Id.ToString() == worksheet.Cells[row, 7].Value.ToString()).FirstOrDefault().Id;
+                                var phone = worksheet.Cells[row, 8].Value?.ToString();
+                                var alternatePhone = worksheet.Cells[row, 9].Value?.ToString();
+                                var email = worksheet.Cells[row, 10].Value?.ToString();
+                                if (!IsValidEmail(email))
+                                {
+                                    Errors.AppendLine("Row Number:" + row + " " + email + ": Is not valid");
+                                    numberFailed++;
+                                    continue;
+                                }
+                                var website = worksheet.Cells[row, 11].Value?.ToString();                                
+                                var status = worksheet.Cells[row, 12].Value?.ToString();
+
 
                                 var formModel = new TblChurchNta
                                 {
+                                    ChurchIdNo = churchIdNumber,
                                     InsertDatetime = DateTime.Now,
-                                    InsertUser = loggedinUser.Id.ToString(),                                 
+                                    InsertUser = loggedinUser.Id.ToString(),
                                     DistrictId = districtId,
-                                    SectionId = sectionEntities.Where(m => m.Name == worksheet.Cells[row, 2].Value.ToString()).FirstOrDefault().Id,
+                                    SectionId = sectionID,
                                     IsDelete = false,
-                                    ChurchName = worksheet.Cells[row, 3].Value.ToString(),
-                                    AccountNo = worksheet.Cells[row, 4].Value?.ToString(),
-                                    ChurchType = worksheet.Cells[row, 5].Value?.ToString(),
-                                    Directory = worksheet.Cells[row, 6].Value?.ToString(),
-                                    Address = worksheet.Cells[row, 7].Value?.ToString(),
-                                    MailAddress = worksheet.Cells[row, 8].Value?.ToString(),
-                                    Phone = worksheet.Cells[row, 9].Value?.ToString(),
-                                    Phone2 = worksheet.Cells[row, 10].Value?.ToString(),
-                                    WebSite = worksheet.Cells[row, 11].Value?.ToString(),
-                                    Email = worksheet.Cells[row, 12].Value?.ToString(),
+                                    ChurchName = churchName,
+                                    ChurchType = churchType,
+                                    AccountNo = accountNumber,
+                                    Address = address,
+                                    MailAddress = mailAddress,
+                                    Phone = phone,
+                                    Phone2 = alternatePhone,
+                                    WebSite = website,
+                                    Email = email,
+                                    Lat = latitude,
+                                    Lon = longitude
                                 };
-                                //maxNumber++;
-                                //model = formModel;
-                                //var currentList = model.Where(m => m.ChurchName == formModel.ChurchName).ToList();
-                                //var existingList = existingEntity.Where(m => m.ChurchName == formModel.ChurchName).ToList();
-                                //if (currentList.Count > 0 || existingList.Count > 0)
-                                //{
-                                //    model.Remove(formModel);
-                                //}
-                                //else
-                                //{
-                                    model.Add(formModel);
-                                //}
+                
+                                try
+                                {
+                                    _context.TblChurchNta.AddRange(formModel);
+                                    await _context.SaveChangesAsync();
+                                }
+                                catch(Exception ex)
+                                {
+                                    Errors.AppendLine("Row Number:" + row + ex.InnerException.Message);
+                                    numberFailed++;
+                                    continue;
+                                }             
+
                             }
                             else
                             {
-                                jsonString = "Excel Format is not right. Kindly upload the right format as per given format";
-                                return Json(jsonString);
+                                Errors.AppendLine("Row Number:" + row + " Is blank. Please resubmit that row with relative data");
+                                continue;
                             }
 
                         }
-                        _context.TblChurchNta.AddRange(model);
-                        await _context.SaveChangesAsync();
-                        return Json(jsonString);
+
+                        if (Errors.Length == 0)
+                        {
+                            return Json(jsonString);
+                        }
+                        else
+                        {
+                            return Json(numberInserts + "Attempted to be added: " + numberFailed + "Failed:Errors are as follows:\n" + Errors);
+                        }
                     }
 
                 }
