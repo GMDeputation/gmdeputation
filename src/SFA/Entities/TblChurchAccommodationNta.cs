@@ -34,6 +34,8 @@ namespace SFA.Entities
         [InverseProperty("TblChurchAccommodationNta")]
         public TblChurchNta Church { get; set; }
         [InverseProperty("Accomodation")]
+
+        public string EqaccomAddress { get; set; }
         public ICollection<TblAccomodationBookingNta> TblAccomodationBookingNta { get; set; }
     }
 }
