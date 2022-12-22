@@ -1,0 +1,17 @@
+
+
+CREATE TABLE Global.Tbl_MacroSchedule_NTA(
+	Id int IDENTITY(1,1) PRIMARY KEY,
+	IdOld uniqueidentifier NOT NULL,
+	Description nvarchar(200) NULL,
+	EntryDate datetime NOT NULL,
+	IsActive bit NOT NULL,
+	INSERT_USER nvarchar(100) NULL,
+	UPDATE_USER nvarchar(100) NULL,
+	INSERT_DATETIME DATETIME NULL,
+	UPDATE_DATETIME DATETIME NULL, 
+);
+
+INSERT INTO Global.Tbl_MacroSchedule_NTA (IdOld,Description,EntryDate,IsActive,INSERT_USER,UPDATE_USER,INSERT_DATETIME,UPDATE_DATETIME)
+SELECT id,Description,EntryDate,IsActive,'NTA_CREATIVE','NTA_CREATIVE',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP
+FROM Global.Tbl_MacroSchedule;

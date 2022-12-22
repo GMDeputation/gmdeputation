@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using SFA.Entities;
 using OfficeOpenXml;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace SFA.Controllers
 {
@@ -229,6 +230,7 @@ namespace SFA.Controllers
         {
             var jsonString = "";
             var loggedinUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");
+            StringBuilder Errors = new StringBuilder();
             try
             {
 
@@ -243,7 +245,7 @@ namespace SFA.Controllers
                         Directory.CreateDirectory(uploadPath);
                     }
 
-                    var fileSequence = DateTime.Now.Ticks.ToString();
+                    var fileSequence = DateTime.Now.ToString().Replace("/", "").Replace(":", "").Replace(" ", "") + "_" + loggedinUser.Id.ToString() + "_" + loggedinUser.Name;
                     var saveFileName = fileSequence + Path.GetExtension(file.FileName);
                     using (var fileStream = new FileStream(Path.Combine(uploadPath, saveFileName), FileMode.Create))
                     {
@@ -257,52 +259,135 @@ namespace SFA.Controllers
                         ExcelWorksheet worksheet = package.Workbook.Worksheets[1];
                         int rowCount = worksheet.Dimension.Rows;
                         int ColCount = worksheet.Dimension.Columns;
-
-                        var rawText = string.Empty;
+           
                         var existingEntity = await _context.TblChurchNta.Include(m => m.Section).ToListAsync();
 
-                        var districtEntities = await _context.TblDistrictNta.ToListAsync();
-                        var userEntities = await _context.TblUserNta.ToListAsync();
+                        var macroEntities = await _context.TblMacroScheduleNta.ToListAsync();
+                        var userEntities = await _context.TblUserNta.ToListAsync();     
+
+                        int numberInserts = 0;
+                        int numberFailed = 0;
+
                         for (int row = 2; row <= rowCount; row++)
                         {
-                            if (worksheet.Cells[row, 2].Value != null && !worksheet.Cells[row, 2].Value.ToString().Contains("Entry Date", StringComparison.OrdinalIgnoreCase) 
-                                && worksheet.Cells[row, 3].Value != null && worksheet.Cells[row, 4].Value != null && worksheet.Cells[row, 5].Value != null && worksheet.Cells[row, 6].Value != null)
+                            if (worksheet.Cells[row, 2].Value != null)
                             {
+                                numberInserts++;
+                                int? districtId = null;
+                                try {
+                                    districtId = userEntities.Where(m => m.Id.ToString() == worksheet.Cells[row, 2].Value.ToString()).FirstOrDefault().DistrictId;
 
-                                if (!userEntities.Select(m => m.Email).Contains(worksheet.Cells[row, 3].Value.ToString()))
-                                {
-                                    jsonString = "Missionary User EmailId is not right in " + row + " th row of excel sheet. Kindly check Missionary User EmailId";
-                                    return Json(jsonString);
                                 }
-                                int userId = userEntities.Where(m => m.Email == worksheet.Cells[row, 3].Value.ToString()).FirstOrDefault().Id;
+                                catch(Exception ex)
+                                {
 
-                                if (!districtEntities.Select(m => m.Name).Contains(worksheet.Cells[row, 4].Value.ToString()))
-                                {
-                                    jsonString = "District Name is not right in " + row + " th row of excel sheet. Kindly check District Name";
-                                    return Json(jsonString);
+                                    Console.WriteLine(ex.Message);
+                                    Errors.AppendLine("Row Number:" + row + " District was not able to be found for user ID. Please verify User ID.");
+                                    numberFailed++;
+                                    continue;
                                 }
-                                int districtId = districtEntities.Where(m => m.Name == worksheet.Cells[row, 4].Value.ToString()).FirstOrDefault().Id;
-                            
-                                var formModel = new TblMacroScheduleNta
-                                {                                                                      
-                                    Description = worksheet.Cells[row, 1].Value?.ToString(),
-                                    EntryDate = DateTime.Parse(worksheet.Cells[row, 2].Value.ToString()),
-                                    IsActive = true,
-                                    InsertDatetime = DateTime.Now,
-                                    InsertUser = loggedinUser.Id.ToString(),
-                                };
-                                var details = new TblMacroScheduleDetailsNta
-                                {                                                             
-                                    DistrictId = districtId,
-                                    UserId = userId,
-                                    StartDate = DateTime.Parse(worksheet.Cells[row, 5].Value.ToString()),
-                                    EndDate = DateTime.Parse(worksheet.Cells[row, 6].Value.ToString()),
-                                    Notes = worksheet.Cells[row, 7].Value?.ToString(),
-                                    IsApproved = false,
-                                    IsRejected = false
-                                };
-                                formModel.TblMacroScheduleDetailsNta.Add(details);
-                                model.Add(formModel);
+                                var userID = worksheet.Cells[row, 2].Value?.ToString();
+                                var userIDInt = 0;
+
+                                if (userID != null || userID != "")
+                                {
+                                    try
+                                    {
+                                        userIDInt = Convert.ToInt32(userID);
+                                    }
+                                    catch(Exception ex)
+                                    {
+                                        Console.WriteLine(ex.Message);
+                                        Errors.AppendLine("Row Number:" + row + " User ID is not an interger please very user ID");
+                                        numberFailed++;
+                                        continue;
+
+                                    }
+                                   
+                                }
+                                int? macroSchedlueId = null;
+                                try
+                                {
+                                    macroSchedlueId = macroEntities.Where(m => m.Description.ToString() == worksheet.Cells[row, 1].Value?.ToString()).FirstOrDefault().Id;
+                                }
+                                //If we catch an exception here this means that there was no ID that was found. No issues and let's carry on
+                                catch(Exception ex)
+                                {
+                                    Console.WriteLine("Warning:" + ex.Message);
+
+                                }
+                                
+
+                                //This means the macro schedule ID Does not exists in the database and we will add it
+                                if (macroSchedlueId == null)
+                                {
+                                    var formModel = new TblMacroScheduleNta
+                                    {
+                                        Description = worksheet.Cells[row, 1].Value?.ToString(),
+                                        EntryDate = DateTime.Now,
+                                        IsActive = true,
+                                        InsertDatetime = DateTime.Now,
+                                        InsertUser = loggedinUser.Id.ToString(),
+                                    };
+
+                                    _context.TblMacroScheduleNta.AddRange(formModel);
+                                    try
+                                    {
+                                        await _context.SaveChangesAsync();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Errors.AppendLine("Row Number:" + row + " " + ex.InnerException.Message);
+                                        numberFailed++;
+                                        continue;
+                                    }
+
+                                    var details = new TblMacroScheduleDetailsNta
+                                    {
+                                        MacroScheduleId = formModel.Id,
+                                        DistrictId = (int)districtId,
+                                        UserId = userIDInt,
+                                        StartDate = DateTime.Parse(worksheet.Cells[row, 3].Value.ToString()),
+                                        EndDate = DateTime.Parse(worksheet.Cells[row, 4].Value.ToString()),
+                                        Notes = worksheet.Cells[row, 5].Value?.ToString(),
+                                        IsApproved = false,
+                                        IsRejected = false,
+                                        InsertUser = loggedinUser.Id.ToString(),
+                                        InsertDatetime = DateTime.Now
+                                    };
+
+                                    _context.TblMacroScheduleDetailsNta.AddRange(details);
+                                    await _context.SaveChangesAsync();
+
+                                }
+                                //This means that the Macro schedule is already in the database and the macro schedule does not need to be added
+                                //We have the ID and can make the relationship with the details table
+                                else
+                                {
+                                    var details = new TblMacroScheduleDetailsNta
+                                    {
+                                        MacroScheduleId = (int)macroSchedlueId,
+                                        DistrictId = (int)districtId,
+                                        UserId = userIDInt,
+                                        StartDate = DateTime.Parse(worksheet.Cells[row, 3].Value.ToString()),
+                                        EndDate = DateTime.Parse(worksheet.Cells[row, 4].Value.ToString()),
+                                        Notes = worksheet.Cells[row, 5].Value?.ToString(),
+                                        IsApproved = false,
+                                        IsRejected = false
+                                    };
+                                    _context.TblMacroScheduleDetailsNta.AddRange(details);
+                                    try
+                                    {
+                                        await _context.SaveChangesAsync();
+                                    }
+                                    catch(Exception ex)
+                                    {
+                                        Errors.AppendLine("Row Number:" + row + " " + ex.InnerException.Message);
+                                        numberFailed++;
+                                        continue;
+                                    }                                                                      
+                                }                                                                                    
+
                             }
                             else
                             {
@@ -311,9 +396,15 @@ namespace SFA.Controllers
                             }
 
                         }
-                        _context.TblMacroScheduleNta.AddRange(model);
-                        await _context.SaveChangesAsync();
-                        return Json(jsonString);
+
+                        if (Errors.Length == 0)
+                        {
+                            return Json(jsonString);
+                        }
+                        else
+                        {
+                            return Json(numberInserts + "Attempted to be added: " + numberFailed + "Failed:Errors are as follows:\n" + Errors);
+                        }
                     }
 
                 }
