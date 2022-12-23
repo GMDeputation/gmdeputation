@@ -270,22 +270,28 @@ namespace SFA.Controllers
 
                         for (int row = 2; row <= rowCount; row++)
                         {
+                            numberInserts++;
                             if (worksheet.Cells[row, 2].Value != null)
                             {
-                                numberInserts++;
-                                int? districtId = null;
-                                try {
-                                    districtId = userEntities.Where(m => m.Id.ToString() == worksheet.Cells[row, 2].Value.ToString()).FirstOrDefault().DistrictId;
+                               
+                                var districtId = worksheet.Cells[row, 6].Value;
+                                var districtIdInt = 0;
 
-                                }
-                                catch(Exception ex)
-                                {
+                                    try
+                                    {
+                                        districtIdInt = Convert.ToInt32(districtId);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine(ex.Message);
+                                        Errors.AppendLine("Row Number:" + row + " District ID is not an interger please very user ID");
+                                        numberFailed++;
+                                        continue;
 
-                                    Console.WriteLine(ex.Message);
-                                    Errors.AppendLine("Row Number:" + row + " District was not able to be found for user ID. Please verify User ID.");
-                                    numberFailed++;
-                                    continue;
-                                }
+                                    }
+
+                                
+
                                 var userID = worksheet.Cells[row, 2].Value?.ToString();
                                 var userIDInt = 0;
 
@@ -345,7 +351,7 @@ namespace SFA.Controllers
                                     var details = new TblMacroScheduleDetailsNta
                                     {
                                         MacroScheduleId = formModel.Id,
-                                        DistrictId = (int)districtId,
+                                        DistrictId = districtIdInt,
                                         UserId = userIDInt,
                                         StartDate = DateTime.Parse(worksheet.Cells[row, 3].Value.ToString()),
                                         EndDate = DateTime.Parse(worksheet.Cells[row, 4].Value.ToString()),
@@ -357,7 +363,17 @@ namespace SFA.Controllers
                                     };
 
                                     _context.TblMacroScheduleDetailsNta.AddRange(details);
-                                    await _context.SaveChangesAsync();
+                                    try
+                                    {
+                                        await _context.SaveChangesAsync();
+                                    }
+                                    catch(Exception ex)
+                                    {
+                                        Errors.AppendLine("Row Number:" + row + " " + ex.InnerException.Message);
+                                        numberFailed++;
+                                        continue;
+                                    }
+                                  
 
                                 }
                                 //This means that the Macro schedule is already in the database and the macro schedule does not need to be added
@@ -367,7 +383,7 @@ namespace SFA.Controllers
                                     var details = new TblMacroScheduleDetailsNta
                                     {
                                         MacroScheduleId = (int)macroSchedlueId,
-                                        DistrictId = (int)districtId,
+                                        DistrictId = districtIdInt,
                                         UserId = userIDInt,
                                         StartDate = DateTime.Parse(worksheet.Cells[row, 3].Value.ToString()),
                                         EndDate = DateTime.Parse(worksheet.Cells[row, 4].Value.ToString()),
@@ -391,8 +407,9 @@ namespace SFA.Controllers
                             }
                             else
                             {
-                                jsonString = "Excel Format is not right. Kindly upload the right format as per given format";
-                                return Json(jsonString);
+                                Errors.AppendLine("Row Number:" + row + " Excel Format is not right. Kindly upload the right format as per given format");
+                                numberFailed++;
+                                continue;
                             }
 
                         }
