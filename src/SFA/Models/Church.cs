@@ -1,11 +1,14 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace SFA.Models
 {
     public class Church
     {
         public int Id { get; set; }
+
+        public string ChurchIdNo { get; set; }
         public string ChurchName { get; set; }
         public string Address { get; set; }
         public string Directory { get; set; }
@@ -29,6 +32,13 @@ namespace SFA.Models
         public DateTime? InsertDatetime { get; set; }
         public DateTime? UpdateDatetime { get; set; }
         public string Pastor { get; set; }
+        public string ServiceTypewiseTime { get; set; }
+
+        public decimal? TotalPoint { get; set; }
+
+        public List<ChurchServiceTime> ChurchServiceTimes { get; set; }
+
+        public List<ChurchAttribute> Attributes { get; set; }
     }
     public class ChurchQuery : Query
     {

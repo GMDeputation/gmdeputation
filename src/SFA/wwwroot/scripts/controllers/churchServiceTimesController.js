@@ -60,6 +60,7 @@
         $scope.search();
     });
 
+
     $scope.$watch('query.serviceTypeId', function (newValue, oldValue) {
         if (!oldValue) {
             bookmark = $scope.query.page;

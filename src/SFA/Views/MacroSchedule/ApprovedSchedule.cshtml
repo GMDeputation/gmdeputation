@@ -85,6 +85,10 @@
                             <md-tooltip>Create Appointment</md-tooltip>
                             <i class="ti-marker-alt">Appointment</i>
                         </md-button>
+                         <md-button class="md-button edit-btn" ng-click="detailOfferingOnly(macroSchedule.id)" ng-if="!macroSchedule.isDateOver">
+                            <md-tooltip>Create Offering Only Appointment</md-tooltip>
+                            <i class="ti-marker-alt">Offering Only</i>
+                        </md-button>
                         <md-button class="cancel-btn" ng-if="macroSchedule.isDateOver">
                             <md-tooltip>Experied</md-tooltip>
                             <i class="ti-cancel">Experied</i>

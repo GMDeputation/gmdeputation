@@ -77,6 +77,9 @@
     <Content Update="Views\AccomodationBook\Detail.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Appointment\AddOfferingOnly.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Appointment\Add.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -200,6 +203,10 @@
     <Content Update="Views\User\Export.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\styles\emailTemplates\images\" />
   </ItemGroup>
 
 </Project>

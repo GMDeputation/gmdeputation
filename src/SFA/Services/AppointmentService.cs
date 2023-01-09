@@ -3,6 +3,7 @@ using SFA.Entities;
 using SFA.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,7 +20,9 @@ namespace SFA.Services
         Task<string> ForwardAppointmentForMissionary(Appointment appointment);
         Task<string> ApproveAppointmentByMissionary(Appointment appointment);
         Task<string> ApprovedPastorApointmentsIds(List<int> selectApointment,int userId);
-        Task<string> ApprovedMissionaryApointmentsIds(List<int> selectApointment,int userId); 
+        Task<string> ApprovedMissionaryApointmentsIds(List<int> selectApointment,int userId);
+
+        Task<string> Add(List<Appointment> appointments, string accessCode, int userId);
     }
     public class AppointmentService : IAppointmentService
     {
@@ -207,15 +210,67 @@ namespace SFA.Services
             }
         }
 
+        public async Task<string> Add(List<Appointment> appointments, string accessCode, int userId)
+        {
+            List<TblAppointmentNta> list = new List<TblAppointmentNta>();
+            foreach (Appointment appointment in appointments)
+            {
+                TblAppointmentNta item = new TblAppointmentNta
+                {          
+                    ChurchId = appointment.ChurchId,
+                    MacroScheduleDetailId = appointment.MacroScheduleDetailId,
+                    EventDate = appointment.EventDate,
+                    EventTime = appointment.EventTime,
+                    Description = appointment.Description,
+                    PimAmount = appointment.PimAmount,
+                    Offering = appointment.Offering,
+                    Notes = appointment.Notes,
+                    IsSubmit = false,
+                    IsAcceptByDgmd = false,
+                    IsCreatedByPastor = ((accessCode == "P") ? true : false),
+                    IsAcceptByPastor = false,
+                    IsRejectByPastor = false,
+                    IsForwardForMissionary = false,
+                    IsAcceptMissionary = false,
+                    CreatedBy = userId,
+                    CreatedOn = DateTime.Now,
+                    InsertDatetime = DateTime.Now,
+                    InsertUser = userId.ToString()
+                    
+                };
+                list.Add(item);
+            }
+            try
+            {
+                _context.TblAppointmentNta.AddRange(list);
+                await _context.SaveChangesAsync();
+                return "";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<string> Save(Appointment appointment, User loggedinUser)
         {
-            if (appointment.Id < 0)
+            if (appointment.Id == 0)
             {
+                var eventDate = new DateTime();
+                try
+                {
+                    eventDate = DateTime.ParseExact(appointment.EventDate.ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                
                 var appointmentEntities = new TblAppointmentNta
                 {           
                     ChurchId = appointment.ChurchId,
                     MacroScheduleDetailId = appointment.MacroScheduleDetailId,
-                    EventDate = appointment.EventDate,
+                    EventDate = eventDate,
                     EventTime = appointment.EventTime,
                     Description = appointment.Description,
                     PimAmount = appointment.PimAmount,

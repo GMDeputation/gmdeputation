@@ -22,6 +22,12 @@
         return $http.post('/user/api/save', user).then(function (resp) {
             return resp;
         });
+    }; 
+
+    this.GetAllPastorsByDistrict = function (id) {
+        return $http.post('/user/api/GetAllPastorsByDistrict/' + id).then(function (resp) {
+            return resp;
+        });
     };
 
     this.export = function (file) {

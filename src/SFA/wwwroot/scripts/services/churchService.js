@@ -20,6 +20,11 @@
             return resp.data;
         });
     };
+    this.GetChurchByPastorID = function (id) {
+        return $http.get('/churches/GetChurchByPastorID/' + id).then(function (resp) {
+            return resp.data;
+        });
+    };
     this.getChurchByDistrict = function (id) {
         return $http.get('/churches/getChurchByDistrict/' + id).then(function (resp) {
             return resp.data;

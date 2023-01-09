@@ -1,33 +1,110 @@
-﻿app.controller('appointmentAddController', function ($scope, $filter, $window, $location, $mdDialog, appointmentService, churchService, churchServiceTimeService, macroScheduleService) {
+﻿app.controller('appointmentAddController', function ($scope, $filter, $window, $location, $mdDialog, appointmentService, churchService, churchServiceTimeService, macroScheduleService, userService, districtService) {
     var macroScheduleDetailId = $location.absUrl().substr($location.absUrl().lastIndexOf('add/') + 4);
 
     $scope.backToList = function () {
         $window.location.href = '/appointments';
     };
     $scope.isShow = false;
-    $scope.Markers = {};
+    $scope.Markers = [];
+    $scope.churches = [];
 
-    $scope.appointment = {
-        eventTime: new Date()
-    };
+    //$scope.appointment = {
+    //    eventTime: new Date()
+    //};
+    $scope.pastors = {
+        fullName: "",
+        id: ""
+    }
+    $scope.church = {
+        fullName: "",
+        id: "",
+        city: "",
+        Districtid: ""
+    }
 
+    $scope.districtValues = {
+        name: ""
+
+    }
     $scope.message = {
         hour: 'Hour is required',
         minute: 'Minute is required',
         meridiem: 'Meridiem is required'
     };
+    $scope.searchPastors = function (searchText) {
 
-    $scope.save = function () {
-        $scope.time = $filter('date')($scope.appointment.eventTime, 'HH:mm:ss');
-        $scope.appointment.eventTime = $scope.time;
+        $scope.test = [];
 
-        $scope.appointment.macroScheduleDetailId = macroScheduleDetailId;
+        angular.forEach($scope.pastors, function (event) {
 
-        appointmentService.save($scope.appointment).then(processSuccess, processError);
+            if (event.pastorName.toLowerCase().match(searchText.toLowerCase())) {
+                $scope.test.push(event);
+            }
+
+
+
+        });
+        return $scope.test;
+    };
+    //This is grabbing the pastor selected and wil default the values for the rest of the fields in the form
+    $scope.pastorSelected = function ($item,index) {
+
+        //Getting all the churches that are tied to that pastor
+        churchService.GetChurchByPastorID($item).then(function (resp) {
+            $scope.appointments[index].church = resp;
+            //$scope.church = resp;
+        });
+        $scope.appointments[index].pastorId = $item;
+
+        //$scope.ChurchSelected();
     };
 
-    $scope.searchChurch = function (searchText) {
-        if ($scope.appointment.eventDate !== null && $scope.appointment.eventDate !== undefined) {
+    //This is grabbing the District of the Church that was selected
+    $scope.ChurchSelected = function ($item, index) {
+
+        //Getting the distritc that is tied to that church
+        districtService.get($item).then(function (resp) {
+            $scope.appointments[index].districtValues = resp;
+            //$scope.districtValues = resp;
+        });
+
+        //$scope.selectedChurchName($item, index);
+    };
+
+
+    $scope.searchPastors = function (searchText) {
+
+        $scope.test = [];
+
+        angular.forEach($scope.pastors, function (event) {
+
+            if (event.pastorName.toLowerCase().match(searchText.toLowerCase())) {
+                $scope.test.push(event);
+            }
+
+
+
+        });
+        return $scope.test;
+    };
+    $scope.save = function () {
+        //$scope.time = $filter('date')($scope.appointment.eventTime, 'HH:mm:ss');
+        //$scope.appointment.eventTime = $scope.time;
+        //$scope.appointment.macroScheduleDetailId = macroScheduleDetailId;
+
+        angular.forEach($scope.appointments, function (appoint) {
+
+            $scope.time = $filter('date')(appoint.eventTime, 'HH:mm:ss');
+            appoint.eventTime = $scope.time;
+
+            appoint.macroScheduleDetailId = macroScheduleDetailId;
+        });
+
+        appointmentService.add($scope.appointments).then(processSuccess, processError);
+    };
+
+    $scope.searchChurch = function (searchText, index) {
+        if (true) {
             $scope.test = [];
 
             angular.forEach($scope.churches, function (event) {
@@ -52,166 +129,203 @@
             return false;
         }
     };
-    $scope.selectedChurchName = function ($item) {
-        $scope.appointment.churchId = $item !== null && $item !== undefined ? $item.id : '0';
+    $scope.selectedChurchName = function ($item, index) {
+        $scope.appointments[index].churchId = $item !== null && $item !== undefined ? $item[index].id : 0;
 
-        if ($scope.appointment.churchId !== null && $scope.appointment.churchId !== undefined && $scope.appointment.churchId !== '0') {
+        if ($scope.appointments[index].churchId !== null && $scope.appointments[index].churchId !== undefined && $scope.appointments[index].churchId !== 0) {
 
-            $scope.appointment.eventDate = new Date($scope.appointment.eventDate);
-            var day = $scope.appointment.eventDate.getDay();
-
-            angular.forEach($scope.days, function (detail) {
-                if (detail.id === day) {
-                    $scope.weekday = detail.name;
-                }
-            });
-
-            churchServiceTimeService.getTimeByChurch($scope.appointment.churchId, $scope.weekday).then(function (resp) {
-                $scope.times = resp;
-            });
-
-            ////********************Map****************//
-            if ($item.lat !== null && $item.lat !== undefined && $item.lon !== null && $item.lon !== undefined) {
-                $scope.isShow = true;
-
-                $scope.Markers = { "title": $item.churchName, "lat": $item.lat, "lng": $item.lon, "description": $item.address }; 
-                $scope.MapOptions = {
-                    center: new google.maps.LatLng($scope.Markers.lat, $scope.Markers.lng),
-                    zoom: 8,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP
-                };
-
-                //Initializing the InfoWindow, Map and LatLngBounds objects.
-                $scope.InfoWindow = new google.maps.InfoWindow();
-                $scope.Latlngbounds = new google.maps.LatLngBounds();
-                $scope.Map = new google.maps.Map(document.getElementById("dvMap"), $scope.MapOptions);
-
-                var data = $scope.Markers;
-                var myLatlng = new google.maps.LatLng(data.lat, data.lng);
-
-                //Initializing the Marker object.
-                var marker = new google.maps.Marker({
-                    position: myLatlng,
-                    map: $scope.Map,
-                    title: data.title
-                });
-
-                //Adding InfoWindow to the Marker.
-                (function (marker, data) {
-                    google.maps.event.addListener(marker, "click", function (e) {
-                        $scope.InfoWindow.setContent("<div style = 'width:200px;min-height:40px'>" + data.description + "</div>");
-                        $scope.InfoWindow.open($scope.Map, marker);
-                    });
-                })(marker, data);
-
-                //Plotting the Marker on the Map.
-                $scope.Latlngbounds.extend(marker.position);
-
-                //Adjusting the Map for best display.
-                $scope.Map.setCenter($scope.Latlngbounds.getCenter());
-                $scope.Map.fitBounds($scope.Latlngbounds);
-
-            ////********************Map****************//
-                var cities = [{
-                    city: 'India',
-                    desc: 'The Indian economy is the worlds seventh-largest by nominal GDP and third-largest by purchasing power parity (PPP).',
-                    lat: 23.200000,
-                    long: 79.225487
-                }, {
-                    city: 'New Delhi',
-                    desc: 'Delhi, officially the National Capital Territory of Delhi, is the Capital territory of India. It has a population of about 11 million and a metropolitan population of about 16.3 million',
-                    lat: 28.500000,
-                    long: 77.250000
-                }, {
-                    city: 'Mumbai',
-                    desc: 'Mumbai, formerly called Bombay, is a sprawling, densely populated city on India’s west coast',
-                    lat: 19.000000,
-                    long: 72.90000
-                }, {
-                    city: 'Kolkata',
-                    desc: 'Kolkata is the capital of the Indian state of West Bengal. It is also the commercial capital of East India, located on the east bank of the Hooghly River',
-                    lat: 22.500000,
-                    long: 88.400000
-                }, {
-                    city: 'Chennai	',
-                    desc: 'Chennai holds the colonial past and is an important city of South India. It was previously known as Madras',
-                    lat: 13.000000,
-                    long: 80.250000
-                }, {
-                    city: 'Gorakhpur',
-                    desc: 'Gorakhpur also known as Gorakhshpur is a city along the banks of Rapti river in the eastern part of the state of Uttar Pradesh in India, near the Nepal border 273 east of the state capital Lucknow',
-                    lat: 26.7588,
-                    long: 83.3697
-                }];
-
-                //Create angular controller.
-                var app = angular.module('googleAapApp', []);
-                app.controller('googleAapCtrl', function ($scope) {
-                    $scope.highlighters = [];
-                    $scope.gMap = null;
-
-                    var winInfo = new google.maps.InfoWindow();
-
-                    var googleMapOption = {
-                        zoom: 4,
-                        center: new google.maps.LatLng(25, 80),
-                        mapTypeId: google.maps.MapTypeId.TERRAIN
-                    };
-
-                    $scope.gMap = new google.maps.Map(document.getElementById('googleMap'), googleMapOption);
-
-
-
-                    var createHighlighter = function (citi) {
-
-                        var citiesInfo = new google.maps.Marker({
-                            map: $scope.gMap,
-                            position: new google.maps.LatLng(citi.lat, citi.long),
-                            title: citi.city
-                        });
-
-                        citiesInfo.content = '<div>' + citi.desc + '</div>';
-
-                        google.maps.event.addListener(citiesInfo, 'click', function () {
-                            winInfo.setContent('<h1>' + citiesInfo.title + '</h1>' + citiesInfo.content);
-                            winInfo.open($scope.gMap, citiesInfo);
-                        });
-                        $scope.highlighters.push(citiesInfo);
-                    };
-
-                    for (i = 0; i < cities.length; i++) {
-                        createHighlighter(cities[i]);
-                    }
-                });
-            }
-            else {
-                $scope.Markers = {};
-                $scope.isShow = false;
-            }
+            $scope.getServiceTime(index);
         }
     };
 
-    $scope.dateChange = function () {
-        $scope.church = null;
-        $scope.times = [];
-        $scope.appointment.eventTime = null;
+    $scope.addNewRow = function () {
+        $scope.appointments = $scope.appointments.concat({ "pastor": null, "churchId": null, "districtID": null, "eventDate": null, "eventTime": null, "description": null, "macroScheduleDetailId": null, "times": [] });
+
+        userService.GetAllPastorsByDistrict($scope.macroScheduleDetails.districtId).then(function (resp) {
+            var index = Object.keys($scope.appointments).length - 1;
+            $scope.appointments[index].pastors = resp;
+        });
+
+    };
+    $scope.deleteRow = function (index) {
+        var confirm = $mdDialog.confirm()
+            .title('Church Admin')
+            .textContent('Are You sure To Delete?')
+            .ariaLabel('Alert Dialog')
+            .cancel('No')
+            .ok('Yes');
+
+        $mdDialog.show(confirm).then(function () {
+            $scope.appointments.splice(index, 1);
+        }, function () {
+            $mdDialog.hide();
+        });
     };
 
+    $scope.dateChange = function (index) {
+        $scope.times = [];
+        $scope.appointments[index].eventTime = null;
+
+
+        $scope.appointments[index].eventDate = new Date($scope.appointments[index].eventDate);
+        var day = $scope.appointments[index].eventDate.getDay();
+
+        angular.forEach($scope.days, function (detail) {
+            if (detail.id === day) {
+                $scope.weekday = detail.name;
+            }
+        });
+
+        $scope.selectedChurchName($scope.appointments[index].church, index);
+
+        if ($scope.appointments[index].churchId !== null && $scope.appointments[index].churchId !== undefined && $scope.appointments[index].churchId !== '00000000-0000-0000-0000-000000000000') {
+            $scope.getServiceTime(index);
+        }
+
+        $scope.loadMap();
+    };
+
+    $scope.getServiceTime = function (index) {
+        $scope.appointments[index].eventDate = new Date($scope.appointments[index].eventDate);
+        var day = $scope.appointments[index].eventDate.getDay();
+
+        angular.forEach($scope.days, function (detail) {
+            if (detail.id === day) {
+                $scope.weekday = detail.name;
+            }
+        });
+
+        churchServiceTimeService.getTimeByChurch($scope.appointments[index].churchId, $scope.weekday).then(function (resp) {
+            $scope.appointments[index].times = resp;
+        });
+    };
+
+
+    $scope.loadMap = function () {
+        if ($scope.churches.length > 0) {
+            $scope.isShow = true;
+
+            for (var i = 0; i < $scope.churches.length; i++) {
+
+                if ($scope.churches[i].lat !== null && $scope.churches[i].lat !== undefined && $scope.churches[i].lon !== null && $scope.churches[i].lon !== undefined) {
+
+                    $scope.Markers.push({
+                        "title": $scope.churches[i].churchName,
+                        "lat": $scope.churches[i].lat,
+                        "lng": $scope.churches[i].lon,
+                        "description": $scope.churches[i].mailAddress,
+                        "section": $scope.churches[i].sectionName,
+                        "district": $scope.churches[i].districtName,
+                        "id": $scope.churches[i].id,
+                        "pastor": $scope.churches[i].pastor,
+                        "serviceTypewiseTime": $scope.churches[i].serviceTypewiseTime,
+                        "churchServiceTimes": $scope.churches[i].churchServiceTimes
+                    });
+                }
+            }
+        }
+        else {
+            $scope.Markers = [];
+            $scope.isShow = false;
+        }
+        //Setting the Map options.
+        $scope.MapOptions = {
+            center: new google.maps.LatLng($scope.Markers[0].lat, $scope.Markers[0].lng),
+            zoom: 10,
+            mapTypeId: google.maps.MapTypeId.TERRAIN
+        };
+
+        //Initializing the InfoWindow, Map and LatLngBounds objects.
+        $scope.InfoWindow = new google.maps.InfoWindow();
+        $scope.Latlngbounds = new google.maps.LatLngBounds();
+        $scope.Map = new google.maps.Map(document.getElementById("dvMap1"), $scope.MapOptions);
+
+        //Looping through the Array and adding Markers.
+        for (var i = 0; i < $scope.Markers.length; i++) {
+            var data = $scope.Markers[i];
+            var myLatlng = new google.maps.LatLng(data.lat, data.lng);
+
+            //Initializing the Marker object.
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: $scope.Map,
+                title: data.title
+            });
+
+            angular.forEach(data.churchServiceTimes, function (time) {
+                if (time.weekDay === $scope.weekday) {
+                    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
+                }
+            });
+
+            //Adding InfoWindow to the Marker.
+            (function (marker, data) {
+                google.maps.event.addListener(marker, "click", function (e) {
+                    // $scope.Map.setZoom(8);
+
+                    //$scope.InfoWindow.setContent("<div onclick='setChurch(\""+data.id+"\",\""+data.title+"\")'><div style = 'width:200px'>" + data.title + "</div>" + "<div>" + data.description + "</div>" + "<div>" + data.section + "</div>" + "<div>" + data.district + "</div></div>");
+                    $scope.InfoWindow.setContent("<div style = 'color:blue'><div style = 'width:200px'>" + data.title + "</div>" + "<div>" + data.description + "</div>"
+                        + "<div>" + data.section + "</div>" + "<div>" + data.district + "</div>" + "<div>" + "Pastor : " + data.pastor +
+                        "</div>" + "<div style = 'color:purple'>" + "Service Time : " + data.serviceTypewiseTime + "</div></div>");
+                    $scope.Map.setZoom(8);
+                    $scope.InfoWindow.open($scope.Map, marker);
+
+                    var length = $scope.appointments.length;
+                    length = length - 1;
+
+                    if ($scope.appointments[length].eventDate !== null && $scope.appointments[length].eventDate !== undefined) {
+
+                        $scope.appointments[length].churchId = data.id;
+                        $scope.appointments[length].churchItem = { "id": data.id, "churchName": data.title };
+
+                        $scope.getServiceTime(length);
+                    }
+                    else {
+                        $mdDialog.show(
+                            $mdDialog.alert()
+                                .clickOutsideToClose(false)
+                                .title('Church Admin')
+                                .textContent('Please Select Appointment Date')
+                                .ariaLabel('Alert Dialog')
+                                .ok('OK')
+                        );
+                    }
+                });
+            })(marker, data);
+
+            //Plotting the Marker on the Map.
+            $scope.Latlngbounds.extend(marker.position);
+        }
+
+        //Adjusting the Map for best display.
+        $scope.Map.setCenter($scope.Latlngbounds.getCenter());
+        $scope.Map.fitBounds($scope.Latlngbounds);
+    };
+
+
     function init() {
-        $scope.appointment = [];     
+        $scope.appointments = [{ "pastor": null, "churchId": null, "districtID": null, "eventDate": null, "eventTime": null, "description": null, "macroScheduleDetailId": null, "times": [] }];
 
         $scope.days = [{ "id": 0, "name": "Sunday" }, { "id": 1, "name": "Monday" }, { "id": 2, "name": "Tuesday" }, { "id": 3, "name": "Wednesday" },
-        { "id": 4, "name": "Thurseday" }, { "id": 5, "name": "Friday" }, { "id": 6, "name": "Saturday" }];
+        { "id": 4, "name": "Thursday" }, { "id": 5, "name": "Friday" }, { "id": 6, "name": "Saturday" }];
 
-        $scope.appointment = {};
+        //$scope.appointment = {};
         macroScheduleService.getMacroScheduleDetailsById(macroScheduleDetailId).then(function (resp) {
             $scope.macroScheduleDetails = resp;
 
             $scope.minDate = new Date($scope.macroScheduleDetails.startDate);
             $scope.maxDate = new Date($scope.macroScheduleDetails.endDate);
 
-            churchService.getChurchByDistrict($scope.macroScheduleDetails.districtId).then(function (resp) {
+            userService.GetAllPastorsByDistrict($scope.macroScheduleDetails.districtId).then(function (resp) {
+
+                $scope.appointments[0].pastors = resp;
+            });
+
+
+            churchService.getChurchByDistrictAndMacroSchDtl($scope.macroScheduleDetails.districtId, macroScheduleDetailId).then(function (resp) {
                 $scope.churches = resp;
+
+                $scope.loadMap();
             });
         });
     }

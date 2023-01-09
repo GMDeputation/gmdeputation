@@ -265,11 +265,12 @@ table.md-table .md-table-progress th md-progress-linear > .md-container > .md-ba
   height: 3px;
 }
     table.md-table th.md-column {
-        color: rgb(130, 130, 130);
+        color: #fff;
+        background-color: #009fea !important;
         font-size: 16px;
-        font-weight: bold;
+        font-weight: normal;
         white-space: nowrap;
-        /* border-right: 1px rgba(0, 0, 0, 0.12) solid; */
+        border-right: 1px rgba(0, 0, 0, 0.12) solid;
         background-color: #ffffff;
     }
         table.md-table th.md-column:first-child {

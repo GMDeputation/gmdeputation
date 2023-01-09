@@ -28,6 +28,8 @@ namespace SFA.Services
 
         Task<string> UpdateDistrictAndSection(List<User> users);
         Task<List<User>> GetAllMissionariesUser();
+
+        Task<List<User>> GetAllPastorsByDistrict(int districtID);
     }
 
     public class UserService : IUserService
@@ -217,6 +219,18 @@ namespace SFA.Services
         public async Task<List<User>> GetAllMissionariesUser()
         {
             var userEntities = await _context.TblUserNta.Include(m => m.Role).Where(m => m.Role.DataAccessCode =="M").ToListAsync();
+            return userEntities.Select(m => new User
+            {
+                Id = m.Id,
+                Name = m.FirstName + " " + m.LastName,
+                IsSuperAdmin = m.IsSuperAdmin,
+                IsActive = m.IsActive
+            }).ToList();
+        }
+
+        public async Task<List<User>> GetAllPastorsByDistrict(int districtID)
+        {
+            var userEntities = await _context.TblUserNta.Include(m => m.Role).Where(m => m.Role.DataAccessCode == "P" && m.DistrictId == districtID).ToListAsync();
             return userEntities.Select(m => new User
             {
                 Id = m.Id,

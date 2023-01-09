@@ -96,6 +96,14 @@ namespace SFA.Controllers
             return new JsonResult(church);
         }
 
+
+        [Route("GetChurchByPastorID/{id}")]
+        public async Task<IActionResult> GetChurchByPastorID(int id)
+        {
+            var church = await _churchService.GetChurchByPastorID(id);
+            return new JsonResult(church);
+        }
+        
         [Route("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -155,6 +163,14 @@ namespace SFA.Controllers
                 return false;
             }
         }
+
+        [Route("getChurchByDistrictAndMacroSchDtl/{id}/{macroScheduleDetailId}")]
+        public async Task<IActionResult> GetChurchByDistrictAndMacroSchDtl(int id, int macroScheduleDetailId)
+        {
+            Console.WriteLine("we are here");
+            return new JsonResult(await _churchService.GetChurchByDistrictAndMacroSchDtl(id, macroScheduleDetailId));
+        }
+
 
         [HttpPost]
         [Route("export")]

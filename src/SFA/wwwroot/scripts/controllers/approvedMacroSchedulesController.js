@@ -115,6 +115,9 @@
     $scope.detail = function (macroScheduleDetailId) {      
         $window.location.href = '/appointments/add/' + macroScheduleDetailId;
     };
+    $scope.detailOfferingOnly = function (macroScheduleDetailId) {
+        $window.location.href = '/appointments/addOfferingOnly/' + macroScheduleDetailId;
+    };
 
     $scope.back = function () {
         $window.location.href = '/appointments';

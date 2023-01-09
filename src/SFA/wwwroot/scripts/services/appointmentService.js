@@ -10,6 +10,11 @@
     this.search = function (query) {
         return $http.post('/appointments/search', query);
     };
+    this.add = function (data) {
+        return $http.post('/appointments/add', data).then(function (resp) {
+            return resp;
+        });
+    };
     this.save = function (data) {
         return $http.post('/appointments/save', data).then(function (resp) {
             return resp;

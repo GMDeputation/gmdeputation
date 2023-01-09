@@ -305,3 +305,4 @@ C:\Users\nghia\Documents\source\gmdeputation0\gmdeputation\src\SFA\obj\Debug\net
 C:\Users\nghia\Documents\source\gmdeputation0\gmdeputation\src\SFA\obj\Debug\netcoreapp3.1\SFA.Views.pdb
 C:\Users\nghia\Documents\source\gmdeputation0\gmdeputation\src\SFA\obj\Debug\netcoreapp3.1\SFA.csproj.CopyComplete
 C:\Users\nghia\Documents\source\gmdeputation0\gmdeputation\src\SFA\obj\Debug\netcoreapp3.1\SFA.genruntimeconfig.cache
+C:\Users\SEANR\OneDrive\Documents\GitHub\gmdeputation\src\SFA\obj\Debug\netcoreapp3.1\Razor\Views\Appointment\AddOfferingOnly.cshtml.g.cs

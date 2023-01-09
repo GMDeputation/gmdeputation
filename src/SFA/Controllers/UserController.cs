@@ -115,6 +115,12 @@ public class UserController : Controller
 		return new JsonResult(await _userService.GetAllMissionariesUser());
 	}
 
+	[Route("api/GetAllPastorsByDistrict/{id}")]
+	public async Task<IActionResult> GetAllPastorsByDistrict(int id)
+	{
+		return new JsonResult(await _userService.GetAllPastorsByDistrict(id));
+	}
+
 	[HttpPost]
 	[Route("api/save")]
 	public async Task<IActionResult> Save([FromBody] User user)
@@ -223,29 +229,7 @@ public class UserController : Controller
 								numberFailed++;
 								Console.WriteLine(ex.Message);
 								continue;
-							}							
-							
-							//if (((ExcelRangeBase)worksheet.Cells[row, 9]).Value != null && districtId.HasValue && districtId != 0 && !(from m in sectionEntities.Where(delegate (TblSectionNta m)
-							//{
-							//	int districtId3 = m.DistrictId;
-							//	int? guid3 = districtId;
-							//	return districtId3 == guid3;
-							//})
-							//select m.Name).Contains(((ExcelRangeBase)worksheet.Cells[row, 9]).Value.ToString()))
-							//{
-							//	jsonString2 = "Section Name is not found under " + ((ExcelRangeBase)worksheet.Cells[row, 8]).Value.ToString() + " District " + row + " th row of excel sheet. Kindly check Section Name";
-							//	return Json(jsonString2);
-							//}
-							//if (((ExcelRangeBase)worksheet.Cells[row, 16]).Value != null && !countryEntities.Select((TblCountryNta m) => m.Alpha2Code).Contains(((ExcelRangeBase)worksheet.Cells[row, 16]).Value.ToString()))
-							//{
-							//	jsonString2 = "Country Alpha Code is not right in " + row + " th row of excel sheet. Kindly check Country Alpha Code";
-							//	return Json(jsonString2);
-							//}
-							//if (((ExcelRangeBase)worksheet.Cells[row, 17]).Value != null && !source.Select((TblStateNta m) => m.Alias).Contains(((ExcelRangeBase)worksheet.Cells[row, 17]).Value.ToString()))
-							//{
-							//	jsonString2 = "State Code is not right in " + row + " th row of excel sheet. Kindly check State Code";
-							//	return Json(jsonString2);
-							//}
+							}														
 
 							TblRoleNta tblRole = roleEntities.Where((TblRoleNta m) => m.Id.ToString().Contains(((ExcelRangeBase)worksheet.Cells[row, 10]).Value.ToString())).FirstOrDefault();
 

@@ -287,6 +287,11 @@ namespace SFA.Services
                     };
 
                     macroScheduleDetailsEntities.Add(macroScheduleDetailsEntity);
+                    //This is grabbing the DGMD from the database for the district. 7 Is the dgmd ID for the role. 
+                    var dgmd = await _context.TblUserNta.Where(m => m.DistrictId == item.DistrictId && m.RoleId == 7).FirstAsync();
+                    macroScheduleDetailsEntities.Add(macroScheduleDetailsEntity);
+                    Utilites tmp = new Utilites();
+                    tmp.SendEmail(dgmd.FirstName + dgmd.LastName, item.DistrictName, item.UserName, item.StartDate.ToString(), "https://gmdeputation.com/", dgmd.Email);
                 }
 
                 macroScheduleEntity.TblMacroScheduleDetailsNta = macroScheduleDetailsEntities;
@@ -322,7 +327,11 @@ namespace SFA.Services
                         Notes = item.Notes
                     };
 
+                    //This is grabbing the DGMD from the database for the district. 7 Is the dgmd ID for the role. 
+                    var dgmd = await _context.TblUserNta.Where(m => m.DistrictId == item.DistrictId && m.RoleId == 7).FirstAsync();
                     macroScheduleDetailsEntities.Add(macroScheduleDetailsEntity);
+                    Utilites tmp = new Utilites();
+                    tmp.SendEmail(dgmd.FirstName + dgmd.LastName, item.DistrictName, item.UserName, item.StartDate.ToString(), "https://gmdeputation.com/", dgmd.Email);
                 }
 
                 _context.TblMacroScheduleDetailsNta.AddRange(macroScheduleDetailsEntities);
@@ -331,6 +340,7 @@ namespace SFA.Services
             try
             {
                 await _context.SaveChangesAsync();
+                            
                 return "";
             }
             catch (Exception ex)

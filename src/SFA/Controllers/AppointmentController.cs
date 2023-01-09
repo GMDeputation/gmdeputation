@@ -38,6 +38,13 @@ namespace SFA.Controllers
             return View();
         }
 
+        [Route("addOfferingOnly/{macroScheduleDetailId}")]
+        [CheckAccess]
+        public IActionResult addOfferingOnly(int macroScheduleDetailId)
+        {
+            return View();
+        }
+
         [Route("detail/{id}")]
         [CheckAccess]
         public IActionResult Detail(int? id)
@@ -67,6 +74,34 @@ namespace SFA.Controllers
 
             var appointment = await _appointmentService.GetById(id, loggedinUser.DataAccessCode);
             return new JsonResult(appointment);
+        }
+
+        [HttpPost]
+        [Route("add")]
+        public async Task<IActionResult> Add([FromBody] List<Appointment> appointments)
+        {
+            User user = base.HttpContext.Session.Get<User>("SESSIONSFAUSER");
+            TimeZoneInfo local = TimeZoneInfo.Local;
+            TimeZoneInfo destinationTimeZone = TimeZoneInfo.FindSystemTimeZoneById(local.Id);
+            foreach (Appointment appointment in appointments)
+            {
+                appointment.EventDate = TimeZoneInfo.ConvertTimeFromUtc(appointment.EventDate, destinationTimeZone);
+            }
+            return new JsonResult(await _appointmentService.Add(appointments, user.DataAccessCode, user.Id));
+        }
+
+        [HttpPost]
+        [Route("addOfferingOnly")]
+        public async Task<IActionResult> addOfferingOnly([FromBody] List<Appointment> appointments)
+        {
+            User user = base.HttpContext.Session.Get<User>("SESSIONSFAUSER");
+            TimeZoneInfo local = TimeZoneInfo.Local;
+            TimeZoneInfo destinationTimeZone = TimeZoneInfo.FindSystemTimeZoneById(local.Id);
+            foreach (Appointment appointment in appointments)
+            {
+                appointment.EventDate = TimeZoneInfo.ConvertTimeFromUtc(appointment.EventDate, destinationTimeZone);
+            }
+            return new JsonResult(await _appointmentService.Add(appointments, user.DataAccessCode, user.Id));
         }
 
         [HttpPost]
