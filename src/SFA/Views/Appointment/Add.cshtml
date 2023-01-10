@@ -20,11 +20,9 @@
         <table md-table md-progress="promise" flex>
             <thead md-head>
                 <tr md-row>
-                    <!--<th md-column class="center"><span>Sl No.</span></th>-->
-                    <th md-column class="center"><span>Pastor</span></th>
-                    <th md-column class="center"><span>Church</span></th>
-                    <th md-column class="center"><span>District</span></th>
-                    <th md-column class="center"><span>Appointment Date</span></th>     
+                    <th md-column class="center"><span>Sl No.</span></th>
+                    <th md-column class="center"><span>Appointment Date</span></th>
+                    <th md-column class="center"><span>Church Name</span></th>
                     <th md-column class="center"><span>Appointment Time</span></th>
                     <th md-column class="center"><span>Description</span></th>
                     <th md-column class="center"><span class="pad-l-8">Actions</span></th>
@@ -32,41 +30,30 @@
             </thead>
             <tbody md-body>
                 <tr md-row ng-repeat="detail in appointments track by $index">
-                    <td md-cell class="center">                 
-                       <md-input-container class="md-block" flex>
-                            <label>Pastor Name</label>
-                            <md-select name="pastors" ng-model="pastors.id" required ng-change="pastorSelected(pastors.id, $index)">
-                                <md-option ng-repeat="pastor in detail.pastors.data" ng-value="pastor.id" >{{pastor.name}} </md-option>
-                            </md-select>
-                         </md-input-container>
-                    </td>
-
-                     <td md-cell class="center">                 
-                        <!-- This is the dropdown for all churches to appear via the district ID from the macro scheudle-->
-                         <md-input-container class="md-block" flex>
-                            <label>Church Name</label>
-                            <md-select name="church" ng-model="detail.districtId" required ng-change="ChurchSelected(detail.districtId, $index)">
-                                <md-option ng-repeat="churchvar in detail.church" ng-value="churchvar.districtId">{{churchvar.churchName}}</md-option>
-                            </md-select>
-                        </md-input-container>
-                    </td>
-
-                    <td md-cell class="center">                 
-                        <md-input-container class="md-block" flex>
-                            <label>District Name</label>
-                            <input name="district" ng-model="detail.districtValues.name" required maxlength="25">
-                        </md-input-container>
-                    </td>
-
-
-
+                    <td md-cell class="center">{{$index + 1}}</td>
                     <td md-cell cla ss="center">
                         <md-input-container class="md-block" flex>
                             <label>Appointment Date</label>
                             <md-datepicker name="eventDate" ng-model="detail.eventDate" ng-change="dateChange($index)" md-placeholder="Date of Appointment" md-min-date="minDate" md-max-date="maxDate" required></md-datepicker>
                         </md-input-container>
                     </td>
-
+                    <td md-cell>
+                        <md-autocomplete
+                            flex
+                            class="padding-wrap"
+                            md-no-cache="true"
+                            md-selected-item="detail.churchItem"
+                            md-selected-item-change="selectedChurchName(churchItem,$index)"
+                            md-search-text="churchSearch"
+                            md-items="churchItem in searchChurch(churchSearch,$index)"
+                            md-item-text="churchItem.churchName"
+                            md-min-length="0"
+                            md-floating-label="Church Name"
+                            required
+                        >
+                            <md-item-template> <span md-highlight-text="ChurchSearch" md-highlight-flags="gi">{{churchItem.churchName}}</span> </md-item-template> <md-not-found> No Data Found . </md-not-found>
+                        </md-autocomplete>
+                    </td>
                     <td md-cell>
                         <md-input-container class="md-block" flex>
                             <label>Appointment Time</label>
@@ -106,5 +93,5 @@
     <script src="~/scripts/services/appointmentService.js" asp-append-version="true"></script>
     <script src="~/scripts/controllers/appointmentAddController.js" asp-append-version="true"></script>
     <script src="~/scripts/services/districtService.js" asp-append-version="true"></script>
-    <script src="~/scripts/services/userService.js" asp-append-version="true"></script>
+
 }

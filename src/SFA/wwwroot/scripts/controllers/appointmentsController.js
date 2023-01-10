@@ -75,7 +75,6 @@
 
         $scope.search();
     });
-
     $scope.search = function () {
         $scope.promise = appointmentService.search($scope.query).then(success);
     };
@@ -93,6 +92,48 @@
         $window.location.href = '/appointments/calender';
     };
 
+    $scope.delete = function (id) {
+        var confirm = $mdDialog.confirm()
+            .title('Church Admin')
+            .textContent('Are You sure To Delete Apointments?')
+            .ariaLabel('Alert Dialog')
+            .cancel('No')
+            .ok('Yes');
+
+        $mdDialog.show(confirm).then(function () {
+            $scope.isDisabled = true;
+
+            appointmentService.delete(id).then(function (resp) {
+                if (resp !== null && resp !== undefined && resp === true) {
+                    $mdDialog.show(
+                        $mdDialog.alert()
+                            .clickOutsideToClose(false)
+                            .title('Church Admin')
+                            .textContent('Apointments Delete successfully')
+                            .ariaLabel('Alert Dialog')
+                            .ok('OK')
+                    ).then(function () {
+                        $scope.isDisabled = false;
+                        $scope.search();
+                    });
+                }
+                else {
+                    $mdDialog.show(
+                        $mdDialog.alert()
+                            .clickOutsideToClose(false)
+                            .title('Church Admin')
+                            .textContent('Failed To Delete Apointments')
+                            .ok('OK')
+                    ).then(function () {
+                        $scope.isDisabled = false;
+                    });
+                }
+            });
+
+        }, function () {
+            $mdDialog.hide();
+        });
+    };
 
     function success(resp) {
         $scope.appointments = resp.data.result;

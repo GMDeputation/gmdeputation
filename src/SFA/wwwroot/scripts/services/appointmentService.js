@@ -25,8 +25,18 @@
             return resp;
         });
     };
+    this.acceptAppointmentByDGMD = function (data) {
+        return $http.post('/appointments/acceptAppointmentByDGMD', data).then(function (resp) {
+            return resp;
+        });
+    };
     this.acceptAppointmentByPastor = function (data) {
         return $http.post('/appointments/acceptAppointmentByPastor', data).then(function (resp) {
+            return resp;
+        });
+    };
+    this.rejectAppointmentByPastor = function (data) {
+        return $http.post('/appointments/rejectAppointmentByPastor', data).then(function (resp) {
             return resp;
         });
     };
@@ -48,6 +58,11 @@
     this.approvedMissionaryApointmentsIds = function (data) {
         return $http.post('/appointments/approvedMissionaryApointmentsIds', data).then(function (resp) {
             return resp;
+        });
+    };
+    this.delete = function (id) {
+        return $http.get('/appointments/delete/' + id).then(function (resp) {
+            return resp.data;
         });
     };
 });
