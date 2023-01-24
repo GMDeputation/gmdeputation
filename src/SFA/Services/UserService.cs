@@ -198,6 +198,11 @@ namespace SFA.Services
                 WorkPhoneNo = m.WorkPhoneNo,
                 TelePhoneNo = m.TelePhoneNo,
                 Status = m.Status,
+                TravelingVia = m.TravelingVia,
+                NumberTraveling = m.NumberTraveling,
+                R1 = m.R1,
+                sensitiveNation = m.sensitiveNation
+                
             }).ToList();
         }
 
@@ -283,6 +288,10 @@ namespace SFA.Services
                     WorkPhoneNo = userEntity.WorkPhoneNo,
                     TelePhoneNo = userEntity.TelePhoneNo,
                     Status = userEntity.Status,
+                    NumberTraveling = userEntity.NumberTraveling,
+                    TravelingVia = userEntity.TravelingVia,
+                    R1 = userEntity.R1,
+                    sensitiveNation = userEntity.sensitiveNation,
                     Attributes = userEntity.TblUserAttributeNta.Select(m => new UserAttribute
                     {            
                         AttributeId = m.AttributeId,
@@ -401,6 +410,11 @@ namespace SFA.Services
                     WorkPhoneNo = m.WorkPhoneNo,
                     TelePhoneNo = m.TelePhoneNo,
                     Status = m.Status,
+                    NumberTraveling = m.NumberTraveling,
+                    TravelingVia = m.TravelingVia,
+                    R1 = m.R1,
+                    sensitiveNation = m.sensitiveNation
+                    
                 }).ToList();
 
                 return new QueryResult<User> { Result = users, Count = count };
@@ -462,6 +476,10 @@ namespace SFA.Services
                     userEntity.IsSuperAdmin = user.IsSuperAdmin;
                     userEntity.IsActive = user.IsActive;
                     userEntity.RoleId = user.RoleId;
+                    userEntity.NumberTraveling = user.NumberTraveling;
+                    userEntity.TravelingVia = user.TravelingVia;
+                    userEntity.UserSalutation = user.UserSalutation;
+                    userEntity.R1 = user.R1;
 
                     var attributes = user.Attributes.Select(m => new TblUserAttributeNta
                     {
@@ -526,6 +544,11 @@ namespace SFA.Services
                     userEntity.RoleId = user.RoleId;
                     userEntity.UpdateDatetime = DateTime.Now;
                     userEntity.UpdateUser = loggedinUser.Id.ToString();
+                    userEntity.NumberTraveling = user.NumberTraveling;
+                    userEntity.TravelingVia = user.TravelingVia;
+                    userEntity.UserSalutation = user.UserSalutation;
+                    userEntity.R1 = user.R1;
+                    userEntity.sensitiveNation = user.sensitiveNation;
 
                     _context.TblUserAttributeNta.RemoveRange(userEntity.TblUserAttributeNta);
                     _context.TblUserChurchNta.RemoveRange(userEntity.TblUserChurchNta);
@@ -575,7 +598,7 @@ namespace SFA.Services
         }
 
         public async Task<User> Validate(string email, string password)
-        {
+         {
             foreach(var user in _context.TblUserNta.ToList())
             {
                 Console.WriteLine(user.FirstName);

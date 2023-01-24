@@ -289,9 +289,27 @@ namespace SFA.Services
                     macroScheduleDetailsEntities.Add(macroScheduleDetailsEntity);
                     //This is grabbing the DGMD from the database for the district. 7 Is the dgmd ID for the role. 
                     var dgmd = await _context.TblUserNta.Where(m => m.DistrictId == item.DistrictId && m.RoleId == 7).FirstAsync();
+                    var missionary = await _context.TblUserNta.Where(m => m.Id == item.UserId ).FirstAsync();
+                    var districtEntity = await _context.TblDistrictNta.Where(m => m.Id == item.DistrictId).FirstAsync();
                     macroScheduleDetailsEntities.Add(macroScheduleDetailsEntity);
                     Utilites tmp = new Utilites();
-                    tmp.SendEmail(dgmd.FirstName + dgmd.LastName, item.DistrictName, item.UserName, item.StartDate.ToString(), "https://gmdeputation.com/", dgmd.Email);
+
+                    string typeOfEmail = "";
+                    //This is the standard email that we need to send
+                    if (missionary.R1 != true && missionary.sensitiveNation!=true)
+                    {
+                        typeOfEmail = "standard";
+                    }
+                    else if (missionary.R1)
+                    {
+                        typeOfEmail = "R1";
+                    }
+                    else if (missionary.sensitiveNation)
+                    {
+                        typeOfEmail = "sensitiveNation";
+                    }
+                    tmp.SendEmailDGMDIncomingSchedule(districtEntity.Name, missionary.FirstName, missionary.LastName, missionary.UserSalutation, missionary.Email, dgmd.Email, dgmd.Phone, item.StartDate.ToString("MM/dd/yyyy"), item.EndDate.ToString("MM/dd/yyyy"), typeOfEmail);
+
                 }
 
                 macroScheduleEntity.TblMacroScheduleDetailsNta = macroScheduleDetailsEntities;
@@ -329,9 +347,31 @@ namespace SFA.Services
 
                     //This is grabbing the DGMD from the database for the district. 7 Is the dgmd ID for the role. 
                     var dgmd = await _context.TblUserNta.Where(m => m.DistrictId == item.DistrictId && m.RoleId == 7).FirstAsync();
+                    var missionary = await _context.TblUserNta.Where(m => m.Id == item.UserId).FirstAsync();
                     macroScheduleDetailsEntities.Add(macroScheduleDetailsEntity);
+                    var districtEntity = await _context.TblDistrictNta.Where(m => m.Id == item.DistrictId).FirstAsync();
                     Utilites tmp = new Utilites();
-                    tmp.SendEmail(dgmd.FirstName + dgmd.LastName, item.DistrictName, item.UserName, item.StartDate.ToString(), "https://gmdeputation.com/", dgmd.Email);
+
+                    //This will get passed into email function and based on type choose the correct template that live in ZohoMail.
+                    //The keys will be in the class the function lives in
+                    string typeOfEmail = "";
+                 
+                    if (missionary.R1 != true && missionary.sensitiveNation != true)
+                    {
+                        typeOfEmail = "standard";
+
+                    }
+                    else if (missionary.R1)
+                    {
+                        typeOfEmail = "R1";
+                    }
+                    else if (missionary.sensitiveNation)
+                    {
+                        typeOfEmail = "sensitiveNation";
+                    }
+
+                    tmp.SendEmailDGMDIncomingSchedule(districtEntity.Name, missionary.FirstName, missionary.LastName, missionary.UserSalutation, missionary.Email, dgmd.Email, dgmd.Phone, item.StartDate.ToString("MM/dd/yyyy"), item.EndDate.ToString("MM/dd/yyyy"), typeOfEmail);
+
                 }
 
                 _context.TblMacroScheduleDetailsNta.AddRange(macroScheduleDetailsEntities);

@@ -32,6 +32,8 @@ namespace SFA.Models
         public int? AcceptMissionaryBy { get; set; }
         public DateTime? AcceptMissionaryOn { get; set; }
 
+        public int ServiceTypeId { get; set; }
+        public bool OfferingOnly { get; set; }
         public string Status { get; set; }
         public string TimeString { get; set; }
         public string AccessCode { get; set; } 

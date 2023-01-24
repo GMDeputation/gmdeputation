@@ -299,6 +299,8 @@
             $scope.countries = resp.data;
         });
 
+        $scope.salutations = [{ "id": "Mr.", "name": "Mr" }, { "id": "Ms.", "name": "Ms" }, { "id": "Mrs.", "name": "Mrs" }];
+
         $scope.genders = [{ "id": "Male", "name": "Male" }, { "id": "Female", "name": "Female" }];
         if (id !== null && id !== undefined && id !== '0') {
             userService.get(id).then(function (resp) {

@@ -30,6 +30,16 @@
                     </div>
                 </md-input-container>
 
+                 <md-input-container class="md-block" flex>
+                    <label>Salutation</label>
+                    <md-select name="salutation" ng-model="user.salutation" required>
+                        <md-option ng-repeat="salutation in salutations" ng-value="salutation.id">{{salutation.name}}</md-option>
+                    </md-select>
+                    <div ng-messages="form.salutation.$error" md-auto-hide="false">
+                        <div ng-message="required">Salutation is required</div>
+                    </div>
+                </md-input-container>
+
                 <md-input-container class="md-block" flex>
                     <input type="hidden" value="@ViewBag.Id" ng-model="id" />
                     <label>First Name</label>
@@ -158,6 +168,28 @@
                     <label>TelePhone No</label>
                     <input ng-model="user.telePhoneNo">
                 </md-input-container>
+
+                <md-input-container class="md-block" flex>
+                    <label>Number Traveling</label>
+                    <input ng-model="user.numberTraveling"  type="number" ng-required = "isOneContactRequired()">
+                </md-input-container>
+
+                <md-input-container class="md-block" flex>
+                    <label>Travling Via</label>
+                    <input ng-model="user.travelingVia" ng-required = "isOneContactRequired()">
+                </md-input-container>
+
+                  <md-input-container class="md-block" flex="none">
+                    <md-checkbox ng-model="user.R1" id="active" aria-label="active" ">
+                        R1 Status ?
+                    </md-checkbox>
+                </md-input-container>
+
+                  <md-input-container class="md-block" flex="none">
+                    <md-checkbox ng-model="user.sensitiveNation" id="active" aria-label="active"">
+                        Sensitive Nation ?
+                    </md-checkbox>
+                </md-input-container> 
 
                 <md-input-container class="md-block" flex="none">
                     <md-checkbox ng-model="user.isActive" id="active" aria-label="active">

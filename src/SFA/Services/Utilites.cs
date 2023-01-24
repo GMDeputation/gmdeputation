@@ -11,23 +11,38 @@ namespace SFA.Services
     {
         // This will get the current WORKING directory (i.e. \bin\Debug)
         static string workingDirectory = Environment.CurrentDirectory;
-        static string templateKey = "2d6f.32b15e784a472135.k1.372ab3e0-8c93-11ed-80c6-525400fa05f6.1857f6a2e1e";
 
-        private static string MacroEmailToDGMD = System.IO.File.ReadAllText(workingDirectory+ "\\wwwroot\\styles\\emailTemplates\\MacroScheduleEmailToDGMD.html");
-        public void SendEmail(string dgmd, string district, string missionary, string startDate, string link, string toEmail)
+        static string DGMDIncomingScheduleStandard = "2d6f.32b15e784a472135.k1.84a47570-96de-11ed-908a-525400e3c1b1.185c2e0e647";
+        static string DGMDIncomingScheduleSensitiveNation = "2d6f.32b15e784a472135.k1.7f84b3b0-96df-11ed-908a-525400e3c1b1.185c2e7526b";
+        static string DGMDIncomingScheduleR1Status = "2d6f.32b15e784a472135.k1.114db760-96e0-11ed-908a-525400e3c1b1.185c2eb0dd6";
+
+        public void SendEmailDGMDIncomingSchedule( string district, string missionaryFirstName, string missionaryLastName, string userSalutation, string missionaryEmail, string dgmdEmail, string dgmdPrimaryPhone, string startDate,string  endDate, string type)
         {
-
-            //Replacing the html teamplate with the values needed for the email.
-            MacroEmailToDGMD = MacroEmailToDGMD.Replace("{{DGMD}}", dgmd);
-            MacroEmailToDGMD = MacroEmailToDGMD.Replace("{{district}}", district);
-            MacroEmailToDGMD = MacroEmailToDGMD.Replace("{{missionary}}", missionary);
-            MacroEmailToDGMD = MacroEmailToDGMD.Replace("{{startDate}}", startDate);
-            MacroEmailToDGMD = MacroEmailToDGMD.Replace("{{link}}", link);
-
-            //This is needed to make the HTML a valid JSON Object
-            MacroEmailToDGMD = MacroEmailToDGMD.Replace("\n","\\n");
-            MacroEmailToDGMD = MacroEmailToDGMD.Replace("'", "''");
-            //string test = "I ' am testing ' ' ' ";
+            string apiTemplateKey = "";
+            if("standard".Equals(type))
+            {
+                apiTemplateKey = DGMDIncomingScheduleStandard;
+            }
+            else if ("R1".Equals(type))
+            {
+                apiTemplateKey = DGMDIncomingScheduleR1Status;
+            }
+            else if ("sensitiveNation".Equals(type))
+            {
+                apiTemplateKey = DGMDIncomingScheduleSensitiveNation;
+            }
+            string districtWebsite = "https://gmdeputation.com/";
+            //Variables for this Email are
+            //{{district}}
+            //{{MissionaryFirstName}}
+            //{{MissionaryLastName}}
+            //{{UserSalutation}}
+            //{{email}}
+            //{{DGMDEmail}}
+            //{{DistrictWebsite}}
+            //{{DGMDPrimaryPhone}}
+            //{{StartDate}}
+            //{{EndDate}}
 
 
 
@@ -40,7 +55,7 @@ namespace SFA.Services
             http.Method = "POST";
             http.PreAuthenticate = true;
             http.Headers.Add("Authorization", "Zoho-enczapikey wSsVR60irB74DaZ+zzL/Lu5umg5RA1ugE0R6jVWiuXH6HvvD98c9wkKcUVOlFPAaEzNqEjdGo7krzUxR2jVa24t+ng5WCyiF9mqRe1U4J3x17qnvhDzKWW9alxONJY4MzgtukmdpEMgn+g==");
-            string jsonString = "{'template_key':'"+ templateKey +"','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'Troy'},'to': [{'email_address': {'address': '" + toEmail + "','name': 'Troy Reynolds'}}],'merge_info':{'DGMD':'Test','{{district}}':'test','{{missionary}}':'test','{{startDate}}':'test','{{link}}':'test'}}";
+            string jsonString = "{'template_key':'"+ apiTemplateKey + "','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'Troy'},'to': [{'email_address': {'address': '" + dgmdEmail + "','name': 'DGMD'}}],'merge_info':{'district':'"+district+ "','MissionaryFirstName':'"+missionaryFirstName+ "','MissionaryLastName':'"+missionaryLastName+ "','UserSalutation':'"+userSalutation+ "','email':'"+missionaryEmail+ "','DGMDEmail':'"+dgmdEmail+ "','DistrictWebsite':'"+districtWebsite+ "','DGMDPrimaryPhone':'"+dgmdPrimaryPhone+ "','StartDate':'"+startDate+ "','EndDate':'"+endDate+"'}}";
             JObject parsedContent = null;
             try
             {
@@ -71,8 +86,6 @@ namespace SFA.Services
                 Console.WriteLine(ex.Message);
             }           
 
-          
-            
         }
     }
 }

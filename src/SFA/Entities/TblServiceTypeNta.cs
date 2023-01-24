@@ -11,6 +11,7 @@ namespace SFA.Entities
         public TblServiceTypeNta()
         {
             TblChurchServiceTimeNta = new HashSet<TblChurchServiceTimeNta>();
+            TblAppointmentNta = new HashSet<TblAppointmentNta>();
         }
 
         public int Id { get; set; }
@@ -30,5 +31,6 @@ namespace SFA.Entities
 
         [InverseProperty("ServiceType")]
         public ICollection<TblChurchServiceTimeNta> TblChurchServiceTimeNta { get; set; }
+        public virtual ICollection<TblAppointmentNta> TblAppointmentNta { get; set; }
     }
 }

@@ -77,6 +77,8 @@ namespace SFA.Entities
             });
             modelBuilder.Entity<TblAppointmentNta>(entity =>
             {
+                entity.Property(e => e.ServiceTypeId).HasDefaultValueSql("((1))");
+
                 entity.HasOne(d => d.AcceptByPastorByNavigation)
                     .WithMany(p => p.TblAppointmentNtaAcceptByPastorByNavigation)
                     .HasForeignKey(d => d.AcceptByPastorBy)
@@ -98,6 +100,11 @@ namespace SFA.Entities
                     .HasForeignKey(d => d.CreatedBy)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Tbl_Appointment_NTA_CreatedBy_Tbl_User_NTA_ID");
+
+                entity.HasOne(d => d.ServiceType)
+                   .WithMany(p => p.TblAppointmentNta)
+                   .HasForeignKey(d => d.ServiceTypeId)
+                   .HasConstraintName("FK_Tbl_Appointment_NTA_SERVICE_TYPE_ID_Tbl_ServiceType_NTA_ID");
 
                 entity.HasOne(d => d.MacroScheduleDetail)
                     .WithMany(p => p.TblAppointmentNta)

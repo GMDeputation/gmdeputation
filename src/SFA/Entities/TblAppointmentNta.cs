@@ -61,6 +61,10 @@ namespace SFA.Entities
         [Column("UPDATE_DATETIME", TypeName = "datetime")]
         public DateTime? UpdateDatetime { get; set; }
 
+        [Column("SERVICE_TYPE_ID")]
+        public int ServiceTypeId { get; set; }
+        [Column("OFFERING_ONLY")]
+        public bool OfferingOnly { get; set; }
 
         public TblUserNta AcceptByPastorByNavigation { get; set; }
         public TblUserNta AcceptMissionaryByNavigation { get; set; }
@@ -68,6 +72,7 @@ namespace SFA.Entities
         public TblUserNta CreatedByNavigation { get; set; }
         public TblMacroScheduleDetailsNta MacroScheduleDetail { get; set; }
         public TblUserNta SubmittedByNavigation { get; set; }
+        public virtual TblServiceTypeNta ServiceType { get; set; }
 
     }
 }

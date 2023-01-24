@@ -55,7 +55,7 @@ namespace SFA.Controllers
                 var vm = new LoginViewModel();
                 return View("Index", vm);
             }
-            var user = await _userService.Validate(login.Email, login.Password);
+             var user = await _userService.Validate(login.Email, login.Password);
             if (user == null)
             {
                 TempData["ERRMSG"] = badUserNameOrPasswordMessage;

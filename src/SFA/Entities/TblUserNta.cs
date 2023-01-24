@@ -97,6 +97,17 @@ namespace SFA.Entities
         [Column("UPDATE_DATETIME", TypeName = "datetime")]
         public DateTime? UpdateDatetime { get; set; }
 
+        public int? NumberTraveling { get; set; }
+        [StringLength(100)]
+        public string TravelingVia { get; set; }
+
+        public string UserSalutation { get; set; }
+
+        public bool R1 { get; set; }
+
+        public bool sensitiveNation { get; set; }
+
+
         [ForeignKey("CountryId")]
         [InverseProperty("TblUserNta")]
         public TblCountryNta Country { get; set; }

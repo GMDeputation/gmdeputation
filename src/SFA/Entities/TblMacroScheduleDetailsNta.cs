@@ -51,7 +51,7 @@ namespace SFA.Entities
         [ForeignKey("UserId")]
         [InverseProperty("TblMacroScheduleDetailsNtaUser")]
         public TblUserNta User { get; set; }
-
+        public string Reason { get; set; }
         public TblDistrictNta District { get; set; }
         public ICollection<TblAppointmentNta> TblAppointmentNta { get; set; }
     }
