@@ -283,7 +283,12 @@ namespace SFA.Services
                         StartDate = item.StartDate,
                         EndDate = item.EndDate,
                         IsApproved = false,
-                        IsRejected = false
+                        IsRejected = false,
+                        InsertDatetime = DateTime.Now,
+                        InsertUser = loggedinUser.Id.ToString(),
+                        Notes = item.Notes
+                        
+                        
                     };
 
                     macroScheduleDetailsEntities.Add(macroScheduleDetailsEntity);
@@ -294,11 +299,18 @@ namespace SFA.Services
                     macroScheduleDetailsEntities.Add(macroScheduleDetailsEntity);
                     Utilites tmp = new Utilites();
 
+
+                    //This will get passed into email function and based on type choose the correct template that live in ZohoMail.
+                    //The keys will be in the class the function lives in
                     string typeOfEmail = "";
                     //This is the standard email that we need to send
-                    if (missionary.R1 != true && missionary.sensitiveNation!=true)
+                    if (missionary.R1 != true && missionary.sensitiveNation != true)
                     {
                         typeOfEmail = "standard";
+                    }
+                    else if (missionary.R1 && missionary.sensitiveNation)
+                    {
+                        typeOfEmail = "combined";
                     }
                     else if (missionary.R1)
                     {
@@ -308,9 +320,9 @@ namespace SFA.Services
                     {
                         typeOfEmail = "sensitiveNation";
                     }
-                    tmp.SendEmailDGMDIncomingSchedule(districtEntity.Name, missionary.FirstName, missionary.LastName, missionary.UserSalutation, missionary.Email, dgmd.Email, dgmd.Phone, item.StartDate.ToString("MM/dd/yyyy"), item.EndDate.ToString("MM/dd/yyyy"), typeOfEmail);
+                        tmp.SendEmailDGMDIncomingSchedule(districtEntity.Name, missionary.FirstName, missionary.LastName, missionary.UserSalutation, missionary.Email, dgmd.Email, dgmd.Phone, item.StartDate.ToString("MM/dd/yyyy"), item.EndDate.ToString("MM/dd/yyyy"), typeOfEmail);
 
-                }
+                    }
 
                 macroScheduleEntity.TblMacroScheduleDetailsNta = macroScheduleDetailsEntities;
                 _context.TblMacroScheduleNta.Add(macroScheduleEntity);
@@ -355,11 +367,15 @@ namespace SFA.Services
                     //This will get passed into email function and based on type choose the correct template that live in ZohoMail.
                     //The keys will be in the class the function lives in
                     string typeOfEmail = "";
-                 
+
+            
                     if (missionary.R1 != true && missionary.sensitiveNation != true)
                     {
                         typeOfEmail = "standard";
-
+                    }
+                    else if (missionary.R1 && missionary.sensitiveNation)
+                    {
+                        typeOfEmail = "combined";
                     }
                     else if (missionary.R1)
                     {
@@ -369,8 +385,10 @@ namespace SFA.Services
                     {
                         typeOfEmail = "sensitiveNation";
                     }
-
                     tmp.SendEmailDGMDIncomingSchedule(districtEntity.Name, missionary.FirstName, missionary.LastName, missionary.UserSalutation, missionary.Email, dgmd.Email, dgmd.Phone, item.StartDate.ToString("MM/dd/yyyy"), item.EndDate.ToString("MM/dd/yyyy"), typeOfEmail);
+
+
+
 
                 }
 
@@ -399,6 +417,7 @@ namespace SFA.Services
             macroScheduleDetailsEntity.StartDate = macroScheduleDetails.StartDate;
             macroScheduleDetailsEntity.EndDate = macroScheduleDetails.EndDate;
             macroScheduleDetailsEntity.Notes = macroScheduleDetails.Notes;
+            macroScheduleDetailsEntity.ApprovedRejectRemarks = macroScheduleDetails.ApprovedRejectRemarks;
             macroScheduleDetailsEntity.UpdateDatetime = DateTime.Now;
             macroScheduleDetailsEntity.UpdateUser = loggedinUser.Id.ToString();
 
@@ -419,12 +438,30 @@ namespace SFA.Services
 
             macroScheduleDetailsEntity.IsApproved = true;
             macroScheduleDetailsEntity.ApprovedRejectRemarks = macroScheduleDetails.ApprovedRejectRemarks;
+            macroScheduleDetailsEntity.Notes = macroScheduleDetails.Notes;
             macroScheduleDetailsEntity.ApprovedRejectBy = userId;
             macroScheduleDetailsEntity.ApprovedRejectOn = DateTime.Now;
+            macroScheduleDetailsEntity.UpdateUser = userId.ToString();
+            macroScheduleDetailsEntity.UpdateDatetime = DateTime.Now;
+
 
             try
             {
-                await _context.SaveChangesAsync();
+                //{{district}}
+                //{{MMissionaryFirstName }}
+                //{{MissionaryLastName}}
+                //{{SpecialDGMDText}} ??
+                //{{DGMDFirstName}}
+                //{{DGMDLastName}}
+                //{{DGMDPrimaryPhone}}
+                //{{DGMDEmail}}
+                //{{DistrictWebsite}}
+               await _context.SaveChangesAsync();
+                Utilites tmp = new Utilites();
+                var dgmd = await _context.TblUserNta.Where(m => m.DistrictId == macroScheduleDetailsEntity.DistrictId && m.RoleId == 7).FirstAsync();
+                var missionary = await _context.TblUserNta.Where(m => m.Id == macroScheduleDetailsEntity.UserId).FirstAsync();
+                var districtEntity = await _context.TblDistrictNta.Where(m => m.Id == macroScheduleDetailsEntity.DistrictId).FirstAsync();
+                tmp.SendEmailToMissionaryConfirmedMacro(districtEntity.Name, missionary.FirstName,missionary.LastName, missionary.Email,macroScheduleDetailsEntity.Reason,dgmd.FirstName,dgmd.LastName,dgmd.Phone,dgmd.Email);
                 return "";
             }
             catch (Exception ex)
@@ -441,6 +478,8 @@ namespace SFA.Services
             macroScheduleDetailsEntity.ApprovedRejectRemarks = macroScheduleDetails.ApprovedRejectRemarks;
             macroScheduleDetailsEntity.ApprovedRejectBy = userId;
             macroScheduleDetailsEntity.ApprovedRejectOn = DateTime.Now;
+            macroScheduleDetailsEntity.UpdateDatetime = DateTime.Now;
+            macroScheduleDetailsEntity.UpdateUser = userId.ToString();
 
             try
             {
@@ -462,7 +501,9 @@ namespace SFA.Services
                 item.IsApproved = true;
                 item.ApprovedRejectBy = userId;
                 item.ApprovedRejectOn = DateTime.Now;
-            }
+                item.UpdateDatetime = DateTime.Now;
+                item.UpdateUser = userId.ToString();
+            } 
 
             try
             {
@@ -484,6 +525,8 @@ namespace SFA.Services
                 item.IsRejected = true;
                 item.ApprovedRejectBy = userId;
                 item.ApprovedRejectOn = DateTime.Now;
+                item.UpdateUser = userId.ToString();
+                item.UpdateDatetime = DateTime.Now;
             }
 
             try

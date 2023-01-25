@@ -235,7 +235,8 @@ namespace SFA.Services
                     CreatedBy = userId,
                     CreatedOn = DateTime.Now,
                     InsertDatetime = DateTime.Now,
-                    InsertUser = userId.ToString()
+                    InsertUser = userId.ToString(),
+                    OfferingOnly = true
                     
                 };
                 list.Add(item);
@@ -281,7 +282,8 @@ namespace SFA.Services
                     IsForwardForMissionary = false,
                     IsAcceptMissionary = false,
                     InsertUser = loggedinUser.Id.ToString(),
-                    InsertDatetime = DateTime.Now
+                    InsertDatetime = DateTime.Now,
+                    OfferingOnly = true
                 };
                 _context.TblAppointmentNta.Add(appointmentEntities);
             }
