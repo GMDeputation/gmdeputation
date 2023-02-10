@@ -11,7 +11,7 @@
         return $http.post('/appointments/search', query);
     };
     this.add = function (data) {
-        return $http.post('/appointments/add', data).then(function (resp) {
+        return $http.post('/appointments/addOfferingOnly', data).then(function (resp) {
             return resp;
         });
     };

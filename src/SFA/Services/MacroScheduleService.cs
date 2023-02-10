@@ -461,7 +461,7 @@ namespace SFA.Services
                 var dgmd = await _context.TblUserNta.Where(m => m.DistrictId == macroScheduleDetailsEntity.DistrictId && m.RoleId == 7).FirstAsync();
                 var missionary = await _context.TblUserNta.Where(m => m.Id == macroScheduleDetailsEntity.UserId).FirstAsync();
                 var districtEntity = await _context.TblDistrictNta.Where(m => m.Id == macroScheduleDetailsEntity.DistrictId).FirstAsync();
-                tmp.SendEmailToMissionaryConfirmedMacro(districtEntity.Name, missionary.FirstName,missionary.LastName, missionary.Email,macroScheduleDetailsEntity.Reason,dgmd.FirstName,dgmd.LastName,dgmd.Phone,dgmd.Email);
+                tmp.SendEmailToMissionaryConfirmedMacro(districtEntity.Name, missionary.FirstName,missionary.LastName, missionary.Email, macroScheduleDetails.ApprovedRejectRemarks, dgmd.FirstName,dgmd.LastName,dgmd.Phone,dgmd.Email);
                 return "";
             }
             catch (Exception ex)

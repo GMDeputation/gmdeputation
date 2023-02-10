@@ -96,8 +96,16 @@
 
             $scope.time = $filter('date')(appoint.eventTime, 'HH:mm:ss');
             appoint.eventTime = $scope.time;
+            angular.forEach(appoint.times, function (time) {
+                if ($scope.time == time.serviceTime) {
+                    $scope.serviceTypeID = time.id;
+                }               
+            });
+
+            appoint.serviceTypeID = $scope.serviceTypeID;
 
             appoint.macroScheduleDetailId = macroScheduleDetailId;
+            appoint.offeringOnly = false;
         });
 
         appointmentService.add($scope.appointments).then(processSuccess, processError);
@@ -178,7 +186,7 @@
 
         $scope.selectedChurchName($scope.appointments[index].church, index);
 
-        if ($scope.appointments[index].churchId !== null && $scope.appointments[index].churchId !== undefined && $scope.appointments[index].churchId !== '00000000-0000-0000-0000-000000000000') {
+        if ($scope.appointments[index].churchId !== null && $scope.appointments[index].churchId !== undefined && $scope.appointments[index].churchId !== '') {
             $scope.getServiceTime(index);
         }
 

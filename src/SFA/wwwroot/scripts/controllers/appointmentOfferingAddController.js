@@ -97,9 +97,17 @@
             $scope.time = $filter('date')(appoint.eventTime, 'HH:mm:ss');
             appoint.eventTime = $scope.time;
 
-            appoint.macroScheduleDetailId = macroScheduleDetailId;
-        });
+            angular.forEach(appoint.times, function (time) {
+                if ($scope.time == time.serviceTime) {
+                    $scope.serviceTypeID = time.id;
+                }
+            });
 
+            appoint.serviceTypeID = $scope.serviceTypeID;
+            appoint.macroScheduleDetailId = macroScheduleDetailId;
+            appoint.offeringOnly = true;
+        });
+             
         appointmentOfferingService.add($scope.appointments).then(processSuccess, processError);
     };
 
@@ -163,7 +171,14 @@
     };
 
     $scope.dateChange = function (index) {
-        $scope.times = [];
+        $scope.appointments[index].times = [
+        { serviceTime:'09:00:00', timeString: '9AM:Breakfast' }
+        , {
+            serviceTime: '13:00:00' ,timeString: '1PM:Lunch' }
+            ,
+        { serviceTime: '18:00:00', timeString: '6PM: Dinner' } 
+
+        ];
         $scope.appointments[index].eventTime = null;
 
 
@@ -174,12 +189,12 @@
             if (detail.id === day) {
                 $scope.weekday = detail.name;
             }
-        });
+       });
 
-        $scope.selectedChurchName($scope.appointments[index].church, index);
+       $scope.selectedChurchName($scope.appointments[index].church, index);
 
-        if ($scope.appointments[index].churchId !== null && $scope.appointments[index].churchId !== undefined && $scope.appointments[index].churchId !== '00000000-0000-0000-0000-000000000000') {
-            $scope.getServiceTime(index);
+        if ($scope.appointments[index].churchId !== null && $scope.appointments[index].churchId !== undefined && $scope.appointments[index].churchId !== '0') {
+           $scope.getServiceTime(index);
         }
 
         $scope.loadMap();
@@ -252,10 +267,10 @@
                 title: data.title
             });
 
-            angular.forEach(data.churchServiceTimes, function (time) {
-                if (time.weekDay === $scope.weekday) {
+            //Setting the Icons to Green.
+            angular.forEach(data, function (time) {
                     marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
-                }
+                
             });
 
             //Adding InfoWindow to the Marker.
@@ -265,31 +280,19 @@
 
                     //$scope.InfoWindow.setContent("<div onclick='setChurch(\""+data.id+"\",\""+data.title+"\")'><div style = 'width:200px'>" + data.title + "</div>" + "<div>" + data.description + "</div>" + "<div>" + data.section + "</div>" + "<div>" + data.district + "</div></div>");
                     $scope.InfoWindow.setContent("<div style = 'color:blue'><div style = 'width:200px'>" + data.title + "</div>" + "<div>" + data.description + "</div>"
-                        + "<div>" + data.section + "</div>" + "<div>" + data.district + "</div>" + "<div>" + "Pastor : " + data.pastor +
+                        + "<div>Section:" + data.section + "</div>" + "<div>District:" + data.district + "</div>" + "<div>" + "Pastor : " + data.pastor +
                         "</div>" + "<div style = 'color:purple'>" + "Service Time : " + data.serviceTypewiseTime + "</div></div>");
                     $scope.Map.setZoom(8);
                     $scope.InfoWindow.open($scope.Map, marker);
-
                     var length = $scope.appointments.length;
                     length = length - 1;
 
-                    if ($scope.appointments[length].eventDate !== null && $scope.appointments[length].eventDate !== undefined) {
-
+                        $scope.appointments[length].pastor =  data.pastor;
                         $scope.appointments[length].churchId = data.id;
                         $scope.appointments[length].churchItem = { "id": data.id, "churchName": data.title };
 
-                        $scope.getServiceTime(length);
-                    }
-                    else {
-                        $mdDialog.show(
-                            $mdDialog.alert()
-                                .clickOutsideToClose(false)
-                                .title('Church Admin')
-                                .textContent('Please Select Appointment Date')
-                                .ariaLabel('Alert Dialog')
-                                .ok('OK')
-                        );
-                    }
+                       // $scope.getServiceTime(length);
+                  
                 });
             })(marker, data);
 

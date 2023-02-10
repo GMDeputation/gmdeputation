@@ -209,7 +209,7 @@ namespace SFA.Services
                 return null;
             }
         }
-
+        //This is called when we add an appointment initially
         public async Task<string> Add(List<Appointment> appointments, string accessCode, int userId)
         {
             List<TblAppointmentNta> list = new List<TblAppointmentNta>();
@@ -225,7 +225,9 @@ namespace SFA.Services
                     PimAmount = appointment.PimAmount,
                     Offering = appointment.Offering,
                     Notes = appointment.Notes,
-                    IsSubmit = false,
+                    IsSubmit = true,
+                    SubmittedBy = userId,
+                    SubmittedOn = DateTime.Now,
                     IsAcceptByDgmd = false,
                     IsCreatedByPastor = ((accessCode == "P") ? true : false),
                     IsAcceptByPastor = false,
@@ -236,7 +238,8 @@ namespace SFA.Services
                     CreatedOn = DateTime.Now,
                     InsertDatetime = DateTime.Now,
                     InsertUser = userId.ToString(),
-                    OfferingOnly = true
+                    OfferingOnly = appointment.OfferingOnly
+                   // ServiceTypeId = appointment.ServiceTypeId
                     
                 };
                 list.Add(item);
@@ -245,6 +248,69 @@ namespace SFA.Services
             {
                 _context.TblAppointmentNta.AddRange(list);
                 await _context.SaveChangesAsync();
+                //This will go throgh all the appointments and send out emails
+                foreach (TblAppointmentNta appointment in list)
+                {
+                    //These are the variables that the email function needs
+                    //{ { district} }
+                    //{ { MissionaryFirstName} }
+                    //{ { MissionaryLastName} }
+                    //{ { UserSalutation} }
+                    //{ { PastorFirstName} }
+                    //{ { PastorLastName} }
+                    //{ { ChurchName} }
+                    //{ { MissionaryCountry} }
+                    //{ { NumberTraveling} }
+                    //{ { TravelingVia} }
+                    //{ { DayOfWeek} }
+                    //{ { EventDate} }
+                    //{ { EventTime} }
+                    //{ { TypeOfEvent} }
+                    //{ { MissionaryMobile} }
+                    //{ { MissionaryEmail} }
+                    //{ { DGMDFirstName} }
+                    //{ { DGMDLastName} }
+                    //{ { DGMDMobile} }
+                    //{ { DGMDEmail} }
+                    //{ { DistrictWebsite} }
+                    //{ { DGMDPrimaryPhone} }
+                    try
+                    {
+                        var churchEntity = await _context.TblChurchNta.Where(m => m.Id == appointment.ChurchId).FirstAsync();
+                        var districtEntity = await _context.TblDistrictNta.Where(m => m.Id == churchEntity.DistrictId).FirstAsync();
+                        var macroScheudleDetailEntity = await _context.TblMacroScheduleDetailsNta.Where(m => m.Id == appointment.MacroScheduleDetailId).FirstAsync();
+                        var missionaryEntity = await _context.TblUserNta.Where(m => m.Id == macroScheudleDetailEntity.UserId).FirstAsync();
+                        //Gets the link to see who the pastor is in a church: Could be mutiple? 
+                        var linkToPastorAndChurchEntity = await _context.TblUserChurchNta.Where(m => m.ChurchId == appointment.ChurchId).FirstAsync();
+                        var pastorEntity = await _context.TblUserNta.Where(m => m.Id == linkToPastorAndChurchEntity.UserId).FirstAsync();
+                        var dgmd = await _context.TblUserNta.Where(m => m.DistrictId == districtEntity.Id && m.RoleId == 7).FirstAsync();
+                        var serviceTimeEntity = await _context.TblChurchServiceTimeNta.Where(m => m.Id == appointment.ServiceTypeId).FirstAsync();
+                        var serviceTypeEntity = await _context.TblServiceTypeNta.Where(m => m.Id == serviceTimeEntity.ServiceTypeId).FirstAsync();
+                        Utilites tmp = new Utilites();
+                        //Hard coded USA for country for now. 
+                        if(appointment.OfferingOnly)
+                        {
+                            tmp.SendEmailToPastorNewServiceSchedule(districtEntity.Name, missionaryEntity.FirstName, missionaryEntity.LastName, missionaryEntity.UserSalutation,
+                            pastorEntity.FirstName, pastorEntity.LastName, churchEntity.ChurchName, "USA", missionaryEntity.NumberTraveling.ToString(),
+                            missionaryEntity.TravelingVia, appointment.EventDate.DayOfWeek.ToString(), appointment.EventDate.ToString("MM/dd/yyyy"),
+                            appointment.EventTime.ToString(), serviceTypeEntity.Name, missionaryEntity.TelePhoneNo, missionaryEntity.Email, dgmd.FirstName,
+                            dgmd.LastName, dgmd.TelePhoneNo, dgmd.Email, dgmd.Phone, pastorEntity.Email, appointment.OfferingOnly,dgmd.FirstName + " " + dgmd.LastName,dgmd.Address);
+                        }
+                        else
+                        {
+                            tmp.SendEmailToPastorNewServiceSchedule(districtEntity.Name, missionaryEntity.FirstName, missionaryEntity.LastName, missionaryEntity.UserSalutation,
+                            pastorEntity.FirstName, pastorEntity.LastName, churchEntity.ChurchName, "USA", missionaryEntity.NumberTraveling.ToString(),
+                            missionaryEntity.TravelingVia, appointment.EventDate.DayOfWeek.ToString(), appointment.EventDate.ToString("MM/dd/yyyy"),
+                            appointment.EventTime.ToString(), serviceTypeEntity.Name, missionaryEntity.TelePhoneNo, missionaryEntity.Email, dgmd.FirstName,
+                            dgmd.LastName, dgmd.TelePhoneNo, dgmd.Email, dgmd.Phone, pastorEntity.Email, appointment.OfferingOnly,"","");
+                        }
+
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine("One or more emails failed to send for appointment additions: " + ex.Message);
+                    }
+                }
                 return "";
             }
             catch (Exception ex)
@@ -255,6 +321,7 @@ namespace SFA.Services
 
         public async Task<string> Save(Appointment appointment, User loggedinUser)
         {
+            //This is for inserts
             if (appointment.Id == 0)
             {
                 var eventDate = new DateTime();
@@ -286,6 +353,7 @@ namespace SFA.Services
                     OfferingOnly = true
                 };
                 _context.TblAppointmentNta.Add(appointmentEntities);
+
             }
             else
             {
@@ -313,7 +381,8 @@ namespace SFA.Services
                 throw ex;
             }
         }
-
+        //We are going to deafult when the appoint is make to it is submitted as well. 
+        //Saying that this code will be in limbo unless we dafult that to null like it used ot be
         public async Task<string> SubmitAppointment(Appointment appointment)
         {
             var appointmentEntity = await _context.TblAppointmentNta.FirstOrDefaultAsync(m => m.Id == appointment.Id);
