@@ -11,6 +11,7 @@ using SFA.Entities;
 using SFA.Services;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft;
+using SFA.Services.TimedJobs;
 
 namespace SFA
 {
@@ -81,6 +82,10 @@ namespace SFA
             services.AddScoped<IAccomodationBookService, AccomodationBookService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IReportService, ReportService>();
+           // services.AddScoped<IHostedService, HQEmailTwoWeeks>();
+
+            //Adding Timer Jobs
+            services.AddHostedService<HQEmailTwoWeeks>();
 
             //This is what was used for 2.1 Version
             //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

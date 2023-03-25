@@ -444,10 +444,24 @@ namespace SFA.Services
                     var addressToGeoCode = user.Address;
 
                     var locationService = new GoogleLocationService("AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI");
-                    var point = locationService.GetLatLongFromAddress(addressToGeoCode);
 
-                    latitude = point.Latitude;
-                    longitude = point.Longitude;
+                    try
+                    {
+                        var point = locationService.GetLatLongFromAddress(addressToGeoCode);
+
+                        latitude = point.Latitude;
+                        longitude = point.Longitude;
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        return 3;
+                    }
+                   
+
+                  
+
+
                 }
                
 

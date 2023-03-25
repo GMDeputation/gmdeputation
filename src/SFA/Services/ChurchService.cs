@@ -327,11 +327,26 @@ namespace SFA.Services
         {
             var addressToGeoCode = church.Address;
 
-            var locationService = new GoogleLocationService("AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI");
-            var point = locationService.GetLatLongFromAddress(addressToGeoCode);
+            var point = new GoogleMaps.LocationServices.MapPoint();
+            var latitude = 0.0;
+            var longitude = 0.0;
 
-            var latitude = point.Latitude;
-            var longitude = point.Longitude;
+            var locationService = new GoogleLocationService("AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI");
+
+            //If for some reason the API is down then we will be adding in 0 as the long and lat
+            try
+            {
+                point = locationService.GetLatLongFromAddress(addressToGeoCode);
+                latitude = point.Latitude;
+                longitude = point.Longitude;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return "Google API is down. Please reach out to IT Support";
+            }
+
+
 
             var churchEntities = new TblChurchNta
             {
@@ -371,11 +386,25 @@ namespace SFA.Services
 
             var addressToGeoCode = church.Address;
 
-            var locationService = new GoogleLocationService("AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI");
-            var point = locationService.GetLatLongFromAddress(addressToGeoCode);
 
-            var latitude = point.Latitude;
-            var longitude = point.Longitude;
+            var point = new GoogleMaps.LocationServices.MapPoint();
+            var latitude = 0.0;
+            var longitude = 0.0;
+
+            var locationService = new GoogleLocationService("AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI");
+
+            //If for some reason the API is down then we will be adding in 0 as the long and lat
+            try
+            {
+                point = locationService.GetLatLongFromAddress(addressToGeoCode);
+                latitude = point.Latitude;
+                longitude = point.Longitude;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return "Google API is down. Please reach out to IT Support";
+            }
 
             var churchEntities = await _context.TblChurchNta.FirstOrDefaultAsync(m => m.Id == church.Id);
             churchEntities.ChurchName = church.ChurchName;

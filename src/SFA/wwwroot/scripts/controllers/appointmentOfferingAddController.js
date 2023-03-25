@@ -211,7 +211,7 @@
         });
 
         churchServiceTimeService.getTimeByChurch($scope.appointments[index].churchId, $scope.weekday).then(function (resp) {
-            $scope.appointments[index].times = resp;
+            //$scope.appointments[index].times = resp;
         });
     };
 

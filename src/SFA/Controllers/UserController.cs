@@ -127,6 +127,13 @@ public class UserController : Controller
 	{
 		var loggedinUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");
 		var result = await _userService.Save(user, loggedinUser);
+		string error = "";
+		if (result == 3)
+        {
+			error = "Failed to Save: Google API is down. Please reach out to IT Support";
+			return new JsonResult(error);
+
+		}
 		return new JsonResult(result);
 	}
 

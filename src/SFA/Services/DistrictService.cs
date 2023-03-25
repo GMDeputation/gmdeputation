@@ -142,6 +142,9 @@ namespace SFA.Services
             };
             
             _context.TblDistrictNta.Add(districtEntities);
+            //Needed to save first so you get the ID for the relationship for the distract state table. 
+            //Otherwise the ID would be 0 and we would get a FK relationship error
+            await _context.SaveChangesAsync();
 
             if (district.States != null)
             {

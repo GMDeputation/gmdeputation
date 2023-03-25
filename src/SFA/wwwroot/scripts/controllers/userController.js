@@ -210,7 +210,7 @@
                     $mdDialog.alert()
                         .clickOutsideToClose(false)
                         .title('ENFINS Admin')
-                        .textContent('Failed To Saved User')
+                        .textContent(resp.data)
                         .ok('OK')
                 ).then(function () {
                     $scope.isDisabled = false;

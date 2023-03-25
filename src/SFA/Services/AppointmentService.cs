@@ -225,9 +225,9 @@ namespace SFA.Services
                     PimAmount = appointment.PimAmount,
                     Offering = appointment.Offering,
                     Notes = appointment.Notes,
-                    IsSubmit = true,
-                    SubmittedBy = userId,
-                    SubmittedOn = DateTime.Now,
+                    //IsSubmit = true,
+                    //SubmittedBy = userId,
+                    //SubmittedOn = DateTime.Now,
                     IsAcceptByDgmd = false,
                     IsCreatedByPastor = ((accessCode == "P") ? true : false),
                     IsAcceptByPastor = false,
@@ -381,8 +381,7 @@ namespace SFA.Services
                 throw ex;
             }
         }
-        //We are going to deafult when the appoint is make to it is submitted as well. 
-        //Saying that this code will be in limbo unless we dafult that to null like it used ot be
+
         public async Task<string> SubmitAppointment(Appointment appointment)
         {
             var appointmentEntity = await _context.TblAppointmentNta.FirstOrDefaultAsync(m => m.Id == appointment.Id);
@@ -401,7 +400,7 @@ namespace SFA.Services
                 throw ex;
             }
         }
-
+        //Called when the pastor accepts the service in appointments/detail page. 
         public async Task<string> ApproveAppointmentByPator(Appointment appointment) 
         {
             var appointmentEntity = await _context.TblAppointmentNta.FirstOrDefaultAsync(m => m.Id == appointment.Id);
@@ -418,6 +417,24 @@ namespace SFA.Services
             try
             {
                 await _context.SaveChangesAsync();
+
+                var churchEntity = await _context.TblChurchNta.Where(m => m.Id == appointment.ChurchId).FirstAsync();
+                var districtEntity = await _context.TblDistrictNta.Where(m => m.Id == churchEntity.DistrictId).FirstAsync();
+                var macroScheudleDetailEntity = await _context.TblMacroScheduleDetailsNta.Where(m => m.Id == appointment.MacroScheduleDetailId).FirstAsync();
+                var missionaryEntity = await _context.TblUserNta.Where(m => m.Id == macroScheudleDetailEntity.UserId).FirstAsync();
+                //Gets the link to see who the pastor is in a church: Could be mutiple? 
+                var linkToPastorAndChurchEntity = await _context.TblUserChurchNta.Where(m => m.ChurchId == appointment.ChurchId).FirstAsync();
+                var pastorEntity = await _context.TblUserNta.Where(m => m.Id == linkToPastorAndChurchEntity.UserId).FirstAsync();
+                var dgmd = await _context.TblUserNta.Where(m => m.DistrictId == districtEntity.Id && m.RoleId == 7).FirstAsync();
+                var serviceTimeEntity = await _context.TblChurchServiceTimeNta.Where(m => m.Id == appointmentEntity.ServiceTypeId).FirstAsync();
+                var serviceTypeEntity = await _context.TblServiceTypeNta.Where(m => m.Id == serviceTimeEntity.ServiceTypeId).FirstAsync();
+                Utilites tmp = new Utilites();
+                tmp.SendEmailToMissionaryConfirmedService(districtEntity.Name, missionaryEntity.FirstName, missionaryEntity.LastName, pastorEntity.FirstName, pastorEntity.LastName,
+                    "Church City", serviceTypeEntity.Name, appointment.EventDate.DayOfWeek.ToString(), appointment.EventTime.ToString(),pastorEntity.TelePhoneNo,pastorEntity.Email,
+                    churchEntity.ChurchName,churchEntity.Address,churchEntity.Phone,"Special Pastor Text", missionaryEntity.UserSalutation, dgmd.FirstName, dgmd.LastName,
+                    dgmd.Phone, dgmd.Email,missionaryEntity.Email);
+
+
                 return "";
             }
             catch (Exception ex)

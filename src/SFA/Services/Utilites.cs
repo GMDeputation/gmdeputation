@@ -5,6 +5,11 @@ using System.IO;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SFA.Entities;
+using System.Timers;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+
 namespace SFA.Services
 {
     public class Utilites
@@ -23,6 +28,13 @@ namespace SFA.Services
         //Function SendEmailToPastorNewServiceSchedule uses this
         static string EmailToPastorWithNewService = "2d6f.32b15e784a472135.k1.bd121560-9c02-11ed-9725-525400e3c1b1.185e492e1b6";
         static string EmailToPastorWithNewServiceOfferingOnly = "2d6f.32b15e784a472135.k1.4f1dc760-9c03-11ed-9725-525400e3c1b1.185e4969ed6";
+
+        //Function SendEmailToMissionaryConfirmedService Uses this
+        static string EmailToMissionaryConfirmedService = "2d6f.32b15e784a472135.k1.6c44c850-9c05-11ed-9725-525400e3c1b1.185e4a47955";
+
+        static string EmatilToHQTwoWeekOut = "2d6f.32b15e784a472135.k1.af0d2570-9c04-11ed-9725-525400e3c1b1.185e49fa147";
+
+        private readonly SFADBContext _context = null;
 
         //Templates 1,1a,1b,1c
         public void SendEmailDGMDIncomingSchedule( string district, string missionaryFirstName, string missionaryLastName, string userSalutation, string missionaryEmail, string dgmdEmail, string dgmdPrimaryPhone, string startDate,string  endDate, string type)
@@ -208,6 +220,158 @@ namespace SFA.Services
             http.PreAuthenticate = true;
             http.Headers.Add("Authorization", "Zoho-enczapikey wSsVR60irB74DaZ+zzL/Lu5umg5RA1ugE0R6jVWiuXH6HvvD98c9wkKcUVOlFPAaEzNqEjdGo7krzUxR2jVa24t+ng5WCyiF9mqRe1U4J3x17qnvhDzKWW9alxONJY4MzgtukmdpEMgn+g==");
            //jsonString = "{'template_key':'" + apiTemplateKey + "','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'Troy'},'to': [{'email_address': {'address': '" + pastorEmail   + "','name': 'Missionary'}}],'merge_info':{'district':'" + district + "','MissionaryFirstName':'" + missionaryFirstName + "','MissionaryLastName':'" + missionaryLastName + "','UserSalutation':'" + userSalutation + "','PastorFirstName':'" + pastorFirstName + "','PastorLastName':'" + pastorLastName + "','ChurchName':'" + churchName + "','MissionaryCountry':'" + missionaryCountry + "','NumberTraveling':'" + numbe3rtraveling + "','TravelingVia':'" + travelingVia + "','DayOfWeek':'" + dayOfWeek + "','EventDate':'" + eventDate + "','EventTime':'" + eventTime + "','TypeOfEvent':'" + typeOfEvent + "','MissionaryMobile':'" + MissionaryMobile + "','MissionaryEmail':'" + missionaryEmail + "','DGMDFirstName':'" + dgmdFirstName + "','DGMDLastName':'" + dgmdLastName + "','DGMDMobile':'" + dgmdMobile + "','DGMDEmail':'" + dgmdEmail + "','DistrictWebsite':'" + districtWebsite + "','DGMDPrimaryPhone':'" + dgmdPrimaryPhone + "'}}";
+            JObject parsedContent = null;
+            try
+            {
+                parsedContent = JObject.Parse(jsonString);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            Console.WriteLine(parsedContent.ToString());
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            Byte[] bytes = encoding.GetBytes(parsedContent.ToString());
+
+            Stream newStream = http.GetRequestStream();
+            newStream.Write(bytes, 0, bytes.Length);
+            newStream.Close();
+            try
+            {
+                var response = http.GetResponse();
+                var stream = response.GetResponseStream();
+                var sr = new StreamReader(stream);
+                var content = sr.ReadToEnd();
+                Console.WriteLine(content);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        //Template 12
+        public void SendEmailToMissionaryConfirmedService(string district, string missionaryFirstName, string missionaryLastName, string pastorFirstName, string pastorLastName, string churchCity, string TypeOfEvent, string DayOfWeek, string EventTime, string PastorMobile, string PastorEmail, string churchName, string Churchaddress, string ChurchPhone, string SpecialPastorText, string UserSalutation, string DGMDFirstName, string DGMDLastName, string DGMDPrimaryPhone, string DGMDemail,string missionaryEmail)
+        {
+
+            string districtWebsite = "https://gmdeputation.com/";
+            //{ { district} }
+            //{ { MissionaryFirstName} }
+            //{ { MissionaryLastName} }
+            //{ { PastorFirstName} }
+            //{ { PastorLastName} }
+            //{ { ChurchCity} }
+            //{ { TypeOfEvent} }
+            //{ { DayOfWeek} }
+            //{ { EventTime} }
+            //{ { PastorMobile} }
+            //{ { PastorEmail} }
+            //{ { ChurchName} }
+            //{ { Churchaddress} }
+            //{ { ChurchPhone} }
+            //{ { SpecialPastorText} }
+            //{ { UserSalutation} }
+            //{ { DGMDFirstName} }
+            //{ { DGMDLastName} }
+            //{ { DGMDPrimaryPhone} }
+            //{ { DGMDemail} }
+            //{ { DGMDEmail} }
+            //{ { DistrictWebsite} }
+
+            string jsonString = "";
+            string apiTemplateKey = "";
+
+            //for template 12
+            apiTemplateKey = EmailToMissionaryConfirmedService;
+            jsonString = "{'template_key':'" + apiTemplateKey + "','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'Troy'},'to': [{'email_address': {'address': '" + missionaryEmail + "','name': 'Missionary'}}],'merge_info':{'district':'" + district + "','MissionaryFirstName':'" + missionaryFirstName + "','MissionaryLastName':'" + missionaryLastName + "','PastorFirstName':'" + pastorFirstName + "','PastorLastName':'" + pastorLastName + "','ChurchCity':'" + churchCity + "','TypeOfEvent':'" + TypeOfEvent + "','DayOfWeek':'" + DayOfWeek + "','EventTime':'" + EventTime + "','PastorMobile':'" + PastorMobile + "','PastorEmail':'" + PastorEmail + "','ChurchName':'" + churchName + "','Churchaddress':'" + Churchaddress + "','ChurchPhone':'" + ChurchPhone + "','SpecialPastorText':'" + SpecialPastorText + "','UserSalutation':'" + UserSalutation + "','DGMDFirstName':'" + DGMDFirstName + "','DGMDLastName':'" + DGMDLastName + "','DGMDPrimaryPhone':'" + DGMDPrimaryPhone + "','DGMDEmail':'" + DGMDemail + "','DistrictWebsite':'" + districtWebsite + "'}}";
+
+
+
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            var baseAddress = "https://api.zeptomail.com/v1.1/email/template";
+
+            var http = (HttpWebRequest)WebRequest.Create(new Uri(baseAddress));
+            http.Accept = "application/json";
+            http.ContentType = "application/json";
+            http.Method = "POST";
+            http.PreAuthenticate = true;
+            http.Headers.Add("Authorization", "Zoho-enczapikey wSsVR60irB74DaZ+zzL/Lu5umg5RA1ugE0R6jVWiuXH6HvvD98c9wkKcUVOlFPAaEzNqEjdGo7krzUxR2jVa24t+ng5WCyiF9mqRe1U4J3x17qnvhDzKWW9alxONJY4MzgtukmdpEMgn+g==");
+       
+            JObject parsedContent = null;
+            try
+            {
+                parsedContent = JObject.Parse(jsonString);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            Console.WriteLine(parsedContent.ToString());
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            Byte[] bytes = encoding.GetBytes(parsedContent.ToString());
+
+            Stream newStream = http.GetRequestStream();
+            newStream.Write(bytes, 0, bytes.Length);
+            newStream.Close();
+            try
+            {
+                var response = http.GetResponse();
+                var stream = response.GetResponseStream();
+                var sr = new StreamReader(stream);
+                var content = sr.ReadToEnd();
+                Console.WriteLine(content);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+        //Template 11
+        //This is called from Program.cs in the main class. Called once a day and returns all schedules that are two weeks away exactly to the email template
+        //As an excel file. 
+        public void SendEmailToHQStaff2weekschedules(object source, ElapsedEventArgs e)
+        {
+            DateTime currentTim = DateTime.Now;
+            //Linq Query Right now looking at everything greater than two weeks. When we go liev >= need to just be == Wre are just doing this for testing. 
+            var appointmentQuery = _context.TblAppointmentNta.Where(s=> s.EventDate >= currentTim.AddDays(-14)).Include(m => m.Church).ThenInclude(m => m.District).ThenInclude(m => m.TblUserNta)
+                       .Include(m => m.AcceptByPastorByNavigation).Include(m => m.MacroScheduleDetail).ThenInclude(m => m.MacroSchedule)
+                       .Include(m => m.MacroScheduleDetail).ThenInclude(m => m.District).Include(m => m.AcceptMissionaryByNavigation).Include(m => m.MacroScheduleDetail)
+                      .ThenInclude(m => m.User).AsNoTracking().AsQueryable();
+
+            string districtWebsite = "https://gmdeputation.com/";
+            //{ { district} }
+            //{ { MissionaryFirstName} }
+            //{ { MissionaryLastName} }
+            //{ { District} }
+            //{ { UserSalutation} }
+            //{ { LastName} }
+            //{ { DGMDFirstName} }
+            //{ { DGMDLastName} }
+            //{ { DGMDPrimaryPhone} }
+            //{ { DGMDEmail} }
+            //{ { DistrictWebsite} }
+
+            string jsonString = "";
+            string apiTemplateKey = "";
+
+            //for template 11
+            apiTemplateKey = EmatilToHQTwoWeekOut;
+           // jsonString = "{'template_key':'" + apiTemplateKey + "','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'Troy'},'to': [{'email_address': {'address': '" + missionaryEmail + "','name': 'Missionary'}}],'merge_info':{'district':'" + district + "','MissionaryFirstName':'" + missionaryFirstName + "','MissionaryLastName':'" + missionaryLastName + "','PastorFirstName':'" + pastorFirstName + "','PastorLastName':'" + pastorLastName + "','ChurchCity':'" + churchCity + "','TypeOfEvent':'" + TypeOfEvent + "','DayOfWeek':'" + DayOfWeek + "','EventTime':'" + EventTime + "','PastorMobile':'" + PastorMobile + "','PastorEmail':'" + PastorEmail + "','ChurchName':'" + churchName + "','Churchaddress':'" + Churchaddress + "','ChurchPhone':'" + ChurchPhone + "','SpecialPastorText':'" + SpecialPastorText + "','UserSalutation':'" + UserSalutation + "','DGMDFirstName':'" + DGMDFirstName + "','DGMDLastName':'" + DGMDLastName + "','DGMDPrimaryPhone':'" + DGMDPrimaryPhone + "','DGMDEmail':'" + DGMDemail + "','DistrictWebsite':'" + districtWebsite + "'}}";
+
+
+
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            var baseAddress = "https://api.zeptomail.com/v1.1/email/template";
+
+            var http = (HttpWebRequest)WebRequest.Create(new Uri(baseAddress));
+            http.Accept = "application/json";
+            http.ContentType = "application/json";
+            http.Method = "POST";
+            http.PreAuthenticate = true;
+            http.Headers.Add("Authorization", "Zoho-enczapikey wSsVR60irB74DaZ+zzL/Lu5umg5RA1ugE0R6jVWiuXH6HvvD98c9wkKcUVOlFPAaEzNqEjdGo7krzUxR2jVa24t+ng5WCyiF9mqRe1U4J3x17qnvhDzKWW9alxONJY4MzgtukmdpEMgn+g==");
+
             JObject parsedContent = null;
             try
             {
