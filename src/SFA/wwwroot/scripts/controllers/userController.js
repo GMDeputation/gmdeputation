@@ -7,6 +7,21 @@
     $scope.isMissonaries = false;
 
 
+    var pickup = document.getElementById('Address');
+
+    var options = {
+        componentRestrictions: {
+            country: 'us'
+        }
+    };
+    var autocompletePickup = new google.maps.places.Autocomplete(pickup, options);
+
+    (function (scope) {
+        google.maps.event.addListener(autocompletePickup, 'place_changed', function () {
+            var place = autocompletePickup.getPlace();
+            scope.user.address = place.formatted_address;
+        });
+    })($scope);
 
 
     if (id === "0")
@@ -30,6 +45,7 @@
         $scope.district = [];
 
         if (searchText !== null && searchText !== undefined && searchText !== "") {
+            searchText = searchText.toLowerCase();
             searchText = searchText.toLowerCase();
         }
 
@@ -299,7 +315,7 @@
             $scope.countries = resp.data;
         });
 
-        $scope.salutations = [{ "id": "Mr.", "name": "Mr" }, { "id": "Ms.", "name": "Ms" }, { "id": "Mrs.", "name": "Mrs" }];
+        $scope.salutations = [{ "id": "Mr.", "name": "Mr." }, { "id": "Ms.", "name": "Ms." }, { "id": "Mrs.", "name": "Mrs." }, { "id": "Rev", "name": "Rev" }, { "id": "Pastor", "name": "Pastor" }];
 
         $scope.genders = [{ "id": "Male", "name": "Male" }, { "id": "Female", "name": "Female" }];
         if (id !== null && id !== undefined && id !== '0') {

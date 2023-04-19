@@ -130,7 +130,7 @@ public class UserController : Controller
 		string error = "";
 		if (result == 3)
         {
-			error = "Failed to Save: Google API is down. Please reach out to IT Support";
+			error = "Failed to Save: Google API is down Or address is invalid. Please reach out to IT Support if issue continues";
 			return new JsonResult(error);
 
 		}
@@ -278,7 +278,7 @@ public class UserController : Controller
 							int? sectionIdInt = null;
 							if (sectionId != null || sectionId != "")
 								sectionIdInt = Convert.ToInt32(sectionId);				
-				
+							
 							var stateId = ((((ExcelRangeBase)worksheet.Cells[row, 9]).Value != null) ? new int?(source.Where((TblStateNta m) => m.Alias != null && m.Alias.ToString().ToUpper() == ((ExcelRangeBase)worksheet.Cells[row, 9]).Value.ToString().ToUpper()).FirstOrDefault().Id) : null);
 							var roleId = roleEntities.Where((TblRoleNta m) => m.Id.ToString().Contains(((ExcelRangeBase)worksheet.Cells[row, 10]).Value.ToString())).FirstOrDefault().Id;
 							var city = ((((ExcelRangeBase)worksheet.Cells[row, 11]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 11]).Value.ToString() : null);

@@ -292,6 +292,7 @@ namespace SFA.Services
                     TravelingVia = userEntity.TravelingVia,
                     R1 = userEntity.R1,
                     sensitiveNation = userEntity.sensitiveNation,
+                    UserSalutation = userEntity.UserSalutation,
                     Attributes = userEntity.TblUserAttributeNta.Select(m => new UserAttribute
                     {            
                         AttributeId = m.AttributeId,
@@ -458,8 +459,6 @@ namespace SFA.Services
                         return 3;
                     }
                    
-
-                  
 
 
                 }
