@@ -1,6 +1,62 @@
 ﻿app.controller('userController', function ($scope, $window, $location, $mdDialog, userService, roleService, attributeService, churchService, districtService, sectionService, countryService) {
     var id = $location.absUrl().substr($location.absUrl().lastIndexOf('detail/') + 7);
 
+
+
+
+    const isNumericInput = (event) => {
+        const key = event.keyCode;
+        return ((key >= 48 && key <= 57) || // Allow number line
+            (key >= 96 && key <= 105) // Allow number pad
+        );
+    };
+
+    const isModifierKey = (event) => {
+        const key = event.keyCode;
+        return (event.shiftKey === true || key === 35 || key === 36) || // Allow Shift, Home, End
+            (key === 8 || key === 9 || key === 13 || key === 46) || // Allow Backspace, Tab, Enter, Delete
+            (key > 36 && key < 41) || // Allow left, up, right, down
+            (
+                // Allow Ctrl/Command + A,C,V,X,Z
+                (event.ctrlKey === true || event.metaKey === true) &&
+                (key === 65 || key === 67 || key === 86 || key === 88 || key === 90)
+            )
+    };
+
+    const enforceFormat = (event) => {
+        // Input must be of a valid number format or a modifier key, and not longer than ten digits
+        if (!isNumericInput(event) && !isModifierKey(event)) {
+            event.preventDefault();
+        }
+    };
+
+    const formatToPhone = (event) => {
+        if (isModifierKey(event)) { return; }
+
+        const input = event.target.value.replace(/\D/g, '').substring(0, 10); // First ten digits of input only
+        const areaCode = input.substring(0, 3);
+        const middle = input.substring(3, 6);
+        const last = input.substring(6, 10);
+
+        if (input.length > 6) { event.target.value = `(${areaCode}) ${middle} - ${last}`; }
+        else if (input.length > 3) { event.target.value = `(${areaCode}) ${middle}`; }
+        else if (input.length > 0) { event.target.value = `(${areaCode}`; }
+    };
+
+    //These are the liusteners to auto format the phone numbers when a user is adding a new user
+    const inputElement = document.getElementById('phoneNumber');
+    inputElement.addEventListener('keydown', enforceFormat);
+    inputElement.addEventListener('keyup', formatToPhone);
+
+    const inputElement2 = document.getElementById('phoneNumber2');
+    inputElement2.addEventListener('keydown', enforceFormat);
+    inputElement2.addEventListener('keyup', formatToPhone);
+
+    const inputElement3 = document.getElementById('phoneNumber3');
+    inputElement3.addEventListener('keydown', enforceFormat);
+    inputElement3.addEventListener('keyup', formatToPhone);
+
+
     $scope.edit = false;
     $scope.count = false;
     $scope.churchIdNull = false;
@@ -316,7 +372,7 @@
         });
 
         $scope.salutations = [{ "id": "Mr.", "name": "Mr." }, { "id": "Ms.", "name": "Ms." }, { "id": "Mrs.", "name": "Mrs." }, { "id": "Rev", "name": "Rev" }, { "id": "Pastor", "name": "Pastor" }];
-
+        $scope.travelingViaOptions = [{ "id": "Travel trailer", "name": "Travel trailer" }, { "id": "Motorhome", "name": "Motorhome" }, { "id": "Vehicle", "name": "Vehicle" }, { "id": "Bicycle", "name": "Bicycle" }];
         $scope.genders = [{ "id": "Male", "name": "Male" }, { "id": "Female", "name": "Female" }];
         if (id !== null && id !== undefined && id !== '0') {
             userService.get(id).then(function (resp) {
@@ -329,7 +385,7 @@
                 }
 
                 angular.forEach($scope.user.churches, function (detail) {
-                    detail.church = { "id": detail.id, "churchName": detail.churchName };
+                    detail.church = { "id": detail.id, "churchName": detail.churchName, "address": detail.address };
                 });
 
                 angular.forEach($scope.user.attributes, function (detail) {

@@ -154,7 +154,7 @@
 
                 <md-input-container class="md-block" flex>
                     <label>Home Phone</label>
-                    <input type="number" name="phone" [ng-model]="user.phone | number: '3-3-4'" required>
+                    <input  id="phoneNumber"name="phone" [ng-model]="user.phone | number: '3-3-4'" required>
                     <div ng-messages="form.phone.$error" md-auto-hide="false">
                         <div ng-message="required">User Phone is required</div>
                     </div>
@@ -163,22 +163,28 @@
             <div layout="row" layout-sm="column" layout-xs="column">
                 <md-input-container class="md-block" flex>
                     <label>Work Phone</label>
-                    <input ng-model="user.workPhoneNo">
+                    <input id="phoneNumber2" ng-model="user.workPhoneNo">
                 </md-input-container>
 
                 <md-input-container class="md-block" flex>
                     <label>Mobile Phone</label>
-                    <input ng-model="user.telePhoneNo">
+                    <input id="phoneNumber3" ng-model="user.telePhoneNo">
                 </md-input-container>
 
                 <md-input-container class="md-block" flex>
                     <label>Number Traveling</label>
+
                     <input ng-model="user.numberTraveling"  type="number" ng-required = "isOneContactRequired()">
                 </md-input-container>
 
-                <md-input-container class="md-block" flex>
+                   <md-input-container class="md-block" flex>
                     <label>Travling Via</label>
-                    <input ng-model="user.travelingVia" ng-required = "isOneContactRequired()">
+                    <md-select name="travelingVia" ng-model="user.travelingVia" ng-required = "isOneContactRequired()">
+                        <md-option ng-repeat="travelingVia in travelingViaOptions" ng-value="travelingVia.id">{{travelingVia.name}}</md-option>
+                    </md-select>
+                    <div ng-messages="form.travelingVia.$error" md-auto-hide="false">
+                        <div ng-message="required">travelingVia is required</div>
+                    </div>
                 </md-input-container>
 
                   <md-input-container class="md-block" flex="none">
@@ -268,7 +274,7 @@
                                              md-min-length="0"
                                              md-floating-label="Church Name" ng-required = "isOneContactRequired()">
                                 <md-item-template>
-                                    <span md-highlight-text="ChurchSearch" md-highlight-flags="gi">{{church.churchName}}</span>
+                                    <span md-highlight-text="ChurchSearch" md-highlight-flags="gi">{{church.churchName}} | {{church.address}}</span>
                                 </md-item-template>
                                 <md-not-found>
                                     No Data Found .
