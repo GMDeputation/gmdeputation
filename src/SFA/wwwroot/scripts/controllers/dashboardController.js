@@ -71,36 +71,7 @@
     };
 
     function init() {
-        homeService.getDashbordData().then(function (resp) {
-            $scope.dashbordData = resp.data;
-
-            var currentSeries1 = [];
-            var previousSeries1 = [];
-            $scope.data1 = [];
-            $scope.data2 = [];
-            $scope.labels = [];
-
-            angular.forEach(resp.data.districtChartData, function (value) {
-                
-                currentSeries1.push(value.current);
-                previousSeries1.push(value.previous);
-
-                $scope.labels.push(value.monthName);
-            });
-
-            var currentSeries2 = [];
-            var previousSeries2 = [];
-            angular.forEach(resp.data.sectionChartData, function (value) {
-
-                currentSeries2.push(value.current);
-                previousSeries2.push(value.previous);
-            });
-
-            $scope.data1.push(currentSeries1);
-            $scope.data1.push(previousSeries1);
-            $scope.data2.push(currentSeries2);
-            $scope.data2.push(previousSeries2);
-        });
+       
     }
     init();
     $interval(init, 60000);

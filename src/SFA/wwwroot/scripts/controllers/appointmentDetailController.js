@@ -67,6 +67,11 @@
             churchServiceTimeService.getTimeByChurch($scope.appointment.churchId, $scope.weekday).then(function (resp) {
                 $scope.times = resp;
             });
+
+            if (typeof $scope.times == 'undefined') {
+                //$scope.times = $scope.appointment.eventTime
+            }
+         
         }
     };
 
@@ -260,7 +265,8 @@
         $scope.appointment = {};
         if (id !== null && id !== undefined && id !== '0') {
             appointmentService.get(id).then(function (resp) {
-                $scope.appointment = resp;               
+                $scope.appointment = resp;   
+        
 
                 if ($scope.appointment.churchId !== null && $scope.appointment.churchId !== undefined && $scope.appointment.churchId !== '0') {
 

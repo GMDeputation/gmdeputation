@@ -85,7 +85,7 @@ namespace SFA.Controllers
             TimeZoneInfo destinationTimeZone = TimeZoneInfo.FindSystemTimeZoneById(local.Id);
             foreach (Appointment appointment in appointments)
             {
-                appointment.EventDate = TimeZoneInfo.ConvertTimeFromUtc(appointment.EventDate, destinationTimeZone);
+                appointment.EventDate = appointment.EventDate;//TimeZoneInfo.ConvertTimeFromUtc(appointment.EventDate, destinationTimeZone);
             }
             return new JsonResult(await _appointmentService.Add(appointments, user.DataAccessCode, user.Id));
         }

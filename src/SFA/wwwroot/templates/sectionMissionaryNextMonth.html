@@ -1,0 +1,27 @@
+﻿<div ng-init="getSectionNextMonth()">
+    <table class="dashboard-table-4th">
+        <thead>
+            <tr>
+                <th colspan="9" style="text-align:center;color: #000;font-size: 1.5em;background-color: white;">Section Missionary Next Month</th>
+            </tr>
+            <tr class="center" style="text-align:center;">
+                <th>Name</th>
+                <th>Role Name</th>
+                <th>Email</th>
+                <th>Phone No</th>
+                <th>District Name</th>
+                <th>Section Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="center" style="text-align:center;" data-ng-repeat="item in sectionNextMonthDatas track by $index">
+                <td>{{item.name}}</td>
+                <td>{{item.roleName}}</td>
+                <td>{{item.email}}</td>
+                <td>{{item.phone}}</td>
+                <td>{{item.districtName}}</td>
+                <td>{{item.sectionName}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

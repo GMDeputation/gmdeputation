@@ -209,7 +209,7 @@ namespace SFA.Services.TimedJobs
 						string baseEncoded = Convert.ToBase64String(val.GetAsByteArray(), Base64FormattingOptions.None);
 						//for template 11
 						apiTemplateKey = "2d6f.32b15e784a472135.k1.af0d2570-9c04-11ed-9725-525400e3c1b1.185e49fa147";
-						 jsonString = "{'template_key':'" + apiTemplateKey + "','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'Troy'},'to': [{'email_address': {'address': '" + missionaryEmail + "','name': 'Missionary'}}],'attachments':[{'content': '"+baseEncoded + "','mime_type':'application/vnd','name':'Schedule.xls'}],'merge_info':{'district':'" + appointmentQuery[0].MacroScheduleDetail.District.Name + "','MissionaryFirstName':'" + missionaryFirstName + "','MissionaryLastName':'" + missionaryLastName + "'}}";
+						jsonString = "{'template_key':'" + apiTemplateKey + "','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'Troy'},'to': [{'email_address': {'address': '" + missionaryEmail + "','name': 'Missionary'}}],'attachments':[{'content': '"+baseEncoded + "','mime_type':'application/vnd','name':'Schedule.xls'}],'merge_info':{'district':'" + appointmentQuery[0].MacroScheduleDetail.District.Name + "','MissionaryFirstName':'" + missionaryFirstName + "','MissionaryLastName':'" + missionaryLastName + "'}}";
 
 
 						System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;

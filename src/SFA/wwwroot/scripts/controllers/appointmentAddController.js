@@ -138,7 +138,7 @@
         }
     };
     $scope.selectedChurchName = function ($item, index) {
-        $scope.appointments[index].churchId = $item !== null && $item !== undefined ? $item[index].id : 0;
+        $scope.appointments[index].churchId = $item !== null && $item !== undefined ? $item.id : 0;
 
         if ($scope.appointments[index].churchId !== null && $scope.appointments[index].churchId !== undefined && $scope.appointments[index].churchId !== 0) {
 
