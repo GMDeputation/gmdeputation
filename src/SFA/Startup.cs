@@ -26,6 +26,7 @@ namespace SFA
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
             HostingEnvironment = env;
+
         }
         public IWebHostEnvironment HostingEnvironment { get; }
         public IConfiguration Configuration { get; }
