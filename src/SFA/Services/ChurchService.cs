@@ -343,7 +343,7 @@ namespace SFA.Services
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return "Google API is down. Please reach out to IT Support";
+                return "Google API is down or Address is invalid. Address is " + addressToGeoCode + "  Please reach out to IT Support";
             }
 
 

@@ -154,7 +154,7 @@
 
                 <md-input-container class="md-block" flex>
                     <label>Home Phone</label>
-                    <input  id="phoneNumber"name="phone" [ng-model]="user.phone | number: '3-3-4'" required>
+                    <input  id="phoneNumber"name="phone" ng-model="user.phone" required>
                     <div ng-messages="form.phone.$error" md-auto-hide="false">
                         <div ng-message="required">User Phone is required</div>
                     </div>

@@ -480,6 +480,8 @@ namespace SFA.Services
                     userEntity.Lat = latitude == 0.0?null:latitude.ToString();
                     userEntity.Long = longitude == 0.0 ? null : longitude.ToString();
                     userEntity.Phone = user.Phone;
+                    userEntity.WorkPhoneNo = user.WorkPhoneNo;
+                    userEntity.TelePhoneNo = user.TelePhoneNo;
                     userEntity.Zipcode = user.Zipcode;
                     userEntity.SectionId = user.SectionId;
                     userEntity.DistrictId = user.DistrictId;
@@ -546,6 +548,8 @@ namespace SFA.Services
                     userEntity.Lat = latitude.ToString();
                     userEntity.Long = longitude.ToString();
                     userEntity.Phone = user.Phone;
+                    userEntity.WorkPhoneNo = user.WorkPhoneNo;
+                    userEntity.TelePhoneNo = user.TelePhoneNo;
                     userEntity.Zipcode = user.Zipcode;
                     userEntity.SectionId = user.SectionId;
                     userEntity.DistrictId = user.DistrictId;

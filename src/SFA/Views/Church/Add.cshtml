@@ -75,13 +75,13 @@
                 </md-input-container>
                 <md-input-container class="md-block" flex>
                     <label>Phone Number</label>
-                    <input ng-model="church.phone">
+                    <input ng-model="church.phone" id="phone">
                 </md-input-container>
             </div>
             <div layout="row" layout-xs="column">
                 <md-input-container class="md-block" flex>
                     <label>Alternative Phone Number</label>
-                    <input ng-model="church.phone2">
+                    <input ng-model="church.phone2" id="phone2">
                 </md-input-container>
                 <md-input-container class="md-block" flex>
                     <label>Email</label>
@@ -127,25 +127,5 @@
     <script src="~/scripts/controllers/churchAddController.js" asp-append-version="true"></script>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI"></script>
 
-        <script type="text/javascript">  
-        google.maps.event.addDomListener(window, 'load', function () {  
-            var options = {  
-                //types: ['(cities)'],  
-                componentRestrictions: { country: "us" }  
-            };  
-  
-            var input = document.getElementById('Address');  
-            var places = new google.maps.places.Autocomplete(input, options);  
-            if(places.value > 4)
-                document.getElementById('Address').value = places;
-
-            var input2 = document.getElementById('MailAddress');  
-            var places2 = new google.maps.places.Autocomplete(input2, options);  
-            if(places2.value > 4)
-                document.getElementById('MailAddress').value = places;
-
-        });  
-  
-</script> 
 }
 
