@@ -54,5 +54,21 @@ public class DashBoardController : Controller
 
 		return new JsonResult(result);
 	}
+
+	[Route("getServiceOneYearCount")]
+	public async Task<IActionResult> GetServiceOneYearCount()
+	{
+		var result = await _dashBoardService.GetServiceCountOneYear();
+
+		return new JsonResult(result);
+	}
+
+	[Route("getMacroScheduleThirtyDayCount")]
+	public async Task<IActionResult> GetMacroScheduleThirtyDayCount()
+	{
+		var result = await _dashBoardService.GetMacroScheduleDetailThirtyDayCount();
+
+		return new JsonResult(result);
+	}
 }
 

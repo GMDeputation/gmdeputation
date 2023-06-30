@@ -45,11 +45,32 @@ namespace SFA.Entities
 
         public DbSet<MacroScheduleDetailCount> MacroScheduleCounts { get; set; }
 
+        public DbSet<MacroScheduleDetailThirtyDayCount> MacroScheduleDetailThirtyDayCount { get; set; }
+
+        public DbSet<ServiceCountOneYear> ServiceCountOneYear { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ServiceCountOneYear>(entity =>
 
+            {
 
-modelBuilder.Entity<MacroScheduleDetailCount>(entity =>
+                entity.HasNoKey();
+
+                entity.ToView("TotalServicesLastYear");
+
+            });
+
+            modelBuilder.Entity<MacroScheduleDetailThirtyDayCount>(entity =>
+
+            {
+
+                entity.HasNoKey();
+
+                entity.ToView("MacroScheduleDeatailsNextThirtyDays");
+
+            });
+
+            modelBuilder.Entity<MacroScheduleDetailCount>(entity =>
 
 {
 
