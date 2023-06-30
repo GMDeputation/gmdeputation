@@ -2,7 +2,7 @@
     ViewData["Title"] = "Home";
 }
 
-<md-card>
+<div data-ng-controller="DashBoardController">
     <div class="state-overview">
         <div class="row">
 
@@ -11,14 +11,12 @@
                     <span class="info-box-icon push-bottom"><i class="material-icons">shopping_cart</i></span>
                     <div class="info-box-content">
                         <span class="info-box-text">Unscheduled Services</span>
+                        <span class="progress-description" ng-model="macSched.macro_wo_services">
+                        </span>
+                        <span class="progress-description" ng-model="macSched.macro_lt5_services">
+                        </span>
                         <span class="progress-description">
-                            2: Sun
-                        </span>
-                                                <span class="progress-description">
-                            1: Weekday
-                        </span>
-                                                <span class="progress-description">
-                            2: Offering Only
+                        
                         </span>
                     </div>
                     <!-- /.info-box-content -->
@@ -109,6 +107,7 @@
                 </div>
                 <!-- /.info-box -->
             </div>
+        </div>
     </div>
 
     <div class="row">
@@ -164,7 +163,7 @@
         </div>
 
     </div>
-</md-card>
+</div>
 
 @section Styles{
     <link rel="stylesheet" href="~/styles/bootstrap.min.css" />
@@ -183,6 +182,10 @@
     <script src="~/libs/Chart.min.js"></script>
     <script src="~/libs/angular-chart.min.js"></script>
     <script src="~/libs/angularResource.js"></script>
+
+    <script src="~/scripts/services/dashboardService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/dashboardController.js" asp-append-version="true"></script>
+
 }
 <script>
     let myChart = document.getElementById('chartjs_pie')
