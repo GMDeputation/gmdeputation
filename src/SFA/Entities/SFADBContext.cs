@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using SFA.Models;
 
 namespace SFA.Entities
 {
@@ -42,6 +43,7 @@ namespace SFA.Entities
         public virtual DbSet<TblUserNta> TblUserNta { get; set; }
         public virtual DbSet<TblUserPasswordNta> TblUserPasswordNta { get; set; }
 
+        public DbSet<MacroScheduleDetailCount> MacroScheduleCounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -85,9 +85,13 @@
                     <md-tooltip>Reject</md-tooltip>
                     <i class="ti-close"></i> Reject
                 </md-button>
-                <md-button class="cancel-btn" aria-label="Cancel" data-ng-click="backToList()">
+                <md-button class="cancel-btn" aria-label="Cancel" ng-if="!macroScheduleDetails.isApproved" data-ng-click="backToList()">
                     <md-tooltip>Cancel</md-tooltip>
                     <i class="fas fa-reply"></i> Cancel
+                </md-button>
+                 <md-button class="cancel-btn" aria-label="Cancel Service" data-ng-click="openDialog()" ng-if="macroScheduleDetails.isApproved">
+                    <md-tooltip>Cancel Macro Schedule</md-tooltip>
+                    <i class="fas fa-reply"></i> Cancel Macro Schedle
                 </md-button>
             </div>
         </div>

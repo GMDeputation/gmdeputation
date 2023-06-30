@@ -66,6 +66,18 @@ namespace SFA.Entities
         [Column("OFFERING_ONLY")]
         public bool OfferingOnly { get; set; }
 
+        [Column("IsCanceled")]
+        public bool IsCanceled { get; set; }
+
+        public int? IsCanceledBy { get; set; }
+        
+
+        [Column("Cancellation_DateTime", TypeName = "datetime")]
+        public DateTime? Cancellation_DateTime { get; set; }
+
+        [StringLength(250)]
+        public string Cancellation_Notes { get; set; }
+
         public TblUserNta AcceptByPastorByNavigation { get; set; }
         public TblUserNta AcceptMissionaryByNavigation { get; set; }
         public TblChurchNta Church { get; set; }

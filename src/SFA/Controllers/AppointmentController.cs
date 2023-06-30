@@ -75,7 +75,17 @@ namespace SFA.Controllers
             var appointment = await _appointmentService.GetById(id, loggedinUser.DataAccessCode);
             return new JsonResult(appointment);
         }
+        [HttpPost]
+        [Route("cancel")]
+        public async Task<IActionResult> Cancel([FromBody] Appointment appointment)
+        {
+            var loggedinUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");
 
+            var result = await _appointmentService.Cancel(appointment, loggedinUser);
+
+            return new JsonResult(result);
+
+        }
         [HttpPost]
         [Route("add")]
         public async Task<IActionResult> Add([FromBody] List<Appointment> appointments)

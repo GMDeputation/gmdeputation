@@ -144,9 +144,13 @@
                     <md-tooltip>Accept</md-tooltip>
                     <i class="far fa-save"></i> Accept
                 </md-button>
-                <md-button class="cancel-btn" aria-label="Cancel" data-ng-click="backToList()">
+                <md-button class="cancel-btn" aria-label="Cancel" data-ng-click="backToList()" ng-if="!appointment.status.includes('Accepted')">
                     <md-tooltip>Cancel</md-tooltip>
                     <i class="fas fa-reply"></i> Cancel
+                </md-button>
+                 <md-button class="cancel-btn" aria-label="Cancel Service" data-ng-click="openDialog()" ng-if="appointment.status.includes('Accepted')">
+                    <md-tooltip>Cancel Service</md-tooltip>
+                    <i class="fas fa-reply"></i> Cancel Service
                 </md-button>
             </div>
         </div>

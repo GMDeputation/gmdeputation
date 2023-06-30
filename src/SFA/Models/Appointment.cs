@@ -45,6 +45,11 @@ namespace SFA.Models
         public string UpdateUser { get; set; }
         public DateTime? InsertDatetime { get; set; }
         public DateTime? UpdateDatetime { get; set; }
+
+        public bool IsCanceled { get; set; }
+        public int? IsCanceledBy { get; set; }
+        public string Cancellation_Notes { get; set; }
+        public DateTime? Cancellation_DateTime { get; set; }
     }
 
     public class AppointmentQuery : Query

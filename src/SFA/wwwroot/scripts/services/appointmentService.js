@@ -65,4 +65,9 @@
             return resp.data;
         });
     };
+    this.cancel = function (data) {
+        return $http.post('/appointments/cancel', data).then(function (resp) {
+            return resp.data;
+        });
+    };
 });

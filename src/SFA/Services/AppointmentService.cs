@@ -15,6 +15,7 @@ namespace SFA.Services
         Task<Appointment> GetById(int id, string accessCode);
         Task<QueryResult<Appointment>> Search(AppointmentQuery query, string accessCode, int userId);
         Task<string> Save(Appointment appointment, User loggedinUser);
+        Task<string> Cancel(Appointment appointment, User loggedinUser);
         Task<string> SubmitAppointment(Appointment appointment);
         Task<string> ApproveAppointmentByPator(Appointment appointment);
         Task<string> ForwardAppointmentForMissionary(Appointment appointment);
@@ -74,8 +75,10 @@ namespace SFA.Services
                 IsAcceptMissionary = m.IsAcceptMissionary,
                 IsForwardForMissionary = m.IsForwardForMissionary,
                 MissionaryUser = m.MacroScheduleDetail?.User?.FirstName + " " + m.MacroScheduleDetail?.User?.MiddleName + " " + m.MacroScheduleDetail?.User?.LastName,
-
-                Status = m.IsAcceptMissionary ? "Accepted by Missionary" : m.IsAcceptByPastor ? "Accepted by Pastor" : m.IsSubmit ? "Submitted" : "Initiated"
+                IsCanceled = m.IsCanceled,
+                Cancellation_DateTime = m.Cancellation_DateTime,
+                Cancellation_Notes = m.Cancellation_Notes,
+                Status = m.IsCanceled ? "Canceled" : m.IsAcceptMissionary ? "Accepted by Missionary" : m.IsAcceptByPastor ? "Accepted by Pastor" : m.IsSubmit ? "Submitted" : "Initiated"
             }).ToList();
         }
 
@@ -100,7 +103,11 @@ namespace SFA.Services
                 IsAcceptMissionary = appointmentEntity.IsAcceptMissionary,
                 AcceptByPastorRemarks = appointmentEntity.AcceptByPastorRemarks,
                 AcceptMissionaryRemarks = appointmentEntity.AcceptMissionaryRemarks,
-                AccessCode = accessCode
+                AccessCode = accessCode,
+                IsCanceled = appointmentEntity.IsCanceled,
+                Cancellation_DateTime = appointmentEntity.Cancellation_DateTime,
+                Cancellation_Notes = appointmentEntity.Cancellation_Notes,
+                Status = appointmentEntity.IsCanceled ? "Canceled" : appointmentEntity.IsAcceptMissionary ? "Accepted by Missionary" : appointmentEntity.IsAcceptByPastor ? "Accepted by Pastor" : appointmentEntity.IsSubmit ? "Submitted" : "Initiated"
             };
         }
 
@@ -198,7 +205,10 @@ namespace SFA.Services
                     TimeString = m.EventTime.ToString().Substring(0, 5),
                     MissionaryUser = m.MacroScheduleDetail?.User?.FirstName + " " + m.MacroScheduleDetail?.User?.MiddleName + " " + m.MacroScheduleDetail?.User?.LastName,
                     AccessCode = accessCode,
-                    Status = m.IsAcceptMissionary ? "Accepted by Missionary" + " (" + m.AcceptMissionaryByNavigation?.FirstName + " " + m.AcceptMissionaryByNavigation?.MiddleName + " " + m.AcceptMissionaryByNavigation?.LastName + ")"
+                    IsCanceled = m.IsCanceled,
+                    Cancellation_DateTime = m.Cancellation_DateTime,
+                    Cancellation_Notes = m.Cancellation_Notes,
+                    Status = m.IsCanceled ? "Canceled" : m.IsAcceptMissionary ? "Accepted by Missionary" + " (" + m.AcceptMissionaryByNavigation?.FirstName + " " + m.AcceptMissionaryByNavigation?.MiddleName + " " + m.AcceptMissionaryByNavigation?.LastName + ")"
                              : m.IsAcceptByPastor ? "Accepted by Pastor" + " (" + m.AcceptByPastorByNavigation?.FirstName +" "+m.AcceptByPastorByNavigation?.MiddleName +" "+ m.AcceptByPastorByNavigation?.LastName + ")" : m.IsSubmit ? "Submitted" : "Initiated"
                 }).ToList();
 
@@ -317,6 +327,26 @@ namespace SFA.Services
             {
                 throw ex;
             }
+        }
+        public async Task<string> Cancel(Appointment appointment, User loggedinUser)
+        {
+            var appointmentEntity = await _context.TblAppointmentNta.Include(m => m.Church).FirstOrDefaultAsync(m => m.Id == appointment.Id);
+
+            appointmentEntity.IsCanceled = true;
+            appointmentEntity.Cancellation_DateTime = DateTime.Now;
+            appointmentEntity.Cancellation_Notes = appointment.Cancellation_Notes;
+            appointmentEntity.IsCanceledBy = loggedinUser.Id;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                return "";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+         
         }
 
         public async Task<string> Save(Appointment appointment, User loggedinUser)

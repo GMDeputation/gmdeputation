@@ -50,6 +50,18 @@ namespace SFA.Entities
         public TblMacroScheduleNta MacroSchedule { get; set; }
         [ForeignKey("UserId")]
         [InverseProperty("TblMacroScheduleDetailsNtaUser")]
+
+        [Column("IsCanceled")]
+        public bool IsCanceled { get; set; }
+
+        public int? IsCanceledBy { get; set; }
+
+
+        [Column("Cancellation_DateTime", TypeName = "datetime")]
+        public DateTime? Cancellation_DateTime { get; set; }
+
+        [StringLength(250)]
+        public string Cancellation_Notes { get; set; }
         public TblUserNta User { get; set; }
         public string Reason { get; set; }
         public TblDistrictNta District { get; set; }

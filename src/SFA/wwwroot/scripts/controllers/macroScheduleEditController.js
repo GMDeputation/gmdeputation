@@ -22,6 +22,25 @@
 
         return $scope.district;
     };
+
+    $scope.openDialog = function () {
+        $mdDialog.show(
+            $mdDialog.prompt()
+                .clickOutsideToClose(false)
+                .title('Cancellation Confirmation')
+                .textContent('Are you sure you want to cancel?')
+                .ariaLabel('Alert Dialog')
+                .placeholder("Reason for cancelling")
+                .ok('OK')
+                .cancel("Cancel")
+        ).then(function (result) {
+            $scope.macroScheduleDetails.Cancellation_Notes = result
+            macroScheduleService.cancel($scope.macroScheduleDetails);
+            $window.location.href = '/macroSchedule';
+        });
+
+    };
+
     $scope.selectedDistrictName = function ($item) {
         $scope.macroScheduleDetails.districtId = $item !== null && $item !== undefined ? $item.id : '0';
 

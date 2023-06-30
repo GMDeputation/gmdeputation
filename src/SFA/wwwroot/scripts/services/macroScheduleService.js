@@ -63,4 +63,10 @@
             return resp;
         });
     };
+
+    this.cancel = async function (data) {
+        return await $http.post('/macroSchedule/cancel', data).then(function (resp) {
+            return resp.data;
+        });
+    };
 });

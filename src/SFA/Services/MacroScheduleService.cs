@@ -18,6 +18,7 @@ namespace SFA.Services
         Task<MacroScheduleDetails> GetMacroScheduleDetailsById(int id, string accesscode);
         Task<string> Approved(MacroScheduleDetails macroScheduleDetails, int userId);
         Task<string> Rejected(MacroScheduleDetails macroScheduleDetails, int userId);
+        Task<string> Cancel(MacroScheduleDetails macroScheduleDetails, int userId);
         Task<string> ApprovedMacroSchedulesIds(List<int>  selectSchedule, int userId);
         Task<string> RejectMacroSchedulesIds(List<int>  selectSchedule, int userId);
 
@@ -30,6 +31,43 @@ namespace SFA.Services
         public MacroScheduleService(SFADBContext context)
         {
             _context = context;
+        }
+
+        public async Task<string> Cancel(MacroScheduleDetails macroScheduleDetails, int loggedinUser)
+        {
+           
+            var macroScheduleDetailsEntity = await _context.TblMacroScheduleDetailsNta.FirstOrDefaultAsync(m => m.Id == macroScheduleDetails.Id);
+
+
+
+            var macroScheduleDetailsAppointmentsEntity = await _context.TblAppointmentNta.Where(m => m.MacroScheduleDetailId == macroScheduleDetails.Id).ToListAsync();
+           
+            macroScheduleDetailsEntity.IsCanceled = true;
+            macroScheduleDetailsEntity.Cancellation_DateTime = DateTime.Now;
+            macroScheduleDetailsEntity.Cancellation_Notes = macroScheduleDetails.Cancellation_Notes;
+            macroScheduleDetailsEntity.IsCanceledBy = loggedinUser;
+
+            //This is going through all the appointments that are tied to the macro schedule and
+            //Cancelling them as well.
+            foreach (var item in macroScheduleDetailsAppointmentsEntity)
+            {
+                item.IsCanceled = true;
+                item.Cancellation_DateTime = DateTime.Now;
+                item.Cancellation_Notes = macroScheduleDetails.Cancellation_Notes;
+                item.IsCanceledBy = loggedinUser;
+            }
+
+                try
+            {
+                await _context.SaveChangesAsync();
+
+
+                return "";
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<List<MacroScheduleDetails>> GetAll(string dataAccessCode,int userId)
@@ -60,7 +98,7 @@ namespace SFA.Services
                 IsApproved = m.IsApproved,
                 IsRejected = m.IsRejected,
                 Notes = m.Notes,
-                Status = m.IsApproved ? "Approved" : m.IsRejected ? "Rejected" : "Initiate",
+                Status = m.IsCanceled ? "Canceled" : m.IsApproved ? "Approved" : m.IsRejected ? "Rejected" : "Initiate",
                 AccessCode = dataAccessCode
             }).ToList();
         }
@@ -152,7 +190,7 @@ namespace SFA.Services
                 IsApproved = n.IsApproved,
                 IsRejected = n.IsRejected,
                 Notes = n.Notes,
-                Status = n.IsApproved ? "Approved" : n.IsRejected ? "Rejected" : "Initiate",
+                Status = n.IsCanceled ? "Canceled" : n.IsApproved ? "Approved" : n.IsRejected ? "Rejected" : "Initiate",
 
                 IsDateOver = n.EndDate.Date < DateTime.Now.Date ? true : false
             }).ToList();
@@ -243,7 +281,7 @@ namespace SFA.Services
                     IsApproved = n.IsApproved,
                     IsRejected = n.IsRejected,
                     Notes = n.Notes,
-                    Status = n.IsApproved ? "Approved" : n.IsRejected ? "Rejected" : "Initiate",
+                    Status = n.IsCanceled ? "Canceled" : n.IsApproved ? "Approved" : n.IsRejected ? "Rejected" : "Initiate",
                     AccessCode = userEntity?.Role?.DataAccessCode,
                     EntryDate = n.MacroSchedule.EntryDate,
                     ApprovedRejectUser = n.ApprovedRejectBy != null ? n.ApprovedRejectByNavigation?.FirstName + " " + n.ApprovedRejectByNavigation?.MiddleName + " " + n.ApprovedRejectByNavigation?.LastName + " (" + n.ApprovedRejectByNavigation?.Role.Name + ")" : null

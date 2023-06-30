@@ -42,7 +42,11 @@ namespace SFA.Models
         public bool IsDateOver { get; set; }
 
         public DateTime EntryDate { get; set; }
-        public string ApprovedRejectUser { get; set; } 
+        public string ApprovedRejectUser { get; set; }
+        public bool IsCanceled { get; set; }
+        public int? IsCanceledBy { get; set; }
+        public string Cancellation_Notes { get; set; }
+        public DateTime? Cancellation_DateTime { get; set; }
     }
 
     public class MacroScheduleQuery : Query

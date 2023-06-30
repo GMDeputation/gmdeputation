@@ -203,6 +203,17 @@ namespace SFA.Controllers
             var macroSchedule = await _macroScheduleService.Rejected(macroScheduleDetails, loggedinUser.Id);
             return new JsonResult(macroSchedule);
         }
+        [HttpPost]
+        [Route("cancel")]
+        public async Task<IActionResult> Cancel([FromBody] MacroScheduleDetails macroScheduleDetails)
+        {
+            var loggedinUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");
+
+            var result = await _macroScheduleService.Cancel(macroScheduleDetails, loggedinUser.Id);
+
+            return new JsonResult(result);
+
+        }
 
         [HttpPost]
         [Route("approvedMacroSchedulesIds")]

@@ -34,6 +34,10 @@ namespace SFA.Services
 
         static string EmatilToHQTwoWeekOut = "2d6f.32b15e784a472135.k1.af0d2570-9c04-11ed-9725-525400e3c1b1.185e49fa147";
 
+        static string EmailForMacroScheduleCancel = "2d6f.32b15e784a472135.k1.fb1565d0-9c00-11ed-9725-525400e3c1b1.185e4875cad";
+
+        static string EmailForAppointCancel = "2d6f.32b15e784a472135.k1.de4db970-9d9f-11ed-ab84-525400e3c1b1.185ef265e87";
+
         private readonly SFADBContext _context = null;
 
         //Templates 1,1a,1b,1c
@@ -359,6 +363,168 @@ namespace SFA.Services
             //for template 11
             apiTemplateKey = EmatilToHQTwoWeekOut;
            // jsonString = "{'template_key':'" + apiTemplateKey + "','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'Troy'},'to': [{'email_address': {'address': '" + missionaryEmail + "','name': 'Missionary'}}],'merge_info':{'district':'" + district + "','MissionaryFirstName':'" + missionaryFirstName + "','MissionaryLastName':'" + missionaryLastName + "','PastorFirstName':'" + pastorFirstName + "','PastorLastName':'" + pastorLastName + "','ChurchCity':'" + churchCity + "','TypeOfEvent':'" + TypeOfEvent + "','DayOfWeek':'" + DayOfWeek + "','EventTime':'" + EventTime + "','PastorMobile':'" + PastorMobile + "','PastorEmail':'" + PastorEmail + "','ChurchName':'" + churchName + "','Churchaddress':'" + Churchaddress + "','ChurchPhone':'" + ChurchPhone + "','SpecialPastorText':'" + SpecialPastorText + "','UserSalutation':'" + UserSalutation + "','DGMDFirstName':'" + DGMDFirstName + "','DGMDLastName':'" + DGMDLastName + "','DGMDPrimaryPhone':'" + DGMDPrimaryPhone + "','DGMDEmail':'" + DGMDemail + "','DistrictWebsite':'" + districtWebsite + "'}}";
+
+
+
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            var baseAddress = "https://api.zeptomail.com/v1.1/email/template";
+
+            var http = (HttpWebRequest)WebRequest.Create(new Uri(baseAddress));
+            http.Accept = "application/json";
+            http.ContentType = "application/json";
+            http.Method = "POST";
+            http.PreAuthenticate = true;
+            http.Headers.Add("Authorization", "Zoho-enczapikey wSsVR60irB74DaZ+zzL/Lu5umg5RA1ugE0R6jVWiuXH6HvvD98c9wkKcUVOlFPAaEzNqEjdGo7krzUxR2jVa24t+ng5WCyiF9mqRe1U4J3x17qnvhDzKWW9alxONJY4MzgtukmdpEMgn+g==");
+
+            JObject parsedContent = null;
+            try
+            {
+                parsedContent = JObject.Parse(jsonString);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            Console.WriteLine(parsedContent.ToString());
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            Byte[] bytes = encoding.GetBytes(parsedContent.ToString());
+
+            Stream newStream = http.GetRequestStream();
+            newStream.Write(bytes, 0, bytes.Length);
+            newStream.Close();
+            try
+            {
+                var response = http.GetResponse();
+                var stream = response.GetResponseStream();
+                var sr = new StreamReader(stream);
+                var content = sr.ReadToEnd();
+                Console.WriteLine(content);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+
+        }
+        //Template 17
+        //This is called from Program.cs in the main class. Called once a day and returns all schedules that are two weeks away exactly to the email template
+        //As an excel file. 
+        public void SendEmailForCancelledAppointments(object source, ElapsedEventArgs e)
+        {
+            //TODO NEED TO FIND OUT HOW TO GET THESE DETAILS
+            //{ { district} }
+            //{ { MissionaryFirstName} }
+            //{ { MissionaryLastName} }
+            //{ { UserSalutation} }
+            //{ { PastorFirstName} }
+            //{ { PastorLastName} }
+            //{ { DGMDFirstName} }
+            //{ { DGMDLastName} }
+            //{ { DayOfWeek} }
+            //{ { EventDate} }
+            //{ { MissionaryCountry} }
+            //{ { ChurchName} }
+            //{ { DGMDMobile} }
+            //{ { DGMDEmail} }
+            //{ { DistrictWebsite} }
+            //{ { DGMDPrimaryPhone} }
+
+            DateTime currentTim = DateTime.Now;
+            //Linq Query Right now looking at everything greater than two weeks. When we go liev >= need to just be == Wre are just doing this for testing. 
+            var appointmentQuery = _context.TblAppointmentNta.Where(s => s.EventDate >= currentTim.AddDays(-14)).Include(m => m.Church).ThenInclude(m => m.District).ThenInclude(m => m.TblUserNta)
+                       .Include(m => m.AcceptByPastorByNavigation).Include(m => m.MacroScheduleDetail).ThenInclude(m => m.MacroSchedule)
+                       .Include(m => m.MacroScheduleDetail).ThenInclude(m => m.District).Include(m => m.AcceptMissionaryByNavigation).Include(m => m.MacroScheduleDetail)
+                      .ThenInclude(m => m.User).AsNoTracking().AsQueryable();
+
+            string districtWebsite = "https://gmdeputation.com/";
+
+            string jsonString = "";
+            string apiTemplateKey = "";
+
+            //for template 17
+            apiTemplateKey = EmailForAppointCancel;
+            // jsonString = "{'template_key':'" + apiTemplateKey + "','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'Troy'},'to': [{'email_address': {'address': '" + missionaryEmail + "','name': 'Missionary'}}],'merge_info':{'district':'" + district + "','MissionaryFirstName':'" + missionaryFirstName + "','MissionaryLastName':'" + missionaryLastName + "','PastorFirstName':'" + pastorFirstName + "','PastorLastName':'" + pastorLastName + "','TypeOfEvent':'" + TypeOfEvent + "','DayOfWeek':'" + DayOfWeek + "','EventTime':'" + EventTime + "','PastorMobile':'" + PastorMobile + "','PastorEmail':'" + PastorEmail + "','ChurchName':'" + churchName + "','Churchaddress':'" + Churchaddress + "','ChurchPhone':'" + ChurchPhone + "','SpecialPastorText':'" + SpecialPastorText + "','UserSalutation':'" + UserSalutation + "','DGMDFirstName':'" + DGMDFirstName + "','DGMDLastName':'" + DGMDLastName + "','DGMDPrimaryPhone':'" + DGMDPrimaryPhone + "','DGMDEmail':'" + DGMDemail + "','DistrictWebsite':'" + districtWebsite + "'}}";
+
+
+
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            var baseAddress = "https://api.zeptomail.com/v1.1/email/template";
+
+            var http = (HttpWebRequest)WebRequest.Create(new Uri(baseAddress));
+            http.Accept = "application/json";
+            http.ContentType = "application/json";
+            http.Method = "POST";
+            http.PreAuthenticate = true;
+            http.Headers.Add("Authorization", "Zoho-enczapikey wSsVR60irB74DaZ+zzL/Lu5umg5RA1ugE0R6jVWiuXH6HvvD98c9wkKcUVOlFPAaEzNqEjdGo7krzUxR2jVa24t+ng5WCyiF9mqRe1U4J3x17qnvhDzKWW9alxONJY4MzgtukmdpEMgn+g==");
+
+            JObject parsedContent = null;
+            try
+            {
+                parsedContent = JObject.Parse(jsonString);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            Console.WriteLine(parsedContent.ToString());
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            Byte[] bytes = encoding.GetBytes(parsedContent.ToString());
+
+            Stream newStream = http.GetRequestStream();
+            newStream.Write(bytes, 0, bytes.Length);
+            newStream.Close();
+            try
+            {
+                var response = http.GetResponse();
+                var stream = response.GetResponseStream();
+                var sr = new StreamReader(stream);
+                var content = sr.ReadToEnd();
+                Console.WriteLine(content);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        //Template 3
+        //This is called from Program.cs in the main class. Called once a day and returns all schedules that are two weeks away exactly to the email template
+        //As an excel file. 
+        public void SendEmailForCancelledMacroSchedule(object source, ElapsedEventArgs e)
+        {
+            // TODO: FIND OUT HOW TO GET THESE DETAILS
+            //{ { district} }
+            //{ { MssionaryFirstName} }
+            //{ { MissionaryLastName} }
+            //{ { UserSalutation} }
+            //{ { DGMDLastName} }
+            //{ { start date} }
+            //{ { EndDate} }
+            //{ { status} }
+            //{ { ReasonText} }
+            //{ { DGMDEmail} }
+            //{ { DistrictWebsite} }
+            //{ { DGMDPrimaryPhone} }
+
+            DateTime currentTim = DateTime.Now;
+            //Linq Query Right now looking at everything greater than two weeks. When we go liev >= need to just be == Wre are just doing this for testing. 
+            var appointmentQuery = _context.TblAppointmentNta.Where(s => s.EventDate >= currentTim.AddDays(-14)).Include(m => m.Church).ThenInclude(m => m.District).ThenInclude(m => m.TblUserNta)
+                       .Include(m => m.AcceptByPastorByNavigation).Include(m => m.MacroScheduleDetail).ThenInclude(m => m.MacroSchedule)
+                       .Include(m => m.MacroScheduleDetail).ThenInclude(m => m.District).Include(m => m.AcceptMissionaryByNavigation).Include(m => m.MacroScheduleDetail)
+                      .ThenInclude(m => m.User).AsNoTracking().AsQueryable();
+
+            string districtWebsite = "https://gmdeputation.com/";
+
+
+            string jsonString = "";
+            string apiTemplateKey = "";
+
+            //for template 3
+            apiTemplateKey = EmailForMacroScheduleCancel;
+            // jsonString = "{'template_key':'" + apiTemplateKey + "','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'Troy'},'to': [{'email_address': {'address': '" + missionaryEmail + "','name': 'Missionary'}}],'merge_info':{'district':'" + district + "','MissionaryFirstName':'" + missionaryFirstName + "','MissionaryLastName':'" + missionaryLastName + "','PastorFirstName':'" + pastorFirstName + "','PastorLastName':'" + pastorLastName + "','ChurchCity':'" + churchCity + "','TypeOfEvent':'" + TypeOfEvent + "','DayOfWeek':'" + DayOfWeek + "','EventTime':'" + EventTime + "','PastorMobile':'" + PastorMobile + "','PastorEmail':'" + PastorEmail + "','ChurchName':'" + churchName + "','Churchaddress':'" + Churchaddress + "','ChurchPhone':'" + ChurchPhone + "','SpecialPastorText':'" + SpecialPastorText + "','UserSalutation':'" + UserSalutation + "','DGMDFirstName':'" + DGMDFirstName + "','DGMDLastName':'" + DGMDLastName + "','DGMDPrimaryPhone':'" + DGMDPrimaryPhone + "','DGMDEmail':'" + DGMDemail + "','DistrictWebsite':'" + districtWebsite + "'}}";
 
 
 
