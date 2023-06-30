@@ -7,16 +7,21 @@
         <div class="row">
 
             <div class="col-xl-4 col-md-6 col-12">
-                <div class="info-box bg-b-orange">
+                <div class="info-box bg-b-blue">
                     <span class="info-box-icon push-bottom"><i class="material-icons">shopping_cart</i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">Unscheduled Services</span>
-                        <span class="progress-description" ng-model="macSched.macro_wo_services">
-                        </span>
-                        <span class="progress-description" ng-model="macSched.macro_lt5_services">
+                        <span class="info-box-text" style="font-weight:600;font-size: 18px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
+                            Unscheduled Services
                         </span>
                         <span class="progress-description">
-                        
+                            <span style="font-weight:500;font-size: 14px;display:block;" class="ng-binding">
+                                Total without Services: {{macros[0].macro_lt5_services}}
+                            </span>
+                        </span>
+                        <span class="progress-description">
+                            <span style="font-weight:500; font-size:14px;display:block;">
+                                Total with <= 5 Services: {{macros[0].macro_lt5_services}}
+                            </span>
                         </span>
                     </div>
                     <!-- /.info-box-content -->
@@ -25,16 +30,21 @@
             </div>
             <!-- /.col -->
             <div class="col-xl-4 col-md-6 col-12">
-                <div class="info-box bg-b-purple">
+                <div class="info-box bg-b-black">
                     <span class="info-box-icon push-bottom"><i class="material-icons">redeem</i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">Upcoming (1 Mo.) Missionaries – Qty</span>
-                        <span class="info-box-number">155</span>
-                        <div class="progress">
-                            <div class="progress-bar" style="width: 40%"></div>
-                        </div>
+                        <span class="info-box-text" style="font-weight:600;font-size: 18px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
+                            Upcoming Missionaries
+                        </span>
+                        <span class="info-box-number">
+                            <span style="font-weight:500; font-size:14px;display:block;">
+                                Upcoming within 30-days: {{upcoming[0].upcoming_mac_sched}}
+                            </span>
+                        </span>
                         <span class="progress-description">
-                            40% Increase in 28 Days
+                            <span style="font-weight:500; font-size:14px;display:block;">
+                                Associated Appointments: {{upcoming[0].upcoming_services}}
+                            </span>
                         </span>
                     </div>
                     <!-- /.info-box-content -->
@@ -43,16 +53,21 @@
             </div>
             <!-- /.col -->
             <div class="col-xl-4 col-md-6 col-12">
-                <div class="info-box bg-b-cyan">
+                <div class="info-box bg-b-danger">
                     <span class="info-box-icon push-bottom"><i class="material-icons">group</i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">Churches with Accommodations</span>
-                        <span class="info-box-number">52</span>
-                        <div class="progress">
-                            <div class="progress-bar" style="width: 85%"></div>
-                        </div>
+                        <span class="info-box-text" style="font-weight:600;font-size: 18px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
+                            Churches with EQs
+                        </span>
+                        <span class="info-box-number">
+                            <span style="font-weight:500; font-size:14px;display:block;">
+                                Upcoming within 30-days: {{upcoming[0].upcoming_mac_sched}}
+                            </span>
+                        </span>
                         <span class="progress-description">
-                            85% Increase in 28 Days
+                            <span style="font-weight:500; font-size:14px;display:block;">
+                                Associated Appointments: {{upcoming[0].upcoming_services}}
+                            </span>
                         </span>
                     </div>
                     <!-- /.info-box-content -->
@@ -65,16 +80,21 @@
     <div class="state-overview">
         <div class="row">
             <div class="col-xl-4 col-md-6 col-12">
-                <div class="info-box bg-b-orange">
+                <div class="info-box bg-b-blue">
                     <span class="info-box-icon push-bottom"><i class="material-icons">shopping_cart</i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">Total Services</span>
-                        <span class="info-box-number">450</span>
-                        <div class="progress">
-                            <div class="progress-bar" style="width: 45%"></div>
-                        </div>
-                        <span class="progress-description">
-                            45% Increase in 28 Days
+                        <span class="info-box-text" style="font-weight:600;font-size: 18px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
+                            Total Services
+                        </span>
+                        <span class="info-box-number">
+                            <span style="font-weight:500; font-size:14px;display:block;">
+                                Last 365 Days: {{services[0].cy_tot_services}} ({{services[0].pct_yoy}})
+                            </span>
+                        </span>
+                        <span class="info-box-number">
+                            <span style="font-weight:500; font-size:14px;display:block;">
+                                Previous 365 Days: {{services[0].py_tot_services}}
+                            </span>
                         </span>
                     </div>
                     <!-- /.info-box-content -->
@@ -83,11 +103,25 @@
             </div>
             <!-- /.col -->
             <div class="col-xl-4 col-md-6 col-12">
-                <div class="info-box bg-b-purple">
+                <div class="info-box bg-b-black">
                     <span class="info-box-icon push-bottom"><i class="material-icons">redeem</i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">Pastors with no Missionary Services </span>
-                        <span class="info-box-number">10</span>                        
+                        <span class="info-box-text">
+                            <span class="info-box-text" style="font-weight:600;font-size: 18px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
+                                Pastors without Missionary Services
+                            </span>
+                        </span>
+                        <span class="info-box-number">
+                            <span style="font-weight:500; font-size:14px;display:block;">
+                                Churches without Appointments: ---
+                            </span>
+                        </span>
+                        <br />
+                        <span class="info-box-number">
+                            <span style="font-weight:500; font-size:14px;display:block;">
+
+                            </span>
+                        </span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -95,13 +129,25 @@
             </div>
             <!-- /.col -->
             <div class="col-xl-4 col-md-6 col-12">
-                <div class="info-box bg-b-cyan">
+                <div class="info-box bg-b-danger">
                     <span class="info-box-icon push-bottom"><i class="material-icons">group</i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">I AM Global (DistrictName)</span>
-                        <span class="progress-description">52% Churches Participating</span>
-                         <span class="progress-description">$1,000 Amount</span>
-                         <span class="progress-description">98% of last year</span>
+                        <span class="info-box-text">
+                            <span class="info-box-text" style="font-weight:600;font-size: 18px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
+                                I AM Global (DistrictName)
+                            </span>
+                        </span>
+                        <span class="info-box-number">
+                            <span style="font-weight:500; font-size:14px;display:block;">
+
+                            </span>
+                        </span>
+                        <br />
+                        <span class="info-box-number">
+                            <span style="font-weight:500; font-size:14px;display:block;">
+
+                            </span>
+                        </span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -144,7 +190,7 @@
                     </div>
                 </div>
             </div>
-                        <div class="card card-box">
+            <div class="card card-box">
                 <div class="card-head">
                     <header>Chart Survey</header>
                     <div class="tools">
@@ -169,15 +215,14 @@
     <link rel="stylesheet" href="~/styles/bootstrap.min.css" />
     <link rel="stylesheet" href="~/styles/material-icon.css" />
     <link rel="stylesheet" href="~/styles/Dashboard/style.css" />
-}
 
+}
 @section Scripts{
     <script src="~/lib/jquery.min.js"></script>
     <script src="~/lib/bootstrap.min.js"></script>
     <script src="~/lib/Chart.bundle.js"></script>
     <script src="~/lib/utils.js"></script>
     <script src="~/lib/home-data.js"></script>
-
 
     <script src="~/libs/Chart.min.js"></script>
     <script src="~/libs/angular-chart.min.js"></script>

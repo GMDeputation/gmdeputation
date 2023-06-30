@@ -19,6 +19,9 @@
     <link href="~/styles/fonts/Livvic/livvic.css" rel="stylesheet">
     <link href="~/styles/fonts/Lora/lora.css" rel="stylesheet">
     <link href="~/styles/fonts/Roboto/roboto.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
     <environment names="Development">
         <link rel="stylesheet" href="~/libs/dhtmlxscheduler.css" />
         <link rel="stylesheet" href="~/libs/fontawesome-all.css" />
@@ -42,7 +45,7 @@
         <link href="~/libs/md-time-picker.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/libs/lf-ng-md-file-input.css" />
         <link rel="stylesheet" href="~/styles/loader.css" />
-        
+
         @*<link rel="stylesheet" href="~/css/admin/loader.css" asp-append-version="true" />*@
         <link rel="stylesheet" href="~/styles/site.css" asp-append-version="true" />
     </environment>
@@ -67,8 +70,8 @@
 
 
             /*table.dashboard-table > tbody > tr:nth-child(2n+1) {
-                    background: #fff;
-                }*/
+                            background: #fff;
+                        }*/
 
             table.dashboard-table > thead > tr {
                 background: #0582eb;
@@ -174,12 +177,12 @@
                                 }
 
                             /*table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(2n) {
-                                background: #fff;
-                            }
+                                        background: #fff;
+                                    }
 
-                            table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(n+1) {
-                                background-image: linear-gradient(to right, #d0d0d0, #e0e0e0);
-                            }*/
+                                    table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(n+1) {
+                                        background-image: linear-gradient(to right, #d0d0d0, #e0e0e0);
+                                    }*/
 
                             table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td {
                                 padding: 10px 5px;
@@ -247,11 +250,62 @@
         table.md-table > tbody > tr:nth-child(odd) {
             background-color: white;
         }
+
+        body {
+            font-family: 'Poppins', sans-serif, 'Roboto Condensed', sans-serif !important;
+        }
+
+        .info-box {
+            border-bottom-left-radius: 20px !important;
+            border-top-right-radius: 20px !important;
+            min-height: 100px;
+            height: 175px !important;
+            width: 95% !important;
+            box-shadow: 1px 3px 5px rgb(0 0 0 / 25%) !important;
+            -webkit-box-shadow: 1px 2px 5px rgb(0 0 0 / 25%) !important;
+            margin: 10px 0 15px 0 !important;
+            padding: 12px 10px 12px 15px !important;
+            border-width: 5px !important;
+            border-color: #eee;
+            border-style: solid;
+        }
+
+        .bg-b-blue {
+            background: linear-gradient(45deg,#253a52,#6496d2) !important;
+        }
+
+        .bg-b-black {
+            background: linear-gradient(45deg, #222222, #b6b6b6) !important;
+        }
+
+        .bg-b-danger {
+            background: linear-gradient(45deg, #5c0c0c, #ff818180) !important;
+        }
+
+        ul.side-nav-list > li {
+            position: relative !important;
+            padding: 15px 27px !important;
+            font-family: Roboto !important;
+            font-size: 1.25em !important;
+            line-height: 1.25 !important;
+            cursor: pointer;
+            color: #e5e5e5;
+        }
+
+        ul.side-nav-list > li {
+            position: relative;
+            padding: 15px 27px;
+            font-family: Roboto;
+            font-size: 1.2em;
+            line-height: 1.25;
+            cursor: pointer;
+            color: #e5e5e5;
+        }
     </style>
     @RenderSection("Styles", required: false)
 </head>
 <body data-ng-app="app" data-ng-cloak>
-    <section id="page-wraper" layout="column" flex data-ng-controller="navController" style=@(accessGroups.Count() > 0 ?  "padding-left:70px;" : "padding-left:0px;")>
+    <section id="page-wraper" layout="column" flex data-ng-controller="navController" style=@(accessGroups.Count() > 0 ? "padding-left:70px;" : "padding-left:0px;")>
         <!--Side Navigation-->
         <div id="sidebar-wraper" style="margin-left: -150px;left: -30px;" ng-show="@accessGroups.Count() > 0">
             <div layout="row">
@@ -278,53 +332,53 @@
         <!--//Side Navigation-->
         <div id="content-wraper">
             <div id="page-content">
-                <div layout="row" id="topBarNav" class="toppanel" layout-md="column" style=@(accessGroups.Count() > 0 ?  "width:calc(100%-70px);" : "width:100%;")>
+                <div layout="row" id="topBarNav" class="toppanel" layout-md="column" style=@(accessGroups.Count() > 0 ? "width:calc(100%-70px);" : "width:100%;")>
 
                     @*@if (loggedinUser.Permissions.Count > 0)
-                        {
-                            <div flex="3" style="border-right: 1px solid #6C6C6C;text-align:center;">
-                                <md-button class="md-icon-button" aria-label="Open Menu" data-ng-click="openSideNavPanel()" style="color:lightgray; height:64px !important;">
-                                    <md-tooltip>Open Menu</md-tooltip>
-                                    <i class="fas fa-list"></i>
-                                </md-button>
-                            </div>
-                        }*@
+                    {
+                    <div flex="3" style="border-right: 1px solid #6C6C6C;text-align:center;">
+                    <md-button class="md-icon-button" aria-label="Open Menu" data-ng-click="openSideNavPanel()" style="color:lightgray; height:64px !important;">
+                    <md-tooltip>Open Menu</md-tooltip>
+                    <i class="fas fa-list"></i>
+                    </md-button>
+                    </div>
+                    }*@
 
 
                     @*<div style="font-size:14px;line-height:24px;"><span class="orange">Welcome</span> @(loggedinUser.UserName) @(loggedinUser.Permissions.Count > 0 ? "(" + loggedinUser.RoleName + ")" : "") </div>
-                        @if (loggedinUser.Permissions.Count > 0)
-                        {
-                            <div style="font-size:14px;">Working Date: <strong>@(loggedinUser.WorkingDate.ToString("dd-MM-yyyy"))</strong> | Working Branch: <strong>@(loggedinUser.BranchName)</strong> &nbsp;&nbsp;&nbsp;<a asp-action="Index" asp-controller="Selection">Change</a></div>
-                        }
-                                <div data-ng-controller="navController"><span class="byeline">Today: {{ clock | date:'dd-MM-yyyy'}} {{ clock | date:'hh:mm:ss a'}}</span></div>*@
-                                       
+                    @if (loggedinUser.Permissions.Count > 0)
+                    {
+                    <div style="font-size:14px;">Working Date: <strong>@(loggedinUser.WorkingDate.ToString("dd-MM-yyyy"))</strong> | Working Branch: <strong>@(loggedinUser.BranchName)</strong> &nbsp;&nbsp;&nbsp;<a asp-action="Index" asp-controller="Selection">Change</a></div>
+                    }
+                    <div data-ng-controller="navController"><span class="byeline">Today: {{ clock | date:'dd-MM-yyyy'}} {{ clock | date:'hh:mm:ss a'}}</span></div>*@
+
                     <div flex layout-align="center end">
                         <div class="info-panel">
                             @*<div class="powerd-info">
-                                <a href="http://www.qbent.in" target="_blank">
-                                    <img src="~/images/qb_logo.png" title="Powered By Qbent Technology" alt="Qbent Technology" />
-                                </a>
+                            <a href="http://www.qbent.in" target="_blank">
+                            <img src="~/images/qb_logo.png" title="Powered By Qbent Technology" alt="Qbent Technology" />
+                            </a>
                             </div>
                             <span flex="1" class="vertical-seperator">&nbsp;</span>*@
                             @*<div class="notification" aria-label="Open Notification" ng-if="@accessGroups.Count() > 0">
-                                <div class="badge" ng-show="count>0">
-                                    <span>{{count}}</span>
-                                </div>
-                                <md-button class="md-icon-button">
-                                    <i class="ti-bell"></i>
-                                </md-button>
+                            <div class="badge" ng-show="count>0">
+                            <span>{{count}}</span>
+                            </div>
+                            <md-button class="md-icon-button">
+                            <i class="ti-bell"></i>
+                            </md-button>
                             </div>*@
                             @*<div class="notification-wrapper" ng-if="@accessGroups.Count() > 0">
-                                <div class="notification-list">
-                                    <div ng-show="count==0">
-                                        No Notification Found
-                                    </div>
-                                    <ol ng-if="count>0">
-                                        <li data-ng-repeat="notification in notifications track by $index">
-                                            <a data-ng-click="openNotification(notification.id,notification.eventUrl)" href="javascript:void(0)">{{notification.description}}</a>
-                                        </li>
-                                    </ol>
-                                </div>
+                            <div class="notification-list">
+                            <div ng-show="count==0">
+                            No Notification Found
+                            </div>
+                            <ol ng-if="count>0">
+                            <li data-ng-repeat="notification in notifications track by $index">
+                            <a data-ng-click="openNotification(notification.id,notification.eventUrl)" href="javascript:void(0)">{{notification.description}}</a>
+                            </li>
+                            </ol>
+                            </div>
                             </div>
                             <span flex="1" class="vertical-seperator" ng-if="@accessGroups.Count() > 0">&nbsp;</span>*@
                             <div class="user-info" aria-label="Open Menu" data-ng-click="showUserMenu($event)">
@@ -336,29 +390,29 @@
                             </div>
                             @*<span flex="1" class="vertical-seperator">&nbsp;</span>
                             <div class="work-info" aria-label="Open Menu" data-ng-click="navigateTo('/selection')">
-                                <p>
-                                    <i class="ti-home"></i>
-                                    <span hide-xs>@(loggedinUser.BranchName != null ? loggedinUser.BranchName : "Branch Name")</span>
-                                </p>
-                                <p>
-                                    <i class="ti-calendar"></i>
-                                    <span hide-xs>@(loggedinUser.WorkingDate.ToString("dd-MM-yyyy"))</span>
-                                </p>
+                            <p>
+                            <i class="ti-home"></i>
+                            <span hide-xs>@(loggedinUser.BranchName != null ? loggedinUser.BranchName : "Branch Name")</span>
+                            </p>
+                            <p>
+                            <i class="ti-calendar"></i>
+                            <span hide-xs>@(loggedinUser.WorkingDate.ToString("dd-MM-yyyy"))</span>
+                            </p>
                             </div>*@
                         </div>
                         @*<md-button class="md-icon-button notification-badge" aria-label="Open Menu" data-ng-click="navigateTo('/selection')" style="width:inherit;">
-                                <md-tooltip>Change Branch &amp; Date</md-tooltip>
-                                <i class="far fa-edit"></i>
-                            </md-button>
-                            <span flex="1" class="vertical-seperator">&nbsp;</span>
-                            <md-button class="md-icon-button notification-badge" data-ng-class="{'no-after':notifyCount<=0}" data-badge="{{notifyCount}}" aria-label="Open Menu" data-ng-click="openSideNavPanel()" style="width:inherit;">
-                                <md-tooltip>Notifications</md-tooltip>
-                                <i class="far fa-bell"></i>
-                            </md-button>
-                            <md-button class="md-icon-button" aria-label="Open Menu" data-ng-click="openSideNavPanel()" style="width:inherit;">
-                                <md-tooltip>Settings</md-tooltip>
-                                <i class="fas fa-cogs"></i>
-                            </md-button>*@
+                        <md-tooltip>Change Branch &amp; Date</md-tooltip>
+                        <i class="far fa-edit"></i>
+                        </md-button>
+                        <span flex="1" class="vertical-seperator">&nbsp;</span>
+                        <md-button class="md-icon-button notification-badge" data-ng-class="{'no-after':notifyCount<=0}" data-badge="{{notifyCount}}" aria-label="Open Menu" data-ng-click="openSideNavPanel()" style="width:inherit;">
+                        <md-tooltip>Notifications</md-tooltip>
+                        <i class="far fa-bell"></i>
+                        </md-button>
+                        <md-button class="md-icon-button" aria-label="Open Menu" data-ng-click="openSideNavPanel()" style="width:inherit;">
+                        <md-tooltip>Settings</md-tooltip>
+                        <i class="fas fa-cogs"></i>
+                        </md-button>*@
 
 
                         @*<span style="vertical-align:top;">@(loggedinUser.UserName)</span> <br /> <span style="color:yellow;">[@(loggedinUser.RoleName)]</span>*@
@@ -396,10 +450,10 @@
             <hr>
             @*<h4 class="text-center">Select Language</h4>
             <div layout="column" layout-align="center center">
-                <div flex>
-                    <md-button ng-click="changeLanguage('en')" style="width:45px; height:45px;" class="md-icon-button add-btn">ENG</md-button>
-                    <md-button ng-click="changeLanguage('bn')" style="width:45px; height:45px;" class="md-icon-button save-btn">বাংলা</md-button>
-                </div>
+            <div flex>
+            <md-button ng-click="changeLanguage('en')" style="width:45px; height:45px;" class="md-icon-button add-btn">ENG</md-button>
+            <md-button ng-click="changeLanguage('bn')" style="width:45px; height:45px;" class="md-icon-button save-btn">বাংলা</md-button>
+            </div>
             </div>
             <hr>*@
             <h4 class="text-center">Select Theame</h4>
@@ -1009,7 +1063,7 @@
             }
             localStorage.setItem("zoom_value", 100);
         }
-                //End Zoom In Out
+                        //End Zoom In Out
     </script>
     @RenderSection("Scripts", required: false)
 </body>
