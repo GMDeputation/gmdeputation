@@ -83,7 +83,8 @@ namespace SFA
             services.AddScoped<IAccomodationBookService, AccomodationBookService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IReportService, ReportService>();
-           // services.AddScoped<IHostedService, HQEmailTwoWeeks>();
+            services.AddScoped<IDashBoardService, DashBoardService>();
+            // services.AddScoped<IHostedService, HQEmailTwoWeeks>();
 
             //Adding Timer Jobs
             services.AddHostedService<HQEmailTwoWeeks>();

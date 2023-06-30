@@ -47,6 +47,17 @@ namespace SFA.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+
+modelBuilder.Entity<MacroScheduleDetailCount>(entity =>
+
+{
+
+    entity.HasNoKey();
+
+    entity.ToView("MacroScheduleDetailCounts");
+
+});
             modelBuilder.Entity<TblAccomodationBookingNta>(entity =>
             {
                 entity.HasOne(d => d.Accomodation)

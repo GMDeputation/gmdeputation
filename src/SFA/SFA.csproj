@@ -53,18 +53,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="MailKit">
-      <HintPath>..\..\..\..\gmdeputation0\MailKit.dll</HintPath>
-    </Reference>
-    <Reference Include="MimeKit">
-      <HintPath>..\..\..\..\gmdeputation0\MimeKit.dll</HintPath>
-    </Reference>
-    <Reference Include="NETCore.MailKit">
-      <HintPath>..\..\..\..\gmdeputation0\NETCore.MailKit.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Update="Views\AccomodationBook\CalenderView.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -207,6 +195,18 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\styles\emailTemplates\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="MailKit">
+      <HintPath>..\..\..\MailKit.dll</HintPath>
+    </Reference>
+    <Reference Include="MimeKit">
+      <HintPath>..\..\..\MimeKit.dll</HintPath>
+    </Reference>
+    <Reference Include="NETCore.MailKit">
+      <HintPath>..\..\..\NETCore.MailKit.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

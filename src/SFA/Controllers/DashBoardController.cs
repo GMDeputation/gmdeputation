@@ -41,8 +41,13 @@ public class DashBoardController : Controller
 		_context = context;
 	}
 
-	[HttpPost]
-	[Route("api/getCount")]
+	
+	public IActionResult Index()
+	{
+		return View();
+	}
+
+	[Route("getCount")]
 	public async Task<IActionResult> GetCount()
 	{
 		var result = await _dashBoardService.GetMacroScheduleWithFiveServicesOrLess();

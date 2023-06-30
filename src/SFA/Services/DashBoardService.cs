@@ -25,8 +25,17 @@ namespace SFA.Services
 
          public async Task<List<MacroScheduleDetailCount>> GetMacroScheduleWithFiveServicesOrLess()
         {
-            var counts = await _context.MacroScheduleCounts.ToListAsync();
-            return counts;
+            try
+            {
+                var counts = await _context.MacroScheduleCounts.ToListAsync();
+                return counts;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+           
+            
         }
        
     }

@@ -20,9 +20,7 @@
 /src/.vs/SFA/FileContentIndex/489357b3-2de5-429a-95fe-5d53c017d906.vsidx
 /src/.vs/SFA/FileContentIndex/489357b3-2de5-429a-95fe-5d53c017d906.vsidx
 *.json
-/src/SFA/obj/Debug/netcoreapp3.1/SFA.assets.cache
-/src/SFA/obj/Debug/netcoreapp3.1/SFA.csproj.AssemblyReference.cache
-/src/SFA/obj/Debug/netcoreapp3.1/SFA.GeneratedMSBuildEditorConfig.editorconfig
+/src/SFA/obj/Debug/netcoreapp3.1
 /src/SFA/obj/project.nuget.cache
 /src/SFA/obj/SFA.csproj.nuget.g.props
 /src/SFA/obj/project.assets.json
