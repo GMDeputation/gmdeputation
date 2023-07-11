@@ -56,7 +56,8 @@ namespace SFA.Services
         }
         public async Task<Church> GetById(int id)
         {
-            var churchEntity = await _context.TblChurchNta.Include(m =>m.Section).Include(m => m.District).FirstOrDefaultAsync(m => m.Id == id && !m.IsDelete);
+            var churchEntity = await _context.TblChurchNta.Include(m => m.Section).Include(m => m.District).FirstOrDefaultAsync(m => m.Id == id && !m.IsDelete);
+            var churchPastor = await _context.TblUserChurchNta.Where(m => m.ChurchId == id).Include(m => m.User).FirstOrDefaultAsync(m => m.User.Id == m.UserId && (m.User.Role.DataAccessCode == "P" || m.User.Role.DataAccessCode == "N"));
             return churchEntity == null ? null : new Church
             {
                 Id = churchEntity.Id,
@@ -77,7 +78,8 @@ namespace SFA.Services
                 DistrictId = churchEntity.DistrictId,
                 DistrictName = churchEntity.District.Name,
                 Status = churchEntity.Status,
-                WebSite = churchEntity.WebSite
+                WebSite = churchEntity.WebSite,
+                Pastor = churchPastor != null ? churchPastor.User.FirstName + " " + churchPastor.User.LastName : ""
             };
         }
         public async Task<List<Church>> GetChurchBySectionId(int id)
@@ -312,9 +314,9 @@ namespace SFA.Services
                     DistrictName = m.District.Name,
                     Status = m.Status,
                     WebSite = m.WebSite,
-                    Pastor = m.TblUserChurch.Count()>0?(m.TblUserChurch.Where(n=>n.User.Role.DataAccessCode == "P").FirstOrDefault()?.User.FirstName + " "+ m.TblUserChurch.Where(n => n.User.Role.DataAccessCode == "P").FirstOrDefault()?.User.LastName):""
+                    Pastor = m.TblUserChurch.Count()>0?(m.TblUserChurch.Where(n=>n.User.Role.DataAccessCode == "P" || n.User.Role.DataAccessCode == "N" ).FirstOrDefault()?.User.FirstName + " "+ m.TblUserChurch.Where(n => n.User.Role.DataAccessCode == "P" || n.User.Role.DataAccessCode == "N").FirstOrDefault()?.User.LastName):""
                 }).ToList();
-
+                //N is assistant Pastor and P is Pastor
                 return new QueryResult<Church> { Result = churchs, Count = count };
             }
             catch

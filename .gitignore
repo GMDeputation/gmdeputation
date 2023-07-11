@@ -30,6 +30,12 @@ src/SFA/obj/project.nuget.cache
 src/SFA/obj/project.assets.json
 src/SFA/obj/Debug/netcoreapp3.1/staticwebassets/SFA.StaticWebAssets.xml
 src/.vs/
-src/SFA/obj/Debug
+src/SFA/obj/Debug/*
 src/.vs/SFA/v17/.suo
 src/SFA/bin/
+**/bin/Debug/
+**/obj/Debug/
+src/.vs/SFA/config/applicationhost.config
+src/.vs/SFA/config/applicationhost.config
+src/SFA/bin/Debug/netcoreapp3.1/SFA.exe
+

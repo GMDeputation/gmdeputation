@@ -82,7 +82,9 @@ namespace SFA.Entities
         public ICollection<TblUserChurchNta> TblUserChurch { get; set; }
         public ICollection<TblAppointmentNta> TblAppointmentNta { get; set; }
 
+   
 
-    
-}
+
+
+    }
 }
