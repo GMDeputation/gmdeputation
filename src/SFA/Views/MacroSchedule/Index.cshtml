@@ -171,9 +171,9 @@
                     </tr>
                     <tr md-row md-auto-select data-ng-repeat="macroSchedule in macroSchedules track by $index">
                         <td md-cell class="center">{{((query.page - 1) * query.limit) + ($index+1)}}</td>
-                        <td md-cell class="pad-l-8">{{macroSchedule.entryDate | date:'dd/MM/yyyy'}}</td>
-                        <td md-cell class="pad-l-8">{{macroSchedule.startDate | date:'dd/MM/yyyy'}}</td>
-                        <td md-cell class="pad-l-8">{{macroSchedule.endDate | date:'dd/MM/yyyy'}}</td>
+                        <td md-cell class="pad-l-8">{{macroSchedule.entryDate | date:'MM/dd/yyyy'}}</td>
+                        <td md-cell class="pad-l-8">{{macroSchedule.startDate | date:'MM/dd/yyyy'}}</td>
+                        <td md-cell class="pad-l-8">{{macroSchedule.endDate | date:'MM/dd/yyyy'}}</td>
                         <td md-cell class="pad-l-8">{{macroSchedule.districtName}}</td>
                         <td md-cell class="pad-l-8">{{macroSchedule.userName}}</td>
                         <td md-cell class="pad-l-8">{{macroSchedule.macroScheduleDesc}}</td>

@@ -66,8 +66,8 @@
                     <td md-cell class="pad-l-8">{{accommodation.districtName}}</td>
                     <td md-cell class="pad-l-8">{{accommodation.churchName}}</td>
                     <td md-cell class="pad-l-8">{{accommodation.accomodationDesc}}</td>
-                    <td md-cell class="pad-l-8">{{accommodation.checkinDate | date: 'dd/MM/yyyy'}}</td>
-                    <td md-cell class="pad-l-8">{{accommodation.checkoutDate | date: 'dd/MM/yyyy'}}</td>
+                    <td md-cell class="pad-l-8">{{accommodation.checkinDate | date: 'MM/dd/yyyy'}}</td>
+                    <td md-cell class="pad-l-8">{{accommodation.checkoutDate | date: 'MM/dd/yyyy'}}</td>
                     <td md-cell class="center">
                         if (ViewBag.Access == 7 || ViewBag.Access == 3) {
                         <md-button class="md-icon-button edit-btn" ng-click="detail(accommodation.id)" ng-if="!accommodation.isSubmit"> <md-tooltip>Edit</md-tooltip> <i class="ti-marker-alt"></i> </md-button>

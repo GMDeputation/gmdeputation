@@ -4532,7 +4532,7 @@ hooks.defineLocale('af', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd, D MMMM YYYY HH:mm'
@@ -4584,7 +4584,7 @@ hooks.defineLocale('ar-dz', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd D MMMM YYYY HH:mm'
@@ -4632,7 +4632,7 @@ hooks.defineLocale('ar-kw', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd D MMMM YYYY HH:mm'
@@ -4796,7 +4796,7 @@ hooks.defineLocale('ar-ma', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd D MMMM YYYY HH:mm'
@@ -4869,7 +4869,7 @@ hooks.defineLocale('ar-sa', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd D MMMM YYYY HH:mm'
@@ -4938,7 +4938,7 @@ hooks.defineLocale('ar-tn', {
     longDateFormat: {
         LT: 'HH:mm',
         LTS: 'HH:mm:ss',
-        L: 'DD/MM/YYYY',
+        L: 'MM/dd/yyyy',
         LL: 'D MMMM YYYY',
         LLL: 'D MMMM YYYY HH:mm',
         LLLL: 'dddd D MMMM YYYY HH:mm'
@@ -5413,7 +5413,7 @@ hooks.defineLocale('bm', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'MMMM [tile] D [san] YYYY',
         LLL : 'MMMM [tile] D [san] YYYY [lɛrɛ] HH:mm',
         LLLL : 'dddd MMMM [tile] D [san] YYYY [lɛrɛ] HH:mm'
@@ -5485,7 +5485,7 @@ hooks.defineLocale('bn', {
     longDateFormat : {
         LT : 'A h:mm সময়',
         LTS : 'A h:mm:ss সময়',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY, A h:mm সময়',
         LLLL : 'dddd, D MMMM YYYY, A h:mm সময়'
@@ -5593,7 +5593,7 @@ hooks.defineLocale('bo', {
     longDateFormat : {
         LT : 'A h:mm',
         LTS : 'A h:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY, A h:mm',
         LLLL : 'dddd, D MMMM YYYY, A h:mm'
@@ -5721,7 +5721,7 @@ hooks.defineLocale('br', {
     longDateFormat : {
         LT : 'h[e]mm A',
         LTS : 'h[e]mm:ss A',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D [a viz] MMMM YYYY',
         LLL : 'D [a viz] MMMM YYYY h[e]mm A',
         LLLL : 'dddd, D [a viz] MMMM YYYY h[e]mm A'
@@ -5911,7 +5911,7 @@ hooks.defineLocale('ca', {
     longDateFormat : {
         LT : 'H:mm',
         LTS : 'H:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM [de] YYYY',
         ll : 'D MMM YYYY',
         LLL : 'D MMMM [de] YYYY [a les] H:mm',
@@ -6198,7 +6198,7 @@ hooks.defineLocale('cy', {
     longDateFormat: {
         LT: 'HH:mm',
         LTS : 'HH:mm:ss',
-        L: 'DD/MM/YYYY',
+        L: 'MM/dd/yyyy',
         LL: 'D MMMM YYYY',
         LLL: 'D MMMM YYYY HH:mm',
         LLLL: 'dddd, D MMMM YYYY HH:mm'
@@ -6626,7 +6626,7 @@ hooks.defineLocale('el', {
     longDateFormat : {
         LT : 'h:mm A',
         LTS : 'h:mm:ss A',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY h:mm A',
         LLLL : 'dddd, D MMMM YYYY h:mm A'
@@ -6690,7 +6690,7 @@ hooks.defineLocale('en-au', {
     longDateFormat : {
         LT : 'h:mm A',
         LTS : 'h:mm:ss A',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY h:mm A',
         LLLL : 'dddd, D MMMM YYYY h:mm A'
@@ -6798,7 +6798,7 @@ hooks.defineLocale('en-gb', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd, D MMMM YYYY HH:mm'
@@ -6910,7 +6910,7 @@ hooks.defineLocale('en-nz', {
     longDateFormat : {
         LT : 'h:mm A',
         LTS : 'h:mm:ss A',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY h:mm A',
         LLLL : 'dddd, D MMMM YYYY h:mm A'
@@ -7049,7 +7049,7 @@ hooks.defineLocale('es-do', {
     longDateFormat : {
         LT : 'h:mm A',
         LTS : 'h:mm:ss A',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D [de] MMMM [de] YYYY',
         LLL : 'D [de] MMMM [de] YYYY h:mm A',
         LLLL : 'dddd, D [de] MMMM [de] YYYY h:mm A'
@@ -7202,7 +7202,7 @@ hooks.defineLocale('es', {
     longDateFormat : {
         LT : 'H:mm',
         LTS : 'H:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D [de] MMMM [de] YYYY',
         LLL : 'D [de] MMMM [de] YYYY H:mm',
         LLLL : 'dddd, D [de] MMMM [de] YYYY H:mm'
@@ -7411,7 +7411,7 @@ hooks.defineLocale('fa', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd, D MMMM YYYY HH:mm'
@@ -7577,7 +7577,7 @@ hooks.defineLocale('fo', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd D. MMMM, YYYY HH:mm'
@@ -7758,7 +7758,7 @@ hooks.defineLocale('fr', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd D MMMM YYYY HH:mm'
@@ -7905,7 +7905,7 @@ hooks.defineLocale('gd', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd, D MMMM YYYY HH:mm'
@@ -7959,7 +7959,7 @@ hooks.defineLocale('gl', {
     longDateFormat : {
         LT : 'H:mm',
         LTS : 'H:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D [de] MMMM [de] YYYY',
         LLL : 'D [de] MMMM [de] YYYY H:mm',
         LLLL : 'dddd, D [de] MMMM [de] YYYY H:mm'
@@ -8160,7 +8160,7 @@ hooks.defineLocale('gu', {
     longDateFormat: {
         LT: 'A h:mm વાગ્યે',
         LTS: 'A h:mm:ss વાગ્યે',
-        L: 'DD/MM/YYYY',
+        L: 'MM/dd/yyyy',
         LL: 'D MMMM YYYY',
         LLL: 'D MMMM YYYY, A h:mm વાગ્યે',
         LLLL: 'dddd, D MMMM YYYY, A h:mm વાગ્યે'
@@ -8249,7 +8249,7 @@ hooks.defineLocale('he', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D [ב]MMMM YYYY',
         LLL : 'D [ב]MMMM YYYY HH:mm',
         LLLL : 'dddd, D [ב]MMMM YYYY HH:mm',
@@ -8361,7 +8361,7 @@ hooks.defineLocale('hi', {
     longDateFormat : {
         LT : 'A h:mm बजे',
         LTS : 'A h:mm:ss बजे',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY, A h:mm बजे',
         LLLL : 'dddd, D MMMM YYYY, A h:mm बजे'
@@ -8765,7 +8765,7 @@ hooks.defineLocale('id', {
     longDateFormat : {
         LT : 'HH.mm',
         LTS : 'HH.mm.ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY [pukul] HH.mm',
         LLLL : 'dddd, D MMMM YYYY [pukul] HH.mm'
@@ -8953,7 +8953,7 @@ hooks.defineLocale('it', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd, D MMMM YYYY HH:mm'
@@ -9081,7 +9081,7 @@ hooks.defineLocale('jv', {
     longDateFormat : {
         LT : 'HH.mm',
         LTS : 'HH.mm.ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY [pukul] HH.mm',
         LLLL : 'dddd, D MMMM YYYY [pukul] HH.mm'
@@ -9159,7 +9159,7 @@ hooks.defineLocale('ka', {
     longDateFormat : {
         LT : 'h:mm A',
         LTS : 'h:mm:ss A',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY h:mm A',
         LLLL : 'dddd, D MMMM YYYY h:mm A'
@@ -9306,7 +9306,7 @@ hooks.defineLocale('km', {
     longDateFormat: {
         LT: 'HH:mm',
         LTS : 'HH:mm:ss',
-        L: 'DD/MM/YYYY',
+        L: 'MM/dd/yyyy',
         LL: 'D MMMM YYYY',
         LLL: 'D MMMM YYYY HH:mm',
         LLLL: 'dddd, D MMMM YYYY HH:mm'
@@ -9379,7 +9379,7 @@ hooks.defineLocale('kn', {
     longDateFormat : {
         LT : 'A h:mm',
         LTS : 'A h:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY, A h:mm',
         LLLL : 'dddd, D MMMM YYYY, A h:mm'
@@ -9744,7 +9744,7 @@ hooks.defineLocale('lo', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'ວັນdddd D MMMM YYYY HH:mm'
@@ -10098,7 +10098,7 @@ hooks.defineLocale('mi', {
     longDateFormat: {
         LT: 'HH:mm',
         LTS: 'HH:mm:ss',
-        L: 'DD/MM/YYYY',
+        L: 'MM/dd/yyyy',
         LL: 'D MMMM YYYY',
         LLL: 'D MMMM YYYY [i] HH:mm',
         LLLL: 'dddd, D MMMM YYYY [i] HH:mm'
@@ -10227,7 +10227,7 @@ hooks.defineLocale('ml', {
     longDateFormat : {
         LT : 'A h:mm -നു',
         LTS : 'A h:mm:ss -നു',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY, A h:mm -നു',
         LLLL : 'dddd, D MMMM YYYY, A h:mm -നു'
@@ -10359,7 +10359,7 @@ hooks.defineLocale('mr', {
     longDateFormat : {
         LT : 'A h:mm वाजता',
         LTS : 'A h:mm:ss वाजता',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY, A h:mm वाजता',
         LLLL : 'dddd, D MMMM YYYY, A h:mm वाजता'
@@ -10445,7 +10445,7 @@ hooks.defineLocale('ms-my', {
     longDateFormat : {
         LT : 'HH.mm',
         LTS : 'HH.mm.ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY [pukul] HH.mm',
         LLLL : 'dddd, D MMMM YYYY [pukul] HH.mm'
@@ -10516,7 +10516,7 @@ hooks.defineLocale('ms', {
     longDateFormat : {
         LT : 'HH.mm',
         LTS : 'HH.mm.ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY [pukul] HH.mm',
         LLLL : 'dddd, D MMMM YYYY [pukul] HH.mm'
@@ -10615,7 +10615,7 @@ hooks.defineLocale('my', {
     longDateFormat: {
         LT: 'HH:mm',
         LTS: 'HH:mm:ss',
-        L: 'DD/MM/YYYY',
+        L: 'MM/dd/yyyy',
         LL: 'D MMMM YYYY',
         LLL: 'D MMMM YYYY HH:mm',
         LLLL: 'dddd D MMMM YYYY HH:mm'
@@ -10751,7 +10751,7 @@ hooks.defineLocale('ne', {
     longDateFormat : {
         LT : 'Aको h:mm बजे',
         LTS : 'Aको h:mm:ss बजे',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY, Aको h:mm बजे',
         LLLL : 'dddd, D MMMM YYYY, Aको h:mm बजे'
@@ -10862,7 +10862,7 @@ hooks.defineLocale('nl-be', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd D MMMM YYYY HH:mm'
@@ -11065,7 +11065,7 @@ hooks.defineLocale('pa-in', {
     longDateFormat : {
         LT : 'A h:mm ਵਜੇ',
         LTS : 'A h:mm:ss ਵਜੇ',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY, A h:mm ਵਜੇ',
         LLLL : 'dddd, D MMMM YYYY, A h:mm ਵਜੇ'
@@ -11266,7 +11266,7 @@ hooks.defineLocale('pt-br', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D [de] MMMM [de] YYYY',
         LLL : 'D [de] MMMM [de] YYYY [às] HH:mm',
         LLLL : 'dddd, D [de] MMMM [de] YYYY [às] HH:mm'
@@ -11317,7 +11317,7 @@ hooks.defineLocale('pt', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D [de] MMMM [de] YYYY',
         LLL : 'D [de] MMMM [de] YYYY HH:mm',
         LLLL : 'dddd, D [de] MMMM [de] YYYY HH:mm'
@@ -11630,7 +11630,7 @@ hooks.defineLocale('sd', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd، D MMMM YYYY HH:mm'
@@ -12103,7 +12103,7 @@ hooks.defineLocale('sq', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd, D MMMM YYYY HH:mm'
@@ -12352,7 +12352,7 @@ hooks.defineLocale('ss', {
     longDateFormat : {
         LT : 'h:mm A',
         LTS : 'h:mm:ss A',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY h:mm A',
         LLLL : 'dddd, D MMMM YYYY h:mm A'
@@ -12559,7 +12559,7 @@ hooks.defineLocale('ta', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY, HH:mm',
         LLLL : 'dddd, D MMMM YYYY, HH:mm'
@@ -12654,7 +12654,7 @@ hooks.defineLocale('te', {
     longDateFormat : {
         LT : 'A h:mm',
         LTS : 'A h:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY, A h:mm',
         LLLL : 'dddd, D MMMM YYYY, A h:mm'
@@ -12732,7 +12732,7 @@ hooks.defineLocale('tet', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd, D MMMM YYYY HH:mm'
@@ -12790,7 +12790,7 @@ hooks.defineLocale('th', {
     longDateFormat : {
         LT : 'H:mm',
         LTS : 'H:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY เวลา H:mm',
         LLLL : 'วันddddที่ D MMMM YYYY เวลา H:mm'
@@ -13163,7 +13163,7 @@ hooks.defineLocale('tzm-latn', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd D MMMM YYYY HH:mm'
@@ -13210,7 +13210,7 @@ hooks.defineLocale('tzm', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS: 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd D MMMM YYYY HH:mm'
@@ -13422,7 +13422,7 @@ hooks.defineLocale('ur', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd، D MMMM YYYY HH:mm'
@@ -13485,7 +13485,7 @@ hooks.defineLocale('uz-latn', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'D MMMM YYYY, dddd HH:mm'
@@ -13532,7 +13532,7 @@ hooks.defineLocale('uz', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'D MMMM YYYY, dddd HH:mm'
@@ -13592,7 +13592,7 @@ hooks.defineLocale('vi', {
     longDateFormat : {
         LT : 'HH:mm',
         LTS : 'HH:mm:ss',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM [năm] YYYY',
         LLL : 'D MMMM [năm] YYYY HH:mm',
         LLLL : 'dddd, D MMMM [năm] YYYY HH:mm',
@@ -13648,7 +13648,7 @@ hooks.defineLocale('x-pseudo', {
     weekdaysParseExact : true,
     longDateFormat : {
         LT : 'HH:mm',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY HH:mm',
         LLLL : 'dddd, D MMMM YYYY HH:mm'
@@ -13704,7 +13704,7 @@ hooks.defineLocale('yo', {
     longDateFormat : {
         LT : 'h:mm A',
         LTS : 'h:mm:ss A',
-        L : 'DD/MM/YYYY',
+        L : 'MM/dd/yyyy',
         LL : 'D MMMM YYYY',
         LLL : 'D MMMM YYYY h:mm A',
         LLLL : 'dddd, D MMMM YYYY h:mm A'

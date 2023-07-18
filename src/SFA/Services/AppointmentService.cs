@@ -121,6 +121,7 @@ namespace SFA.Services
                                        .Include(m => m.MacroScheduleDetail).ThenInclude(m => m.District).Include(m => m.AcceptMissionaryByNavigation).Include(m => m.MacroScheduleDetail)
                                       .ThenInclude(m => m.User).AsNoTracking().AsQueryable();
 
+                //We need to make the correct searches based on access codes. 
                 switch(accessCode)
                 {
                     case "D":
@@ -443,11 +444,13 @@ namespace SFA.Services
             appointmentEntity.AcceptByPastorRemarks = appointment.AcceptByPastorRemarks;
             appointmentEntity.AcceptByPastorBy = appointment.AcceptByPastorBy;
             appointmentEntity.AcceptByPastorOn = DateTime.Now;
+            appointmentEntity.IsForwardForMissionary = true;
 
             try
             {
                 await _context.SaveChangesAsync();
 
+                //Get Data to Send Email
                 var churchEntity = await _context.TblChurchNta.Where(m => m.Id == appointment.ChurchId).FirstAsync();
                 var districtEntity = await _context.TblDistrictNta.Where(m => m.Id == churchEntity.DistrictId).FirstAsync();
                 var macroScheudleDetailEntity = await _context.TblMacroScheduleDetailsNta.Where(m => m.Id == appointment.MacroScheduleDetailId).FirstAsync();

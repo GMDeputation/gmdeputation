@@ -503,8 +503,12 @@ namespace SFA.Services
                         UserId = user.Id,
                         Notes = m.Notes,
                     }).ToList();
-                    if (attributes[0].AttributeId != 0)
-                        userEntity.TblUserAttributeNta = attributes;
+                    if(attributes.Count != 0)
+                    {
+                        if (attributes[0].AttributeId != 0)
+                            userEntity.TblUserAttributeNta = attributes;
+
+                    }
 
                     var churches = user.Churches.Select(m => new TblUserChurchNta
                     {
@@ -513,15 +517,20 @@ namespace SFA.Services
                         RelationType = m.RelationType,
                         UserId = user.Id,
                     }).ToList();
-                    if (churches[0].ChurchId!=0)
-                        userEntity.TblUserChurchNta = churches;
+                    if(churches.Count != 0)
+                    {
+                        if (churches[0].ChurchId != 0)
+                            userEntity.TblUserChurchNta = churches;
+                    }
+                   
 
                     var model = new TblUserPasswordNta
                     {                       
                         InsertDatetime = DateTime.Now,                  
                         Password = user.Password,
                         UserId = user.Id,
-                    };
+                        InsertUser = loggedinUser.Id.ToString(),
+                };
 
                     userEntity.TblUserPasswordNta.Add(model);
 

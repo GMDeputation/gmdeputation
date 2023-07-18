@@ -78,8 +78,8 @@
                     <td md-cell class="pad-l-8">{{macroSchedule.macroScheduleDesc}}</td>
                     <td md-cell class="pad-l-8">{{macroSchedule.districtName}}</td>
                     <td md-cell class="pad-l-8">{{macroSchedule.userName}}</td>
-                    <td md-cell class="pad-l-8">{{macroSchedule.startDate | date:'dd/MM/yyyy'}}</td>
-                    <td md-cell class="pad-l-8">{{macroSchedule.endDate | date:'dd/MM/yyyy'}}</td>
+                    <td md-cell class="pad-l-8">{{macroSchedule.startDate | date:'MM/dd/yyyy'}}</td>
+                    <td md-cell class="pad-l-8">{{macroSchedule.endDate | date:'MM/dd/yyyy'}}</td>
                     <td md-cell class="center" style="width: 235px;padding: 0;">
                         <md-button class="md-button edit-btn" ng-click="detail(macroSchedule.id)" ng-if="!macroSchedule.isDateOver">
                             <md-tooltip>Create Appointment</md-tooltip>
