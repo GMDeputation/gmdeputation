@@ -17,6 +17,8 @@ namespace SFA.Entities
         public int Id { get; set; }
         [StringLength(4000)]
         public string Code { get; set; }
+        [StringLength(50)]
+        public string CountryCode { get; set; }
         public int CodeVal { get; set; }
         [Required]
         [StringLength(100)]
@@ -42,5 +44,7 @@ namespace SFA.Entities
         public ICollection<TblStateNta> TblStateNta { get; set; }
         [InverseProperty("Country")]
         public ICollection<TblUserNta> TblUserNta { get; set; }
+
+
     }
 }

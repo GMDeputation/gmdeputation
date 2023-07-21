@@ -57,6 +57,7 @@
                     <th md-column md-order-by="name"><span class="pad-l-8">French Name</span></th>
                     <th md-column md-order-by="name"><span class="pad-l-8">Alpha 2 Code</span></th>
                     <th md-column md-order-by="name"><span class="pad-l-8">Alpha 3 Code</span></th>
+                    <th md-column md-order-by="name"><span class="pad-l-8">Country Code</span></th>
                     <th md-column class="center" style="width:160px;"><span class="pad-l-8">Actions</span></th>
                 </tr>
             </thead>
@@ -71,6 +72,7 @@
                     <td md-cell class="pad-l-8">{{country.frenchName}}</td>
                     <td md-cell class="pad-l-8">{{country.alpha2Code}}</td>
                     <td md-cell class="pad-l-8">{{country.alpha3Code}}</td>
+                    <td md-cell class="pad-l-8">{{country.countryCode}}</td>
                     <td md-cell class="center">
                         @if (ViewBag.Access == 7 || ViewBag.Access == 3)
                         {

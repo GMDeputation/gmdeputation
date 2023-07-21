@@ -48,7 +48,8 @@ namespace SFA.Services
                 Name = countryEntity.Name,
                 Alpha2Code = countryEntity.Alpha2Code,
                 Alpha3Code = countryEntity.Alpha3Code,
-                FrenchName = countryEntity.FrenchName
+                FrenchName = countryEntity.FrenchName,
+                CountryCode = countryEntity.CountryCode
             };
         }
 
@@ -78,7 +79,8 @@ namespace SFA.Services
                     Alpha2Code = m.Alpha2Code,
                     Alpha3Code = m.Alpha3Code,
                     FrenchName = m.FrenchName,
-                    Code = m.Code
+                    Code = m.Code,
+                    CountryCode = m.CountryCode
                 }).ToList();
 
                 return new QueryResult<Country> { Result = countries, Count = count };
@@ -111,7 +113,8 @@ namespace SFA.Services
                 Alpha3Code = country.Alpha3Code,
                 FrenchName = country.FrenchName,         
                 InsertUser = LoggedinUser.Id.ToString(),
-                InsertDatetime = DateTime.Now
+                InsertDatetime = DateTime.Now,
+                CountryCode = country.CountryCode
             };
 
             try
@@ -141,6 +144,7 @@ namespace SFA.Services
             countryEntity.FrenchName = country.FrenchName;
             countryEntity.UpdateUser = LoggedinUser.Id.ToString();
             countryEntity.UpdateDatetime = DateTime.Now;
+            countryEntity.CountryCode = country.CountryCode;
 
             try
             {

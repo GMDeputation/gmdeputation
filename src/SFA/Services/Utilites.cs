@@ -32,6 +32,7 @@ namespace SFA.Services
         //Function SendEmailToMissionaryConfirmedService Uses this
         static string EmailToMissionaryConfirmedService = "2d6f.32b15e784a472135.k1.6c44c850-9c05-11ed-9725-525400e3c1b1.185e4a47955";
 
+        // Email 11
         static string EmatilToHQTwoWeekOut = "2d6f.32b15e784a472135.k1.af0d2570-9c04-11ed-9725-525400e3c1b1.185e49fa147";
 
         static string EmailForMacroScheduleCancel = "2d6f.32b15e784a472135.k1.fb1565d0-9c00-11ed-9725-525400e3c1b1.185e4875cad";
@@ -409,9 +410,8 @@ namespace SFA.Services
 
         }
         //Template 17
-        //This is called from Program.cs in the main class. Called once a day and returns all schedules that are two weeks away exactly to the email template
-        //As an excel file. 
-        public void SendEmailForCancelledAppointments(object source, ElapsedEventArgs e)
+        //This is called when an appointment gets cancelled. 
+        public void SendEmailForCancelledAppointments(string district, string MissionaryUserSalutation, string missionaryFirstName, string missionaryLastName, string PastorUserSalutation, string pastorFirstName, string pastorLastName, string PastorEmail, string DGMDFirstName, string DGMDLastName, string DGMDPrimaryPhone, string DGMDemail, string missionaryEmail, string DayOfWeek, string churchName, string DGMDUserSalutation, string eventDate, string MissionaryCountry, string DGMDMobile)
         {
             //TODO NEED TO FIND OUT HOW TO GET THESE DETAILS
             //{ { district} }
@@ -433,10 +433,7 @@ namespace SFA.Services
 
             DateTime currentTim = DateTime.Now;
             //Linq Query Right now looking at everything greater than two weeks. When we go liev >= need to just be == Wre are just doing this for testing. 
-            var appointmentQuery = _context.TblAppointmentNta.Where(s => s.EventDate >= currentTim.AddDays(-14)).Include(m => m.Church).ThenInclude(m => m.District).ThenInclude(m => m.TblUserNta)
-                       .Include(m => m.AcceptByPastorByNavigation).Include(m => m.MacroScheduleDetail).ThenInclude(m => m.MacroSchedule)
-                       .Include(m => m.MacroScheduleDetail).ThenInclude(m => m.District).Include(m => m.AcceptMissionaryByNavigation).Include(m => m.MacroScheduleDetail)
-                      .ThenInclude(m => m.User).AsNoTracking().AsQueryable();
+          
 
             string districtWebsite = "https://gmdeputation.com/";
 
@@ -444,8 +441,9 @@ namespace SFA.Services
             string apiTemplateKey = "";
 
             //for template 17
+            //Note we are sending to DGMD,Pastor and Missionary
             apiTemplateKey = EmailForAppointCancel;
-            // jsonString = "{'template_key':'" + apiTemplateKey + "','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'Troy'},'to': [{'email_address': {'address': '" + missionaryEmail + "','name': 'Missionary'}}],'merge_info':{'district':'" + district + "','MissionaryFirstName':'" + missionaryFirstName + "','MissionaryLastName':'" + missionaryLastName + "','PastorFirstName':'" + pastorFirstName + "','PastorLastName':'" + pastorLastName + "','TypeOfEvent':'" + TypeOfEvent + "','DayOfWeek':'" + DayOfWeek + "','EventTime':'" + EventTime + "','PastorMobile':'" + PastorMobile + "','PastorEmail':'" + PastorEmail + "','ChurchName':'" + churchName + "','Churchaddress':'" + Churchaddress + "','ChurchPhone':'" + ChurchPhone + "','SpecialPastorText':'" + SpecialPastorText + "','UserSalutation':'" + UserSalutation + "','DGMDFirstName':'" + DGMDFirstName + "','DGMDLastName':'" + DGMDLastName + "','DGMDPrimaryPhone':'" + DGMDPrimaryPhone + "','DGMDEmail':'" + DGMDemail + "','DistrictWebsite':'" + districtWebsite + "'}}";
+            jsonString = "{'template_key':'" + apiTemplateKey + "','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'Troy'},'to': [{'email_address': {'address': '" + missionaryEmail + "','name': 'Missionary'}},{'email_address': {'address': '" + PastorEmail + "','name': 'Missionary'}},{'email_address': {'address': '" + DGMDemail + "','name': 'Missionary'}}],'merge_info':{'district':'" + district + "','MissionaryFirstName':'" + missionaryFirstName + "','MissionaryLastName':'" + missionaryLastName + "','PastorUserSalutation':'" + PastorUserSalutation + "','PastorFirstName':'" + pastorFirstName + "','PastorLastName':'" + pastorLastName + "','MissionaryUserSalutation':'" + MissionaryUserSalutation + "','DayOfWeek':'" + DayOfWeek + "','DGMDUserSalutation':'" + DGMDUserSalutation + "','ChurchName':'" + churchName + "','EventDate':'" + eventDate + "','MissionaryCountry':'" + MissionaryCountry + "','DGMDMobile':'" + DGMDMobile + "','DGMDFirstName':'" + DGMDFirstName + "','DGMDLastName':'" + DGMDLastName + "','DGMDPrimaryPhone':'" + DGMDPrimaryPhone + "','DGMDEmail':'" + DGMDemail + "','DistrictWebsite':'" + districtWebsite + "'}}";
 
 
 

@@ -341,8 +341,28 @@ namespace SFA.Services
             try
             {
                 await _context.SaveChangesAsync();
+                //Get Data to Send Email
+                var churchEntity = await _context.TblChurchNta.Where(m => m.Id == appointment.ChurchId).FirstAsync();
+                var districtEntity = await _context.TblDistrictNta.Where(m => m.Id == churchEntity.DistrictId).FirstAsync();
+                var macroScheudleDetailEntity = await _context.TblMacroScheduleDetailsNta.Where(m => m.Id == appointment.MacroScheduleDetailId).FirstAsync();
+                var missionaryEntity = await _context.TblUserNta.Include(m=>m.Country).Where(m => m.Id == macroScheudleDetailEntity.UserId).FirstAsync();
+                //Gets the link to see who the pastor is in a church: Could be mutiple? 
+                var linkToPastorAndChurchEntity = await _context.TblUserChurchNta.Where(m => m.ChurchId == appointment.ChurchId).FirstAsync();
+                var pastorEntity = await _context.TblUserNta.Include(m => m.TblUserChurchNta).Where(m => m.Id == linkToPastorAndChurchEntity.UserId).FirstAsync();
+                var dgmd = await _context.TblUserNta.Where(m => m.DistrictId == districtEntity.Id && m.RoleId == 7).FirstAsync();
+                var serviceTimeEntity = await _context.TblChurchServiceTimeNta.Where(m => m.Id == appointmentEntity.ServiceTypeId).FirstAsync();
+                var serviceTypeEntity = await _context.TblServiceTypeNta.Where(m => m.Id == serviceTimeEntity.ServiceTypeId).FirstAsync();
+
+                Utilites tmp = new Utilites();
+                tmp.SendEmailForCancelledAppointments(districtEntity.Name, missionaryEntity.UserSalutation, missionaryEntity.FirstName, missionaryEntity.LastName, pastorEntity.UserSalutation, pastorEntity.FirstName, pastorEntity.LastName,
+                  pastorEntity.Email, dgmd.FirstName, dgmd.LastName, dgmd.Phone, dgmd.Email, missionaryEntity.Email, appointment.EventDate.DayOfWeek.ToString(), churchEntity.ChurchName, dgmd.UserSalutation, appointmentEntity.EventDate.ToString(), missionaryEntity.Country.Name, dgmd.TelePhoneNo);
+
+
+
                 return "";
             }
+
+            
             catch (Exception ex)
             {
                 throw ex;
