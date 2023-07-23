@@ -70,5 +70,13 @@ public class DashBoardController : Controller
 
 		return new JsonResult(result);
 	}
+
+    [Route("getMissionarySummary")]
+    public async Task<IActionResult> GetMissionarySummary()
+    {
+        var result = await _dashBoardService.GetMissionarySummary();
+
+        return new JsonResult(result);
+    }
 }
 

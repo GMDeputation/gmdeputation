@@ -14,6 +14,7 @@ namespace SFA.Services
         Task<List<MacroScheduleDetailCount>> GetMacroScheduleWithFiveServicesOrLess();
         Task<List<ServiceCountOneYear>> GetServiceCountOneYear();
         Task<List<MacroScheduleDetailThirtyDayCount>> GetMacroScheduleDetailThirtyDayCount();
+        Task<List<MissionarySummary>> GetMissionarySummary();
     }
     public class DashBoardService : IDashBoardService
     {
@@ -51,6 +52,11 @@ namespace SFA.Services
             return counts;
         }
 
+        public async Task<List<MissionarySummary>> GetMissionarySummary()
+        {
+            var counts = await _context.MissionarySummary.ToListAsync();
+            return counts;
+        }
 
     }
 }

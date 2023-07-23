@@ -15,4 +15,9 @@
         return resp;
     };
 
+    this.getMissionarySummary = function () {
+        var resp = $http.get('/dashBoard/getMissionarySummary');
+        return resp;
+    };
+
 });

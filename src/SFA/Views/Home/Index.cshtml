@@ -8,14 +8,18 @@
 
             <div class="col-xl-4 col-md-6 col-12">
                 <div class="info-box bg-b-blue">
-                    <span class="info-box-icon push-bottom"><i class="material-icons">shopping_cart</i></span>
+                    <span class="info-box-icon push-bottom">
+                        <i class="ng-binding" style="font-weight:bold;text-shadow: 1px 1px 5px #111;font-size: 44px;font-style: normal;">
+                            {{macros[0].macro_lt5_services}}
+                        </i>
+                    </span>
                     <div class="info-box-content">
-                        <span class="info-box-text" style="font-weight:600;font-size: 18px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
+                        <span class="info-box-text" style="font-weight:600;font-size: 22px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
                             Unscheduled Services
                         </span>
-                        <span class="progress-description">
-                            <span style="font-weight:500;font-size: 14px;display:block;" class="ng-binding">
-                                Total without Services: {{macros[0].macro_lt5_services}}
+                        <span class="info-box-number">
+                            <span style="font-weight:500; font-size:14px;display:block;">
+                                Unscheduled services within 30 days
                             </span>
                         </span>
                         <span class="progress-description">
@@ -24,6 +28,7 @@
                             </span>
                         </span>
                     </div>
+
                     <!-- /.info-box-content -->
                 </div>
                 <!-- /.info-box -->
@@ -31,14 +36,18 @@
             <!-- /.col -->
             <div class="col-xl-4 col-md-6 col-12">
                 <div class="info-box bg-b-black">
-                    <span class="info-box-icon push-bottom"><i class="material-icons">redeem</i></span>
+                    <span class="info-box-icon push-bottom">
+                        <i class="ng-binding" style="font-weight:bold;text-shadow: 1px 1px 5px #111;font-size: 44px;font-style: normal;">
+                            {{upcoming[0].upcoming_mac_sched}}
+                        </i>
+                    </span>
                     <div class="info-box-content">
-                        <span class="info-box-text" style="font-weight:600;font-size: 18px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
+                        <span class="info-box-text" style="font-weight:600;font-size: 22px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
                             Upcoming Missionaries
                         </span>
                         <span class="info-box-number">
                             <span style="font-weight:500; font-size:14px;display:block;">
-                                Upcoming within 30-days: {{upcoming[0].upcoming_mac_sched}}
+                                Upcoming within 30-days
                             </span>
                         </span>
                         <span class="progress-description">
@@ -54,14 +63,18 @@
             <!-- /.col -->
             <div class="col-xl-4 col-md-6 col-12">
                 <div class="info-box bg-b-danger">
-                    <span class="info-box-icon push-bottom"><i class="material-icons">group</i></span>
+                    <span class="info-box-icon push-bottom">
+                        <i class="ng-binding" style="font-weight:bold;text-shadow: 1px 1px 5px #111;font-size: 44px;font-style: normal;">
+                            --
+                        </i>
+                    </span>
                     <div class="info-box-content">
-                        <span class="info-box-text" style="font-weight:600;font-size: 18px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
+                        <span class="info-box-text" style="font-weight:600;font-size: 22px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
                             Churches with EQs
                         </span>
                         <span class="info-box-number">
                             <span style="font-weight:500; font-size:14px;display:block;">
-                                Upcoming within 30-days: {{upcoming[0].upcoming_mac_sched}}
+                                Upcoming within 30-days: 
                             </span>
                         </span>
                         <span class="progress-description">
@@ -81,19 +94,23 @@
         <div class="row">
             <div class="col-xl-4 col-md-6 col-12">
                 <div class="info-box bg-b-blue">
-                    <span class="info-box-icon push-bottom"><i class="material-icons">shopping_cart</i></span>
+                    <span class="info-box-icon push-bottom">
+                        <i class="ng-binding" style="font-weight:bold;text-shadow: 1px 1px 5px #111;font-size: 44px;font-style: normal;">
+                            --
+                        </i>
+                    </span>
                     <div class="info-box-content">
-                        <span class="info-box-text" style="font-weight:600;font-size: 18px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
-                            Total Services
+                        <span class="info-box-text" style="font-weight:600;font-size: 22px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
+                            Total Services (90 Days)
                         </span>
                         <span class="info-box-number">
                             <span style="font-weight:500; font-size:14px;display:block;">
-                                Last 365 Days: {{services[0].cy_tot_services}} ({{services[0].pct_yoy}})
+                                This Year: {{services[0].cy_tot_services}} ({{services[0].pct_yoy}})
                             </span>
                         </span>
                         <span class="info-box-number">
                             <span style="font-weight:500; font-size:14px;display:block;">
-                                Previous 365 Days: {{services[0].py_tot_services}}
+                                Last Year: {{services[0].py_tot_services}}
                             </span>
                         </span>
                     </div>
@@ -104,10 +121,14 @@
             <!-- /.col -->
             <div class="col-xl-4 col-md-6 col-12">
                 <div class="info-box bg-b-black">
-                    <span class="info-box-icon push-bottom"><i class="material-icons">redeem</i></span>
+                    <span class="info-box-icon push-bottom">
+                        <i class="ng-binding" style="font-weight:bold;text-shadow: 1px 1px 5px #111;font-size: 44px;font-style: normal;">
+                            --
+                        </i>
+                    </span>
                     <div class="info-box-content">
                         <span class="info-box-text">
-                            <span class="info-box-text" style="font-weight:600;font-size: 18px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
+                            <span class="info-box-text" style="font-weight:600;font-size: 22px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
                                 Pastors without Missionary Services
                             </span>
                         </span>
@@ -133,7 +154,7 @@
                     <span class="info-box-icon push-bottom"><i class="material-icons">group</i></span>
                     <div class="info-box-content">
                         <span class="info-box-text">
-                            <span class="info-box-text" style="font-weight:600;font-size: 18px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
+                            <span class="info-box-text" style="font-weight:600;font-size: 22px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
                                 I AM Global (DistrictName)
                             </span>
                         </span>
@@ -160,7 +181,7 @@
         <div class="col-sm-8">
             <div class="card card-box">
                 <div class="card-head">
-                    <header>Chart Survey</header>
+                    <header style="height: unset !important;">Missionaries by Month</header>
                     <div class="tools">
                         <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
                         <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
@@ -177,19 +198,35 @@
         <div class="col-sm-3">
             <div class="card card-box">
                 <div class="card-head">
-                    <header>Chart Survey</header>
-                    <div class="tools">
-                        <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
-                        <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
-                        <a class="t-close btn-color fa fa-times" href="javascript:;"></a>
-                    </div>
+                    <header style="height: unset !important;text-align:center;display:block;">Missionary Dataset</header>
                 </div>
                 <div class="card-body no-padding height-9">
                     <div class="row">
-                        <canvas id="chartjs_pie"></canvas>
+                        <md-table-container style="width:100%;margin: 0 auto;">
+                            <table md-table id="tbl_missionary">
+                                <thead md-head>
+                                    <tr md-row>
+                                        <th md-column style="font-size:12px;text-align:center;">Year</th>
+                                        <th md-column style="font-size:12px;text-align:center;">Month</th>
+                                        <th md-column style="font-size:12px;text-align:center;">Missionaries</></th>
+                                        <th md-column style="font-size:12px;text-align:center;">Schedules</th>
+                                    </tr>
+                                </thead>
+                                <tbody md-body>
+                                    <tr md-row data-ng-repeat="data in summary track by $index">
+                                        <td md-cell style="font-size:12px;text-align:center;" class="">{{data.rpt_year}}</td>
+                                        <td md-cell style="font-size:12px;text-align:center;" class="">{{data.rpt_month_name}}</td>
+                                        <td md-cell style="font-size:12px;text-align:center;" class="">{{data.missionary_cy}}</td>
+                                        <td md-cell style="font-size:12px;text-align:center;" class="">{{data.schedule_cy}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
                     </div>
                 </div>
             </div>
+
+            <!--
             <div class="card card-box">
                 <div class="card-head">
                     <header>Chart Survey</header>
@@ -205,6 +242,7 @@
                     </div>
                 </div>
             </div>
+            -->
 
         </div>
 
@@ -215,15 +253,13 @@
     <link rel="stylesheet" href="~/styles/bootstrap.min.css" />
     <link rel="stylesheet" href="~/styles/material-icon.css" />
     <link rel="stylesheet" href="~/styles/Dashboard/style.css" />
-
 }
 @section Scripts{
     <script src="~/lib/jquery.min.js"></script>
     <script src="~/lib/bootstrap.min.js"></script>
     <script src="~/lib/Chart.bundle.js"></script>
     <script src="~/lib/utils.js"></script>
-    <script src="~/lib/home-data.js"></script>
-
+    
     <script src="~/libs/Chart.min.js"></script>
     <script src="~/libs/angular-chart.min.js"></script>
     <script src="~/libs/angularResource.js"></script>
@@ -231,7 +267,5 @@
     <script src="~/scripts/services/dashboardService.js" asp-append-version="true"></script>
     <script src="~/scripts/controllers/dashboardController.js" asp-append-version="true"></script>
 
+    <script src="~/lib/home-data.js" asp-append-version="true"></script>
 }
-<script>
-    let myChart = document.getElementById('chartjs_pie')
-</script>
