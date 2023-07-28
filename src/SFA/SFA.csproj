@@ -199,13 +199,13 @@
 
   <ItemGroup>
     <Reference Include="MailKit">
-      <HintPath>..\..\..\..\gmdeputation0\MailKit.dll</HintPath>
+      <HintPath>D:\gmdeputation-6ae649ce0dab5f2a983faacdc997e42ed7e7a20b\gmdeputation-6ae649ce0dab5f2a983faacdc997e42ed7e7a20b\MailKit.dll</HintPath>
     </Reference>
     <Reference Include="MimeKit">
-      <HintPath>..\..\..\..\gmdeputation0\MimeKit.dll</HintPath>
+      <HintPath>D:\gmdeputation-6ae649ce0dab5f2a983faacdc997e42ed7e7a20b\gmdeputation-6ae649ce0dab5f2a983faacdc997e42ed7e7a20b\MimeKit.dll</HintPath>
     </Reference>
     <Reference Include="NETCore.MailKit">
-      <HintPath>..\..\..\..\gmdeputation0\NETCore.MailKit.dll</HintPath>
+      <HintPath>D:\gmdeputation-6ae649ce0dab5f2a983faacdc997e42ed7e7a20b\gmdeputation-6ae649ce0dab5f2a983faacdc997e42ed7e7a20b\NETCore.MailKit.dll</HintPath>
     </Reference>
   </ItemGroup>
 

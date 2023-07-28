@@ -47,6 +47,17 @@ namespace SFA.Services
             macroScheduleDetailsEntity.Cancellation_Notes = macroScheduleDetails.Cancellation_Notes;
             macroScheduleDetailsEntity.IsCanceledBy = loggedinUser;
 
+            //Send email that macro Scheudle was cancelled
+            Utilites email = new Utilites();
+           
+          
+            var macroScheudleDetailEntitymain = await _context.TblMacroScheduleDetailsNta.Where(m => m.Id == macroScheduleDetails.Id).FirstAsync();
+            var missionaryEntitymain = await _context.TblUserNta.Include(m => m.Country).Where(m => m.Id == macroScheudleDetailEntitymain.UserId).FirstAsync();
+            var dgmdmain = await _context.TblUserNta.Where(m => m.DistrictId == macroScheduleDetails.DistrictId && m.RoleId == 7).FirstAsync();
+
+
+            email.SendEmailForCancelledMacroSchedule(macroScheduleDetails.DistrictName, missionaryEntitymain.FirstName, missionaryEntitymain.LastName, dgmdmain.UserSalutation, dgmdmain.LastName, macroScheduleDetails.StartDate.ToString(), macroScheduleDetails.EndDate.ToString(), "Cancelled", macroScheduleDetails.Cancellation_Notes, dgmdmain.Email, dgmdmain.Phone);
+
             //This is going through all the appointments that are tied to the macro schedule and
             //Cancelling them as well.
             foreach (var item in macroScheduleDetailsAppointmentsEntity)
@@ -55,6 +66,23 @@ namespace SFA.Services
                 item.Cancellation_DateTime = DateTime.Now;
                 item.Cancellation_Notes = macroScheduleDetails.Cancellation_Notes;
                 item.IsCanceledBy = loggedinUser;
+
+                //Get Data to Send Email
+                var churchEntity = await _context.TblChurchNta.Where(m => m.Id == item.ChurchId).FirstAsync();
+                var districtEntity = await _context.TblDistrictNta.Where(m => m.Id == churchEntity.DistrictId).FirstAsync();
+                var macroScheudleDetailEntity = await _context.TblMacroScheduleDetailsNta.Where(m => m.Id == item.MacroScheduleDetailId).FirstAsync();
+                var missionaryEntity = await _context.TblUserNta.Include(m => m.Country).Where(m => m.Id == macroScheudleDetailEntity.UserId).FirstAsync();
+                //Gets the link to see who the pastor is in a church
+                var linkToPastorAndChurchEntity = await _context.TblUserChurchNta.Where(m => m.ChurchId == item.ChurchId).FirstAsync();
+                var pastorEntity = await _context.TblUserNta.Include(m => m.TblUserChurchNta).Where(m => m.Id == linkToPastorAndChurchEntity.UserId).FirstAsync();
+                var dgmd = await _context.TblUserNta.Where(m => m.DistrictId == districtEntity.Id && m.RoleId == 7).FirstAsync();
+                var serviceTimeEntity = await _context.TblChurchServiceTimeNta.Where(m => m.Id == item.ServiceTypeId).FirstAsync();
+                var serviceTypeEntity = await _context.TblServiceTypeNta.Where(m => m.Id == serviceTimeEntity.ServiceTypeId).FirstAsync();
+
+                //Send email that appointment was cancelled
+                Utilites tmp = new Utilites();
+                tmp.SendEmailForCancelledAppointments(districtEntity.Name, missionaryEntity.UserSalutation, missionaryEntity.FirstName, missionaryEntity.LastName, pastorEntity.UserSalutation, pastorEntity.FirstName, pastorEntity.LastName,
+                  pastorEntity.Email, dgmd.FirstName, dgmd.LastName, dgmd.Phone, dgmd.Email, missionaryEntity.Email, item.EventDate.DayOfWeek.ToString(), churchEntity.ChurchName, dgmd.UserSalutation, item.EventDate.ToString(), missionaryEntity.Country.Name, dgmd.TelePhoneNo);
             }
 
                 try
