@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "List of Appointments";
 }
+
 <div data-ng-controller="appointmentsController">
     <div class="topbar">
         <div class="md-toolbar-tools" layout="row">
@@ -82,7 +83,7 @@
                     <tr class="md-row md-row-empty" ng-show="appointments.length === 0">
                         <td class="md-cell" colspan="11">No Data Found</td>
                     </tr>
-                    <tr md-row md-select="appointment.id" md-select-id="id" ng-disabled="(appointment.accessCode === 'P' && appointment.isAcceptByPastor) || (appointment.accessCode === 'M' && appointment.isAcceptMissionary)" md-auto-select data-ng-repeat="appointment in appointments track by $index">
+                    <tr md-row md-select="appointment.id" md-select-id="id" ng-disabled="(appointment.accessCode === 'P' && appointment.isAcceptByPastor) || (appointment.accessCode === 'M' && appointment.isAcceptMissionary)" md-auto-select data-ng-repeat="appointment in appointments track by $index" ng-class="{'canceled-rec':appointment.status === 'Canceled'}">
                         <td md-cell class="center">{{((query.page - 1) * query.limit) + ($index+1)}}</td>
                         <td md-cell class="pad-l-8">{{appointment.districtName}}</td>
                         <td md-cell class="pad-l-8">{{appointment.macroScheduleDesc}}</td>
@@ -141,7 +142,7 @@
                     <tr class="md-row md-row-empty" ng-show="appointments.length === 0">
                         <td class="md-cell" colspan="11">No Data Found</td>
                     </tr>
-                    <tr md-row data-ng-repeat="appointment in appointments track by $index">
+                    <tr md-row data-ng-repeat="appointment in appointments track by $index" ng-class="{'canceled-rec':appointment.status === 'Canceled'}">
                         <td md-cell class="center">{{((query.page - 1) * query.limit) + ($index+1)}}</td>
                         <td md-cell class="pad-l-8">{{appointment.districtName}}</td>
                         <td md-cell class="pad-l-8">{{appointment.macroScheduleDesc}}</td>
@@ -173,4 +174,7 @@
 @section Scripts{
     <script src="~/scripts/services/appointmentService.js" asp-append-version="true"></script>
     <script src="~/scripts/controllers/appointmentsController.js" asp-append-version="true"></script>
+    <script>
+
+    </script>
 }

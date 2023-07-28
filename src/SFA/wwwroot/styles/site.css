@@ -1159,3 +1159,21 @@ md-card > .md-accordion > md-toolbar:nth-child(odd) {
         display: none;
     }
 }
+
+.canceled-rec > td:before {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    border-bottom: 1px solid #000;
+    width: 100%;
+}
+
+.canceled-rec > td {
+    color: #333 !important;
+}
+
+td {
+    position: relative;
+    padding: 5px 10px;
+}

@@ -7,8 +7,10 @@ $(document).ready(function () {
         var json = [];
         var headers = [];
         var xlabel = [];
-        var wdata = [];
-        var xdata = [];
+        var cmdata = [];
+        var csdata = [];
+        var pmdata = [];
+        var psdata = [];
 
         for (var i = 0; i < table[0].rows[0].cells.length; i++) {
             headers[i] = table[0].rows[0].cells[i].innerHTML.toLowerCase().replace(/ /gi, '');
@@ -21,8 +23,10 @@ $(document).ready(function () {
                 rowData[headers[j]] = tableRow.cells[j].innerHTML;
                 if (i < 13) {
                     xlabel[i - 1] = tableRow.cells[1].innerHTML + ' ' + tableRow.cells[0].innerHTML;
-                    wdata[i - 1] = tableRow.cells[2].innerHTML;
-                    xdata[i - 1] = tableRow.cells[3].innerHTML;
+                    cmdata[i - 1] = tableRow.cells[2].innerHTML;
+                    csdata[i - 1] = tableRow.cells[3].innerHTML;
+                    pmdata[i - 1] = tableRow.cells[4].innerHTML;
+                    psdata[i - 1] = tableRow.cells[5].innerHTML;
                 }
             }
             json.push(rowData);
@@ -36,25 +40,25 @@ $(document).ready(function () {
                 label: 'Missionaries',
                 backgroundColor: '#a7c4e7',
                 borderColor: '#537092',
-                data: wdata
+                data: cmdata
             }, {
                 type: 'bar',
                 label: 'Missionaries (PY)',
                 backgroundColor: color(window.chartColors.blue).alpha(0.2).rgbString(),
                 borderColor: window.chartColors.blue,
-                data: wdata
+                data: csdata
             }, {
                 type: 'bar',
                 label: 'Schedules',
                 backgroundColor: color(window.chartColors.green).alpha(0.2).rgbString(),
                 borderColor: window.chartColors.green,
-                data: xdata
+                data: pmdata
             }, {
                 type: 'bar',
                 label: 'Schedules (PY)',
                 backgroundColor: color(window.chartColors.green).alpha(0.2).rgbString(),
                 borderColor: window.chartColors.green,
-                data: xdata
+                data: psdata
             }]
         };
 

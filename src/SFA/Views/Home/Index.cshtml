@@ -151,7 +151,11 @@
             <!-- /.col -->
             <div class="col-xl-4 col-md-6 col-12">
                 <div class="info-box bg-b-danger">
-                    <span class="info-box-icon push-bottom"><i class="material-icons">group</i></span>
+                    <span class="info-box-icon push-bottom">
+                        <i class="ng-binding" style="font-weight:bold;text-shadow: 1px 1px 5px #111;font-size: 44px;font-style: normal;">
+                            --
+                        </i>
+                    </span>
                     <div class="info-box-content">
                         <span class="info-box-text">
                             <span class="info-box-text" style="font-weight:600;font-size: 22px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
@@ -195,7 +199,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-3" style="max-width:unset;">
             <div class="card card-box">
                 <div class="card-head">
                     <header style="height: unset !important;text-align:center;display:block;">Missionary Dataset</header>
@@ -206,18 +210,22 @@
                             <table md-table id="tbl_missionary">
                                 <thead md-head>
                                     <tr md-row>
-                                        <th md-column style="font-size:14px;text-align:center;">Year</th>
-                                        <th md-column style="font-size:14px;text-align:center;">Month</th>
-                                        <th md-column style="font-size:14px;text-align:center;">Missionaries</></th>
-                                        <th md-column style="font-size:14px;text-align:center;">Schedules</th>
+                                        <th md-column style="font-size:13px;text-align:center;line-height:1;padding:0;">Year</th>
+                                        <th md-column style="font-size:13px;text-align:center;line-height:1;">Month</th>
+                                        <th md-column style="font-size:13px;text-align:center;line-height:1;">Missionaries<span style="display:block;font-size:11px;">Current</span></th>
+                                        <th md-column style="font-size:13px;text-align:center;line-height:1;">Schedules<span style="display:block;font-size:11px;">Current</span></th>
+                                        <th md-column style="font-size:13px;text-align:center;line-height:1;">Missionaries<span style="display:block;font-size:11px;">Previous</span></th>
+                                        <th md-column style="font-size:13px;text-align:center;line-height:1;">Schedules<span style="display:block;font-size:11px;">Previous</span></th>
                                     </tr>
                                 </thead>
                                 <tbody md-body>
                                     <tr md-row data-ng-repeat="data in summary track by $index">
-                                        <td md-cell style="font-size:14px;text-align:center;" class="">{{data.rpt_year}}</td>
-                                        <td md-cell style="font-size:14px;text-align:center;" class="">{{data.rpt_month_name}}</td>
-                                        <td md-cell style="font-size:14px;text-align:center;" class="">{{data.missionary_cy}}</td>
-                                        <td md-cell style="font-size:14px;text-align:center;" class="">{{data.schedule_cy}}</td>
+                                        <td md-cell style="font-size:12px;text-align:center;" class="">{{data.rpt_year}}</td>
+                                        <td md-cell style="font-size:12px;text-align:center;" class="">{{data.rpt_month_name}}</td>
+                                        <td md-cell style="font-size:12px;text-align:center;" class="">{{data.missionary_cy}}</td>
+                                        <td md-cell style="font-size:12px;text-align:center;" class="">{{data.schedule_cy}}</td>
+                                        <td md-cell style="font-size:12px;text-align:center;" class="">{{data.missionary_py}}</td>
+                                        <td md-cell style="font-size:12px;text-align:center;" class="">{{data.schedule_py}}</td>
                                     </tr>
                                 </tbody>
                             </table>

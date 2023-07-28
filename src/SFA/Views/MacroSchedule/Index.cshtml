@@ -104,7 +104,7 @@
                     <tr class="md-row md-row-empty" ng-show="macroSchedules.length === 0">
                         <td class="md-cell" colspan="10">No Data Found</td>
                     </tr>
-                    <tr md-row md-select="macroSchedule.id" md-select-id="id" ng-disabled="macroSchedule.isApproved || macroSchedule.isRejected" md-auto-select data-ng-repeat="macroSchedule in macroSchedules track by $index">
+                    <tr md-row md-select="macroSchedule.id" md-select-id="id" ng-disabled="macroSchedule.isApproved || macroSchedule.isRejected" md-auto-select data-ng-repeat="macroSchedule in macroSchedules track by $index" ng-class="{'canceled-rec':macroSchedule.status === 'Canceled'}">
                         <td md-cell class="center">{{((query.page - 1) * query.limit) + ($index+1)}}</td>
                         <td md-cell class="pad-l-8">{{macroSchedule.entryDate | date:'MM/dd/yyyy'}}</td>
                         <td md-cell class="pad-l-8">{{macroSchedule.startDate | date:'MM/dd/yyyy'}}</td>
@@ -169,7 +169,7 @@
                     <tr class="md-row md-row-empty" ng-show="macroSchedules.length === 0">
                         <td class="md-cell" colspan="10">No Data Found</td>
                     </tr>
-                    <tr md-row md-auto-select data-ng-repeat="macroSchedule in macroSchedules track by $index">
+                    <tr md-row md-auto-select data-ng-repeat="macroSchedule in macroSchedules track by $index" ng-class="{'canceled-rec':macroSchedule.status === 'Canceled'}">
                         <td md-cell class="center">{{((query.page - 1) * query.limit) + ($index+1)}}</td>
                         <td md-cell class="pad-l-8">{{macroSchedule.entryDate | date:'MM/dd/yyyy'}}</td>
                         <td md-cell class="pad-l-8">{{macroSchedule.startDate | date:'MM/dd/yyyy'}}</td>
