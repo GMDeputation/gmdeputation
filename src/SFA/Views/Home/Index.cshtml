@@ -3,83 +3,92 @@
 }
 
 <div data-ng-controller="DashBoardController">
+    <div class="page-header-title">
+        <div class="page-breadcrumb">
+            <span>Home</span> \ <span>Dashboard</span>
+        </div>
+        <h2>Dashboard</h2>
+    </div>
     <div class="state-overview">
         <div class="row">
+            <div class="col-xl-3 col-md-6 col-12">
+                <a href="/reports/macroscheduleWithApoinmentReport" style="color:#FFF !important;" title="Appointment by Macro Report">
+                    <div class="info-box">
+                        <span class="info-box-icon push-bottom">
+                            <i class="ng-binding" style="font-weight:bold;font-size: 44px;font-style: normal;">
+                                {{macros[0].macro_lt5_services}}
+                            </i>
+                        </span>
+                        <div class="info-box-content">
+                            <h4 class="info-box-text" style="font-weight:600;margin: 5px 0;border-bottom: 2px solid #CCC;letter-spacing: -1px;">
+                                Unscheduled Services
+                            </h4>
+                            <span class="info-box-number">
+                                <span style="font-weight:500; display:block;">
+                                    Unscheduled services within 30 days
+                                </span>
+                            </span>
+                            <span class="progress-description">
+                                <span style="font-weight:500; display:block;">
+                                    Total with <= 5 Services: {{macros[0].macro_lt5_services}}
+                                </span>
+                            </span>
+                        </div>
 
-            <div class="col-xl-4 col-md-6 col-12">
-                <div class="info-box bg-b-blue">
-                    <span class="info-box-icon push-bottom">
-                        <i class="ng-binding" style="font-weight:bold;text-shadow: 1px 1px 5px #111;font-size: 44px;font-style: normal;">
-                            {{macros[0].macro_lt5_services}}
-                        </i>
-                    </span>
-                    <div class="info-box-content">
-                        <span class="info-box-text" style="font-weight:600;font-size: 22px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
-                            Unscheduled Services
-                        </span>
-                        <span class="info-box-number">
-                            <span style="font-weight:500; font-size:14px;display:block;">
-                                Unscheduled services within 30 days
-                            </span>
-                        </span>
-                        <span class="progress-description">
-                            <span style="font-weight:500; font-size:14px;display:block;">
-                                Total with <= 5 Services: {{macros[0].macro_lt5_services}}
-                            </span>
-                        </span>
+                        <!-- /.info-box-content -->
                     </div>
-
-                    <!-- /.info-box-content -->
-                </div>
+                <!-- /.info-box -->
+                </a>
+            </div>
+            <!-- /.col -->
+            <div class="col-xl-3 col-md-6 col-12">
+                <a href="/reports/missionaryMacroScheduleReport" style="color:#FFF !important;" title="Macro Report">
+                    <div class="info-box">
+                        <span class="info-box-icon push-bottom">
+                            <i class="ng-binding" style="font-weight:bold;font-size: 44px;font-style: normal;">
+                                {{upcoming[0].upcoming_mac_sched}}
+                            </i>
+                        </span>
+                        <div class="info-box-content">
+                            <h4 class="info-box-text" style="font-weight:600;margin: 5px 0;border-bottom: 2px solid #CCC;letter-spacing: -1px;">
+                                Upcoming Missionaries
+                            </h4>
+                            <span class="info-box-number">
+                                <span style="font-weight:500; display:block;">
+                                    Upcoming within 30-days
+                                </span>
+                            </span>
+                            <span class="progress-description">
+                                <span style="font-weight:500; display:block;">
+                                    Associated Appointments: {{upcoming[0].upcoming_services}}
+                                </span>
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </a>
                 <!-- /.info-box -->
             </div>
             <!-- /.col -->
-            <div class="col-xl-4 col-md-6 col-12">
-                <div class="info-box bg-b-black">
+            <div class="col-xl-3 col-md-6 col-12">
+                <div class="info-box">
                     <span class="info-box-icon push-bottom">
-                        <i class="ng-binding" style="font-weight:bold;text-shadow: 1px 1px 5px #111;font-size: 44px;font-style: normal;">
-                            {{upcoming[0].upcoming_mac_sched}}
+                        <i class="ng-binding" style="font-weight:bold;font-size: 44px;font-style: normal;">
+                            {{churcheq[0].tot_church_eq}}
                         </i>
                     </span>
                     <div class="info-box-content">
-                        <span class="info-box-text" style="font-weight:600;font-size: 22px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
-                            Upcoming Missionaries
-                        </span>
-                        <span class="info-box-number">
-                            <span style="font-weight:500; font-size:14px;display:block;">
-                                Upcoming within 30-days
-                            </span>
-                        </span>
-                        <span class="progress-description">
-                            <span style="font-weight:500; font-size:14px;display:block;">
-                                Associated Appointments: {{upcoming[0].upcoming_services}}
-                            </span>
-                        </span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-            <div class="col-xl-4 col-md-6 col-12">
-                <div class="info-box bg-b-danger">
-                    <span class="info-box-icon push-bottom">
-                        <i class="ng-binding" style="font-weight:bold;text-shadow: 1px 1px 5px #111;font-size: 44px;font-style: normal;">
-                            --
-                        </i>
-                    </span>
-                    <div class="info-box-content">
-                        <span class="info-box-text" style="font-weight:600;font-size: 22px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
+                        <h4 class="info-box-text" style="font-weight:600;margin: 5px 0;border-bottom: 2px solid #CCC;letter-spacing: -1px;">
                             Churches with EQs
-                        </span>
+                        </h4>
                         <span class="info-box-number">
-                            <span style="font-weight:500; font-size:14px;display:block;">
-                                Upcoming within 30-days: 
+                            <span style="font-weight:500; display:block;">
+                                Number of Churches with an EQ count greater than 0
                             </span>
                         </span>
                         <span class="progress-description">
-                            <span style="font-weight:500; font-size:14px;display:block;">
-                                Associated Appointments: {{upcoming[0].upcoming_services}}
+                            <span style="font-weight:500; display:block;">
+                                &nbsp;
                             </span>
                         </span>
                     </div>
@@ -92,25 +101,54 @@
 
     <div class="state-overview">
         <div class="row">
-            <div class="col-xl-4 col-md-6 col-12">
-                <div class="info-box bg-b-blue">
+            <div class="col-xl-3 col-md-6 col-12">
+                <a href="/reports/pastorAppoinmentReport" style="color:#FFF !important;" title="Pastor Appointment Report">
+                    <div class="info-box">
+                        <span class="info-box-icon push-bottom">
+                            <i class="ng-binding" style="font-weight:bold;font-size: 44px;font-style: normal;">
+                                {{services[0].cy_tot_services}}
+                            </i>
+                        </span>
+                        <div class="info-box-content">
+                            <h4 class="info-box-text" style="font-weight:600;margin: 5px 0;border-bottom: 2px solid #CCC;letter-spacing: -1px;">
+                                Total Services (90 Days)
+                            </h4>
+                            <span class="info-box-number">
+                                <span style="font-weight:500; display:block;">
+                                    This Year: {{services[0].cy_tot_services}} ({{services[0].pct_yoy}})
+                                </span>
+                            </span>
+                            <span class="info-box-number">
+                                <span style="font-weight:500; display:block;">
+                                    Last Year: {{services[0].py_tot_services}}
+                                </span>
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                <!-- /.info-box -->
+                </a>
+            </div>
+            <!-- /.col -->
+            <div class="col-xl-3 col-md-6 col-12">
+                <div class="info-box">
                     <span class="info-box-icon push-bottom">
-                        <i class="ng-binding" style="font-weight:bold;text-shadow: 1px 1px 5px #111;font-size: 44px;font-style: normal;">
-                            {{services[0].cy_tot_services}}
+                        <i class="ng-binding" style="font-weight:bold;font-size: 44px;font-style: normal;">
+                            {{churchsvc[0].church_no_svc_cy}}
                         </i>
                     </span>
                     <div class="info-box-content">
-                        <span class="info-box-text" style="font-weight:600;font-size: 22px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
-                            Total Services (90 Days)
-                        </span>
+                        <h4 class="info-box-text" style="font-weight:600;margin: 5px 0;border-bottom: 2px solid #CCC;letter-spacing: -1px;">
+                            Churches w/o Missionary Services
+                        </h4>
                         <span class="info-box-number">
-                            <span style="font-weight:500; font-size:14px;display:block;">
-                                This Year: {{services[0].cy_tot_services}} ({{services[0].pct_yoy}})
+                            <span style="font-weight:500; display:block;">
+                                Pastors w/o Appointments: {{churchsvc[0].church_no_svc_cy}}
                             </span>
                         </span>
                         <span class="info-box-number">
-                            <span style="font-weight:500; font-size:14px;display:block;">
-                                Last Year: {{services[0].py_tot_services}}
+                            <span style="font-weight:500; display:block;">
+                                vs Prior Year: {{churchsvc[0].church_no_svc_py}}
                             </span>
                         </span>
                     </div>
@@ -119,57 +157,25 @@
                 <!-- /.info-box -->
             </div>
             <!-- /.col -->
-            <div class="col-xl-4 col-md-6 col-12">
-                <div class="info-box bg-b-black">
+            <div class="col-xl-3 col-md-6 col-12">
+                <div class="info-box">
                     <span class="info-box-icon push-bottom">
-                        <i class="ng-binding" style="font-weight:bold;text-shadow: 1px 1px 5px #111;font-size: 44px;font-style: normal;">
+                        <i class="ng-binding" style="font-weight:bold;font-size: 44px;font-style: normal;">
                             --
                         </i>
                     </span>
                     <div class="info-box-content">
-                        <span class="info-box-text">
-                            <span class="info-box-text" style="font-weight:600;font-size: 22px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
-                                Pastors without Missionary Services
-                            </span>
-                        </span>
+                        <h4 class="info-box-text" style="font-weight:600;margin: 5px 0;border-bottom: 2px solid #CCC;letter-spacing: -1px;">
+                            I AM Global
+                        </h4>
                         <span class="info-box-number">
-                            <span style="font-weight:500; font-size:14px;display:block;">
-                                Churches without Appointments: ---
-                            </span>
-                        </span>
-                        <br />
-                        <span class="info-box-number">
-                            <span style="font-weight:500; font-size:14px;display:block;">
-
-                            </span>
-                        </span>
-                    </div>
-                    <!-- /.info-box-content -->
-                </div>
-                <!-- /.info-box -->
-            </div>
-            <!-- /.col -->
-            <div class="col-xl-4 col-md-6 col-12">
-                <div class="info-box bg-b-danger">
-                    <span class="info-box-icon push-bottom">
-                        <i class="ng-binding" style="font-weight:bold;text-shadow: 1px 1px 5px #111;font-size: 44px;font-style: normal;">
-                            --
-                        </i>
-                    </span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">
-                            <span class="info-box-text" style="font-weight:600;font-size: 22px !important;margin: 5px 0;border-bottom: 2px solid #CCC;">
-                                I AM Global (DistrictName)
-                            </span>
-                        </span>
-                        <span class="info-box-number">
-                            <span style="font-weight:500; font-size:14px;display:block;">
+                            <span style="font-weight:500; display:block;">
 
                             </span>
                         </span>
                         <br />
                         <span class="info-box-number">
-                            <span style="font-weight:500; font-size:14px;display:block;">
+                            <span style="font-weight:500; display:block;">
 
                             </span>
                         </span>
@@ -182,15 +188,10 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-9">
             <div class="card card-box">
                 <div class="card-head">
                     <header style="height: unset !important;">Missionaries by Month</header>
-                    <div class="tools">
-                        <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
-                        <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
-                        <a class="t-close btn-color fa fa-times" href="javascript:;"></a>
-                    </div>
                 </div>
                 <div class="card-body no-padding height-9">
                     <div class="row">
@@ -200,7 +201,7 @@
             </div>
         </div>
         <div class="col-sm-3" style="max-width:unset;">
-            <div class="card card-box">
+            <div class="card card-box" style="visibility:hidden;">
                 <div class="card-head">
                     <header style="height: unset !important;text-align:center;display:block;">Missionary Dataset</header>
                 </div>

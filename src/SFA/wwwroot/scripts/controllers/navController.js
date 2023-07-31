@@ -2,7 +2,12 @@
     $scope.notifyCount = 0;
     $scope.notifications = [{}];
     $scope.navigateTo = function (category) {
-        $window.location.href = "/nav/" + category;
+        if (category == 'Dashboard') {
+            var utarget = '/home';
+        } else {
+            var utarget = '/nav/' + category;
+        }
+        $window.location.href = utarget;
     };
     $scope.openSideNavPanel = function () {
         $mdSidenav('right').open();

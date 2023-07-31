@@ -25,7 +25,14 @@
                             <div layout="row" style="padding:4px;">
                                 <i class="@(accessMenu.MenuIcon)"></i>
                                 <div style="margin-left:8px;">
-                                    <a href="@(accessMenu.MenuTarget)">@accessMenu.MenuName</a>
+                                    @if(accessMenu.MenuName == "Dashboard")
+                                    {
+                                        <a href="/home">@accessMenu.MenuName</a>
+                                    } 
+                                    else
+                                    {
+                                        <a href="@(accessMenu.MenuTarget)">@accessMenu.MenuName</a>    
+                                    }
                                 </div>
                             </div>
                         }

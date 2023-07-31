@@ -67,7 +67,13 @@ $(document).ready(function () {
             type: 'bar',
             data: barChartData,
             options: {
-                responsive: true
+                responsive: true,
+                legend: {
+                    display: true,
+                    labels: {
+                        color: 'rgb(255, 99, 132)'
+                    }
+                }
             }
         });
     }

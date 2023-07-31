@@ -24,6 +24,7 @@ using SFA.Extensions;
 using SFA.Filters;
 using SFA.Models;
 using SFA.Services;
+
 [Route("dashBoard")]
 [Authorize]
 public class DashBoardController : Controller
@@ -75,6 +76,22 @@ public class DashBoardController : Controller
     public async Task<IActionResult> GetMissionarySummary()
     {
         var result = await _dashBoardService.GetMissionarySummary();
+
+        return new JsonResult(result);
+    }
+
+    [Route("getChurchEQ")]
+    public async Task<IActionResult> GetChurchEQ()
+    {
+        var result = await _dashBoardService.GetChurchEQ();
+
+        return new JsonResult(result);
+    }
+
+    [Route("getChurchPastorKPI")]
+    public async Task<IActionResult> GetChurchPastorKPI()
+    {
+        var result = await _dashBoardService.GetChurchPastorKPI();
 
         return new JsonResult(result);
     }

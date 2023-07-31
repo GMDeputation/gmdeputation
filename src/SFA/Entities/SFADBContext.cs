@@ -51,6 +51,10 @@ namespace SFA.Entities
 
         public DbSet<MissionarySummary> MissionarySummary { get; set; }
 
+        public DbSet<ChurchEQSummary> ChurchEQSummary { get; set; }
+
+        public DbSet<ChurchPastorServiceKPI> ChurchPastorServiceKPI { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ServiceCountOneYear>(entity =>
@@ -89,6 +93,23 @@ namespace SFA.Entities
 
                 entity.ToView("MissionarySummary");
 
+            });
+
+            modelBuilder.Entity<ChurchEQSummary>(entity =>
+
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ChurchEQSummary");
+
+            });
+
+            modelBuilder.Entity<ChurchPastorServiceKPI>(entity =>
+
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ChurchPastorServiceKPI");
             });
 
             modelBuilder.Entity<TblAccomodationBookingNta>(entity =>

@@ -13,6 +13,12 @@
         dashboardService.getMacroScheduleThirtyDayCount().then(function (resp) {
             $scope.upcoming = resp.data;
         });
+        dashboardService.getChurchEQ().then(function (resp) {
+            $scope.churcheq = resp.data;
+        });
+        dashboardService.getChurchPastorKPI().then(function (resp) {
+            $scope.churchsvc = resp.data;
+        });
     }
     init();
 

@@ -5,6 +5,16 @@
         return resp;
     };
 
+    this.getChurchEQ = function () {
+        var resp = $http.get('/dashBoard/getChurchEQ');
+        return resp;
+    };
+
+    this.getChurchPastorKPI = function () {
+        var resp = $http.get('/dashBoard/getChurchPastorKPI');
+        return resp;
+    };
+
     this.getCount = function () {
         var resp = $http.get('/dashBoard/getCount');
         return resp;

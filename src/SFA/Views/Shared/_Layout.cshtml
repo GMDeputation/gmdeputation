@@ -301,6 +301,86 @@
             cursor: pointer;
             color: #e5e5e5;
         }
+        .info-box {
+            width: unset !important;
+            margin-bottom: 10px;
+            color: #333;
+            padding: 5px 0 !important;
+            border-width: 2px !important;
+            font-family: 'Poppins';
+            border-color: #eee;
+            border-style: solid;
+            height: 125px !important;
+            border-radius: 0 !important;
+        }
+        .info-box span span {
+            font-size: 12px !important;
+        }
+        .info-box h4 {
+            font-size: 15px !important;
+            letter-spacing: -1px !important;
+        }
+
+        .info-box-icon {
+            border-radius: 0 !important;
+            border-left: 5px solid #a7c4e7;
+        }
+        .info-box-number {
+            font-weight: 300;
+            font-size: 21px;
+        }
+        .page-breadcrumb {
+            font-size: 12px;
+            letter-spacing: 1px;
+            color: #777;
+        }
+
+        .info-box-content {
+            padding: 18px 15px 10px 0 !important;
+            margin-left: 82px !important;
+        }
+
+        .page-header-title h2 {
+            font-weight: 500;
+            font-family: 'Poppins';
+        }
+
+        .page-header-title {
+            padding: 10px 5px;
+        }
+
+        .toggler-btn {
+            float: right;
+            color: #fff;
+            border: none;
+            box-shadow: none;
+            background: none;
+            font-size: 2em;
+            line-height: 1.5em;
+        }
+
+        ul.side-nav-list > li {
+            position: relative !important;
+            padding: 15px 20px 15px 25px !important;
+            font-family: Poppins !important;
+            font-size: .9em !important;
+            line-height: 1.25 !important;
+        }
+
+        ul.side-nav-list > li > i {
+            float: right;
+            font-size: 1.3em !important;
+        }
+
+        ul.side-nav-list > li:hover::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            border-right: 4px solid #d3d3d3 !important;
+                height: 47px !important;
+        }
+
     </style>
     @RenderSection("Styles", required: false)
 </head>
@@ -380,7 +460,9 @@
                             </ol>
                             </div>
                             </div>
-                            <span flex="1" class="vertical-seperator" ng-if="@accessGroups.Count() > 0">&nbsp;</span>*@
+                            <span flex="1" class="vertical-seperator" ng-if="@accessGroups.Count() > 0">&nbsp;</span>
+                            *@
+                            
                             <div class="user-info" aria-label="Open Menu" data-ng-click="showUserMenu($event)">
                                 <img src="~/images/user-male.png" width="40" height="40" />
                                 <div class="user-information" hide-xs>
@@ -388,7 +470,9 @@
                                     <small>@(loggedinUser.RoleName)</small>
                                 </div>
                             </div>
-                            @*<span flex="1" class="vertical-seperator">&nbsp;</span>
+                            
+                            @*
+                            <span flex="1" class="vertical-seperator">&nbsp;</span>
                             <div class="work-info" aria-label="Open Menu" data-ng-click="navigateTo('/selection')">
                             <p>
                             <i class="ti-home"></i>
@@ -635,6 +719,8 @@
                 event.stopPropagation();
                 $('.notification-wrapper').toggle("fast");
             });
+            localStorage.setItem("usr_email", "\"@loggedinUser.Email\"");
+            localStorage.setItem("usr_role", "\"@loggedinUser.RoleName\"");
         });
         $(document).on("click", function () {
             $(".notification-wrapper").hide();
@@ -642,6 +728,7 @@
 
     </script>
     <script>
+
         function main_menu_open() {
             var x = document.getElementById("sidebar-wraper");
             var y = document.getElementById("page-wraper");
@@ -671,8 +758,6 @@
             for (var i = 0; i < document.getElementsByClassName("add-btn").length; i++) {
                 document.getElementsByClassName("add-btn")[i].style.background = localStorage.getItem('btn');
             }
-
-
 
         } else {
             document.getElementById("topBarNav").style.background = "#2c3e50";

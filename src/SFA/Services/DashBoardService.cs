@@ -15,7 +15,10 @@ namespace SFA.Services
         Task<List<ServiceCountOneYear>> GetServiceCountOneYear();
         Task<List<MacroScheduleDetailThirtyDayCount>> GetMacroScheduleDetailThirtyDayCount();
         Task<List<MissionarySummary>> GetMissionarySummary();
+        Task<List<ChurchEQSummary>> GetChurchEQ();
+        Task<List<ChurchPastorServiceKPI>> GetChurchPastorKPI();
     }
+
     public class DashBoardService : IDashBoardService
     {
         private readonly SFADBContext _context = null;
@@ -55,6 +58,18 @@ namespace SFA.Services
         public async Task<List<MissionarySummary>> GetMissionarySummary()
         {
             var counts = await _context.MissionarySummary.ToListAsync();
+            return counts;
+        }
+
+        public async Task<List<ChurchEQSummary>> GetChurchEQ()
+        {
+            var counts = await _context.ChurchEQSummary.ToListAsync();
+            return counts;
+        }
+
+        public async Task<List<ChurchPastorServiceKPI>> GetChurchPastorKPI()
+        {
+            var counts = await _context.ChurchPastorServiceKPI.ToListAsync();
             return counts;
         }
 
