@@ -39,6 +39,12 @@ namespace SFA.Services
 
         static string EmailForAppointCancel = "2d6f.32b15e784a472135.k1.de4db970-9d9f-11ed-ab84-525400e3c1b1.185ef265e87";
 
+        //Email 2
+        static string EmailForMissionaryChange = "2d6f.32b15e784a472135.k1.907fa190-9c00-11ed-9725-525400e3c1b1.185e484a229";
+
+        //Function SendEmailForMissionaryDateChange uses this
+        static string EmailForDateChange = "2d6f.32b15e784a472135.k1.656854b0-9c01-11ed-9725-525400e3c1b1.185e48a157b";
+
         private readonly SFADBContext _context = null;
 
         //Templates 1,1a,1b,1c
@@ -413,7 +419,7 @@ namespace SFA.Services
         //This is called when an appointment gets cancelled. 
         public void SendEmailForCancelledAppointments(string district, string MissionaryUserSalutation, string missionaryFirstName, string missionaryLastName, string PastorUserSalutation, string pastorFirstName, string pastorLastName, string PastorEmail, string DGMDFirstName, string DGMDLastName, string DGMDPrimaryPhone, string DGMDemail, string missionaryEmail, string DayOfWeek, string churchName, string DGMDUserSalutation, string eventDate, string MissionaryCountry, string DGMDMobile)
         {
-            //TODO NEED TO FIND OUT HOW TO GET THESE DETAILS
+     
             //{ { district} }
             //{ { MissionaryFirstName} }
             //{ { MissionaryLastName} }
@@ -491,7 +497,7 @@ namespace SFA.Services
         //Template 3
         public void SendEmailForCancelledMacroSchedule(string district, string missionaryFirstName, string missionaryLastName, string UserSalutation, string DGMDLastName, string startdate, string endDate, string status, string reasonText, string DGMDEmail, string DGMDPrimaryPhone)
         {
-            // TODO: FIND OUT HOW TO GET THESE DETAILS
+         
             //{ { district} }
             //{ { MssionaryFirstName} }
             //{ { MissionaryLastName} }
@@ -514,6 +520,141 @@ namespace SFA.Services
             //for template 3
             apiTemplateKey = EmailForMacroScheduleCancel;
             jsonString = "{'template_key':'" + apiTemplateKey + "','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'Troy'},'to': [{'email_address': {'address': '" + DGMDEmail + "','name': 'DGMD'}}],'merge_info':{'district':'" + district + "','MissionaryFirstName':'" + missionaryFirstName + "','MissionaryLastName':'" + missionaryLastName + "','UserSalutation':'" + UserSalutation + "','DGMDLastName':'" + DGMDLastName + "','startDate':'" + startdate + "','EndDate':'" + endDate + "','status':'" + status + "','ReasonText':'" + reasonText + "','DGMDEmail':'" + DGMDEmail + "','DistrictWebsite':'" + districtWebsite + "','DGMDPrimaryPhone':'" + DGMDPrimaryPhone + "'}}";
+
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            var baseAddress = "https://api.zeptomail.com/v1.1/email/template";
+
+            var http = (HttpWebRequest)WebRequest.Create(new Uri(baseAddress));
+            http.Accept = "application/json";
+            http.ContentType = "application/json";
+            http.Method = "POST";
+            http.PreAuthenticate = true;
+            http.Headers.Add("Authorization", "Zoho-enczapikey wSsVR60irB74DaZ+zzL/Lu5umg5RA1ugE0R6jVWiuXH6HvvD98c9wkKcUVOlFPAaEzNqEjdGo7krzUxR2jVa24t+ng5WCyiF9mqRe1U4J3x17qnvhDzKWW9alxONJY4MzgtukmdpEMgn+g==");
+
+            JObject parsedContent = null;
+            try
+            {
+                parsedContent = JObject.Parse(jsonString);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            Console.WriteLine(parsedContent.ToString());
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            Byte[] bytes = encoding.GetBytes(parsedContent.ToString());
+
+            Stream newStream = http.GetRequestStream();
+            newStream.Write(bytes, 0, bytes.Length);
+            newStream.Close();
+            try
+            {
+                var response = http.GetResponse();
+                var stream = response.GetResponseStream();
+                var sr = new StreamReader(stream);
+                var content = sr.ReadToEnd();
+                Console.WriteLine(content);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+
+        //Template 2
+        public void SendEmailForMissionaryChangeMacroSchedule(string district, string MissionaryFirstName, string MissionaryLastName, string MissionaryFirstNameOld, string MissionaryLastNameOld, string MissionarySalutation, string MissionaryEmail, string StartDate, string EndDate, string DGMDEmail, string DGMDPrimaryPhone)
+        {
+            //{{district}}
+            //{{MissionaryFirstName}}
+            //{{MissionaryLastName}}
+            //{{MissionaryFirstNameOld}}
+            //{{MissionaryLastNameOld}}
+            //{{MissionarySalutation}}
+            //{{MissionaryEmail}}
+            //{{StartDate}}
+            //{{EndDate}}
+            //{{DGMDEmail}}
+            //{{DistrictWebsite}}
+            //{{DGMDPrimaryPhone}}
+
+            string districtWebsite = "https://gmdeputation.com/";
+
+
+            string jsonString = "";
+            string apiTemplateKey = "";
+
+            //for template 2
+            apiTemplateKey = EmailForMissionaryChange;
+            jsonString = "{'template_key':'" + apiTemplateKey + "','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'Troy'},'to': [{'email_address': {'address': '" + DGMDEmail + "','name': 'DGMD'}}],'merge_info':{'district':'" + district + "','MissionaryFirstName':'" + MissionaryFirstName + "','MissionaryLastName':'" + MissionaryLastName + "','MissionaryFirstNameOld':'" + MissionaryFirstNameOld + "','MissionaryLastNameOld':'" + MissionaryLastNameOld + "','MissionarySalutation':'" + MissionarySalutation + "','MissionaryEmail':'" + MissionaryEmail + "','StartDate':'" + StartDate + "','EndDate':'" + EndDate + "','DGMDEmail':'" + DGMDEmail + "','DistrictWebsite':'" + districtWebsite + "','DGMDPrimaryPhone':'" + DGMDPrimaryPhone + "'}}";
+
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            var baseAddress = "https://api.zeptomail.com/v1.1/email/template";
+
+            var http = (HttpWebRequest)WebRequest.Create(new Uri(baseAddress));
+            http.Accept = "application/json";
+            http.ContentType = "application/json";
+            http.Method = "POST";
+            http.PreAuthenticate = true;
+            http.Headers.Add("Authorization", "Zoho-enczapikey wSsVR60irB74DaZ+zzL/Lu5umg5RA1ugE0R6jVWiuXH6HvvD98c9wkKcUVOlFPAaEzNqEjdGo7krzUxR2jVa24t+ng5WCyiF9mqRe1U4J3x17qnvhDzKWW9alxONJY4MzgtukmdpEMgn+g==");
+
+            JObject parsedContent = null;
+            try
+            {
+                parsedContent = JObject.Parse(jsonString);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            Console.WriteLine(parsedContent.ToString());
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            Byte[] bytes = encoding.GetBytes(parsedContent.ToString());
+
+            Stream newStream = http.GetRequestStream();
+            newStream.Write(bytes, 0, bytes.Length);
+            newStream.Close();
+            try
+            {
+                var response = http.GetResponse();
+                var stream = response.GetResponseStream();
+                var sr = new StreamReader(stream);
+                var content = sr.ReadToEnd();
+                Console.WriteLine(content);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+
+        //Template 4
+        public void SendEmailForMissionaryDateChange(string district, string MissionaryFirstName, string MissionaryLastName, string UserSalutation, string DGMDLastName, string StartDate, string EndDate, string StartDateOld, string EndDateOld, string ReasonText, string DGMDEmail, string DGMDPrimaryPhone)
+        {
+            //{ { district} }
+            //{ { MissionaryFirstName} }
+            //{ { MissionaryLastName} }
+            //{ { UserSalutation} }
+            //{ { DGMDLastName} }
+            //{ { StartDate} }
+            //{ { EndDate} }
+            //{ { ReasonText} }
+            //{ { DGMDEmail} }
+            //{ { DistrictWebsite} }
+            //{ { DGMDPrimaryPhone} }
+
+            string districtWebsite = "https://gmdeputation.com/";
+
+
+            string jsonString = "";
+            string apiTemplateKey = "";
+
+            //for template 2
+            apiTemplateKey = EmailForDateChange;
+            jsonString = "{'template_key':'" + apiTemplateKey + "','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'Troy'},'to': [{'email_address': {'address': '" + DGMDEmail + "','name': 'DGMD'}}],'merge_info':{'district':'" + district + "','MissionaryFirstName':'" + MissionaryFirstName + "','MissionaryLastName':'" + MissionaryLastName + "','UserSalutation':'" + UserSalutation + "','DGMDLastName':'" + DGMDLastName + "','StartDate':'" + StartDate + "','EndDate':'" + EndDate + "','StartDateOld':'" + StartDateOld + "','EndDateOld':'" + EndDateOld + "','ReasonText':'" + ReasonText + "','DGMDEmail':'" + DGMDEmail + "','DGMDPrimaryPhone':'" + DGMDPrimaryPhone + "','DistrictWebsite':'" + districtWebsite + "'}}";
 
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
             var baseAddress = "https://api.zeptomail.com/v1.1/email/template";

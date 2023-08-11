@@ -69,7 +69,7 @@
             });
             return false;
         }
-
+     
         macroScheduleService.edit($scope.macroScheduleDetails).then(function (resp) {
             if (resp.data !== null && resp.data !== undefined && resp.data === "") {
                 $mdDialog.show(
@@ -216,6 +216,9 @@
 
         macroScheduleService.getMacroScheduleDetailsById(id).then(function (data) {
             $scope.macroScheduleDetails = data;
+            $scope.macroScheduleDetails.startDateOld = $scope.macroScheduleDetails.startDate
+            $scope.macroScheduleDetails.endDateOld = $scope.macroScheduleDetails.endDate
+            $scope.macroScheduleDetails.userIdOld = $scope.macroScheduleDetails.userId
 
             $scope.district = { "id": $scope.macroScheduleDetails.districtId, "name": $scope.macroScheduleDetails.districtName };
 
@@ -223,6 +226,7 @@
             //    $scope.users = resp;
             //});
         });
+
 
     }
     init();

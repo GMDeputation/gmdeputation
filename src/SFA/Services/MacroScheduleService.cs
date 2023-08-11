@@ -156,6 +156,8 @@ namespace SFA.Services
                     ApprovedRejectRemarks = n.ApprovedRejectRemarks,
                     UserId = (int)n.UserId,
                     UserName = n.User?.FirstName + " " + n.User?.LastName,
+                    IsCanceled = n.IsCanceled,
+                    IsCanceledBy = n.IsCanceledBy
                 }).ToList()
             };
         }
@@ -177,7 +179,9 @@ namespace SFA.Services
                 AccessCode = accesscode,
                 Notes = macroScheduleDetailsEntity.Notes,
                 UserId = (int)macroScheduleDetailsEntity.UserId,
-                UserName = macroScheduleDetailsEntity.User?.FirstName + " " + macroScheduleDetailsEntity.User?.LastName
+                UserName = macroScheduleDetailsEntity.User?.FirstName + " " + macroScheduleDetailsEntity.User?.LastName,
+                IsCanceled = macroScheduleDetailsEntity.IsCanceled,
+                IsCanceledBy=   macroScheduleDetailsEntity.IsCanceledBy
             };
         }
 
@@ -486,12 +490,50 @@ namespace SFA.Services
             macroScheduleDetailsEntity.ApprovedRejectRemarks = macroScheduleDetails.ApprovedRejectRemarks;
             macroScheduleDetailsEntity.UpdateDatetime = DateTime.Now;
             macroScheduleDetailsEntity.UpdateUser = loggedinUser.Id.ToString();
+            
+            //This is if we are edting the start date or end daTE OR THE MISSIONARY when the service has been cancelled. 
+            //We need to reset all the potential values 
+            if ((macroScheduleDetails.StartDateOld != macroScheduleDetails.StartDate || macroScheduleDetails.EndDate != macroScheduleDetails.EndDateOld) || macroScheduleDetails.UserId != macroScheduleDetails.UserIdOld)
+            {
+                macroScheduleDetailsEntity.IsApproved = false;
+                macroScheduleDetailsEntity.ApprovedRejectBy = null;
+                macroScheduleDetailsEntity.IsCanceled = false;
+                macroScheduleDetailsEntity.IsCanceledBy = null;
+                macroScheduleDetailsEntity.IsRejected = false;
+                macroScheduleDetailsEntity.ApprovedRejectBy = null;
+                macroScheduleDetailsEntity.ApprovedRejectRemarks = null;
+                macroScheduleDetailsEntity.ApprovedRejectOn = null;
+                macroScheduleDetailsEntity.Cancellation_DateTime = null;
+                macroScheduleDetailsEntity.Reason = null;
+                macroScheduleDetailsEntity.Cancellation_Notes = null;
+            }
 
-            try
+                try
             {
                 await _context.SaveChangesAsync();
-                return "";
-            }
+
+                if (macroScheduleDetails.StartDateOld != macroScheduleDetails.StartDate || macroScheduleDetails.EndDate != macroScheduleDetails.EndDateOld)
+                {
+                    //Send email that dates have changed
+                    Utilites tmp = new Utilites();
+                    var dgmd = await _context.TblUserNta.Where(m => m.DistrictId == macroScheduleDetailsEntity.DistrictId && m.RoleId == 7).FirstAsync();
+                    var missionary = await _context.TblUserNta.Where(m => m.Id == macroScheduleDetailsEntity.UserId).FirstAsync();
+                    var districtEntity = await _context.TblDistrictNta.Where(m => m.Id == macroScheduleDetailsEntity.DistrictId).FirstAsync();
+                    tmp.SendEmailForMissionaryDateChange(districtEntity.Name, missionary.FirstName, missionary.LastName, missionary.UserSalutation, dgmd.LastName, macroScheduleDetails.StartDate.ToString(), macroScheduleDetails.EndDate.ToString(), macroScheduleDetails.StartDateOld.ToString(), macroScheduleDetails.EndDateOld.ToString(), macroScheduleDetails.Cancellation_Notes, dgmd.Email, dgmd.Phone);
+                }
+                    if (macroScheduleDetails.UserId != macroScheduleDetails.UserIdOld)
+                {
+                    //Send email that missionaries have changed
+                    Utilites tmp2 = new Utilites();
+                    var dgmd2 = await _context.TblUserNta.Where(m => m.DistrictId == macroScheduleDetailsEntity.DistrictId && m.RoleId == 7).FirstAsync();
+                    var missionary2 = await _context.TblUserNta.Where(m => m.Id == macroScheduleDetailsEntity.UserId).FirstAsync();
+                    var missionaryOld = await _context.TblUserNta.Where(m => m.Id == macroScheduleDetails.UserIdOld).FirstAsync();
+                    var districtEntity2 = await _context.TblDistrictNta.Where(m => m.Id == macroScheduleDetailsEntity.DistrictId).FirstAsync();
+                    tmp2.SendEmailForMissionaryChangeMacroSchedule(districtEntity2.Name, missionary2.FirstName, missionary2.LastName, missionaryOld.FirstName, missionaryOld.LastName, missionary2.UserSalutation, missionary2.Email, macroScheduleDetails.StartDate.ToString(), macroScheduleDetails.EndDate.ToString(),dgmd2.Email,dgmd2.Phone);
+                }
+                    return "";
+                }
+
             catch (Exception ex)
             {
                 throw ex;

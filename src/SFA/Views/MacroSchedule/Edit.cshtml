@@ -38,7 +38,7 @@
                 </md-autocomplete>
                 <md-input-container class="md-block" flex>
                     <label>Missionaries User</label>
-                    <md-select name="userName" ng-model="macroScheduleDetails.userId" required ng-disabled="macroScheduleDetails.accessCode ==='S' || macroScheduleDetails.accessCode ==='D'|| macroScheduleDetails.isApproved|| macroScheduleDetails.isRejected">
+                    <md-select name="userName" ng-model="macroScheduleDetails.userId" required ng-disabled="(macroScheduleDetails.accessCode ==='S' || macroScheduleDetails.accessCode ==='D'|| macroScheduleDetails.isApproved || macroScheduleDetails.isRejected) && !macroScheduleDetails.isCanceled ">
                         <md-option ng-repeat="user in users" ng-value="user.id">{{user.name}}</md-option>
                     </md-select>
                     <div ng-messages="form.userName.$error" md-auto-hide="false">
@@ -49,14 +49,14 @@
             <div layout="row" layout-sm="column" layout-xs="column">
                 <md-input-container class="md-block" flex="none">
                     <label>Start Date</label>
-                    <md-datepicker name="startDate" ng-model="macroScheduleDetails.startDate" md-min-date="minDate" md-placeholder="Date of Start" required ng-disabled="macroScheduleDetails.accessCode ==='S' || macroScheduleDetails.accessCode ==='D'|| macroScheduleDetails.isApproved|| macroScheduleDetails.isRejected"></md-datepicker>
+                    <md-datepicker name="startDate" ng-model="macroScheduleDetails.startDate" md-min-date="minDate" md-placeholder="Date of Start" required ng-disabled="(macroScheduleDetails.accessCode ==='S' || macroScheduleDetails.accessCode ==='D'|| macroScheduleDetails.isApproved|| macroScheduleDetails.isRejected) && !macroScheduleDetails.isCanceled"></md-datepicker>
                     <div ng-messages="form.startDate.$error" md-auto-hide="false">
                         <div ng-message="required">Start Date is required</div>
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block" flex="none">
                     <label>End Date</label>
-                    <md-datepicker name="endDate" ng-model="macroScheduleDetails.endDate" md-min-date="macroScheduleDetails.startDate" md-placeholder="Date of End" required ng-disabled="macroScheduleDetails.accessCode ==='S' || macroScheduleDetails.accessCode ==='D'|| macroScheduleDetails.isApproved|| macroScheduleDetails.isRejected"></md-datepicker>
+                    <md-datepicker name="endDate" ng-model="macroScheduleDetails.endDate" md-min-date="macroScheduleDetails.startDate" md-placeholder="Date of End" required ng-disabled="(macroScheduleDetails.accessCode ==='S' || macroScheduleDetails.accessCode ==='D'|| macroScheduleDetails.isApproved|| macroScheduleDetails.isRejected)&& !macroScheduleDetails.isCanceled"></md-datepicker>
                     <div ng-messages="form.endDate.$error" md-auto-hide="false">
                         <div ng-message="required">End Date is required</div>
                     </div>
@@ -89,9 +89,13 @@
                     <md-tooltip>Cancel</md-tooltip>
                     <i class="fas fa-reply"></i> Cancel
                 </md-button>
-                 <md-button class="cancel-btn" aria-label="Cancel Service" data-ng-click="openDialog()" ng-if="macroScheduleDetails.isApproved">
+                 <md-button class="cancel-btn" aria-label="Cancel Service" data-ng-click="openDialog()" ng-if="macroScheduleDetails.isApproved && !macroScheduleDetails.isCanceled ">
                     <md-tooltip>Cancel Macro Schedule</md-tooltip>
                     <i class="fas fa-reply"></i> Cancel Macro Schedle
+                </md-button>
+                  <md-button class="cancel-btn" aria-label="Rescedule Macro Schedle" data-ng-click="save()" ng-if="macroScheduleDetails.isCanceled ">
+                    <md-tooltip>Rescedule Macro Schedule</md-tooltip>
+                    <i class="fas fa-reply"></i> Reschedule Macro Schedle
                 </md-button>
             </div>
         </div>

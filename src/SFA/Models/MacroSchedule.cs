@@ -27,9 +27,12 @@ namespace SFA.Models
         public int DistrictId { get; set; }
         public string DistrictName { get; set; }
         public int UserId { get; set; }
+        public int UserIdOld { get; set; }
         public string UserName { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public DateTime StartDateOld { get; set; }
+        public DateTime EndDateOld { get; set; }
         public bool IsApproved { get; set; }
         public bool IsRejected { get; set; }
         public string Notes { get; set; }
@@ -47,6 +50,7 @@ namespace SFA.Models
         public int? IsCanceledBy { get; set; }
         public string Cancellation_Notes { get; set; }
         public DateTime? Cancellation_DateTime { get; set; }
+      
     }
 
     public class MacroScheduleQuery : Query
