@@ -38,7 +38,7 @@
                 </md-autocomplete>
                 <md-input-container class="md-block" flex>
                     <label>Missionaries User</label>
-                    <md-select name="userName" ng-model="macroScheduleDetails.userId" required ng-disabled="(macroScheduleDetails.accessCode ==='S' || macroScheduleDetails.accessCode ==='D'|| macroScheduleDetails.isApproved || macroScheduleDetails.isRejected) && !macroScheduleDetails.isCanceled ">
+                    <md-select name="userName" ng-model="macroScheduleDetails.userId" required ng-disabled="((macroScheduleDetails.accessCode ==='S' || macroScheduleDetails.accessCode ==='D'|| macroScheduleDetails.isApproved || macroScheduleDetails.isRejected) && !macroScheduleDetails.isCanceled) && isRescheduleClicked === false">
                         <md-option ng-repeat="user in users" ng-value="user.id">{{user.name}}</md-option>
                     </md-select>
                     <div ng-messages="form.userName.$error" md-auto-hide="false">
@@ -49,14 +49,14 @@
             <div layout="row" layout-sm="column" layout-xs="column">
                 <md-input-container class="md-block" flex="none">
                     <label>Start Date</label>
-                    <md-datepicker name="startDate" ng-model="macroScheduleDetails.startDate" md-min-date="minDate" md-placeholder="Date of Start" required ng-disabled="(macroScheduleDetails.accessCode ==='S' || macroScheduleDetails.accessCode ==='D'|| macroScheduleDetails.isApproved|| macroScheduleDetails.isRejected) && !macroScheduleDetails.isCanceled"></md-datepicker>
+                    <md-datepicker name="startDate" ng-model="macroScheduleDetails.startDate" md-min-date="minDate" md-placeholder="Date of Start" required ng-disabled="((macroScheduleDetails.accessCode ==='S' || macroScheduleDetails.accessCode ==='D'|| macroScheduleDetails.isApproved|| macroScheduleDetails.isRejected) && !macroScheduleDetails.isCanceled) && isRescheduleClicked === false"></md-datepicker>
                     <div ng-messages="form.startDate.$error" md-auto-hide="false">
                         <div ng-message="required">Start Date is required</div>
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block" flex="none">
                     <label>End Date</label>
-                    <md-datepicker name="endDate" ng-model="macroScheduleDetails.endDate" md-min-date="macroScheduleDetails.startDate" md-placeholder="Date of End" required ng-disabled="(macroScheduleDetails.accessCode ==='S' || macroScheduleDetails.accessCode ==='D'|| macroScheduleDetails.isApproved|| macroScheduleDetails.isRejected)&& !macroScheduleDetails.isCanceled"></md-datepicker>
+                    <md-datepicker name="endDate" ng-model="macroScheduleDetails.endDate" md-min-date="macroScheduleDetails.startDate" md-placeholder="Date of End" required ng-disabled="((macroScheduleDetails.accessCode ==='S' || macroScheduleDetails.accessCode ==='D'|| macroScheduleDetails.isApproved|| macroScheduleDetails.isRejected)&& !macroScheduleDetails.isCanceled) && isRescheduleClicked === false"></md-datepicker>
                     <div ng-messages="form.endDate.$error" md-auto-hide="false">
                         <div ng-message="required">End Date is required</div>
                     </div>
@@ -93,9 +93,13 @@
                     <md-tooltip>Cancel Macro Schedule</md-tooltip>
                     <i class="fas fa-reply"></i> Cancel Macro Schedle
                 </md-button>
-                  <md-button class="cancel-btn" aria-label="Rescedule Macro Schedle" data-ng-click="save()" ng-if="macroScheduleDetails.isCanceled ">
+                  <md-button class="save-btn" aria-label="Unlock Macro Schedule" data-ng-click="reschuduleClicked()" ng-if="(macroScheduleDetails.isApproved  || macroScheduleDetails.isCanceled && isRescheduleClicked === false) &&  isRescheduleClicked === false">
+                    <md-tooltip>Unlock Macro Schedule</md-tooltip>
+                    <i class="far fa-save"></i> Unlock Macro Schedule
+                </md-button>
+                 <md-button class="save-btn" aria-label="Rescedule Macro Schedle" data-ng-click="save()" ng-if="isRescheduleClicked === true">
                     <md-tooltip>Rescedule Macro Schedule</md-tooltip>
-                    <i class="fas fa-reply"></i> Reschedule Macro Schedle
+                    <i class="far fa-save"></i> Reschedule Macro Schedle
                 </md-button>
             </div>
         </div>

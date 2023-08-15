@@ -491,9 +491,10 @@ namespace SFA.Services
             macroScheduleDetailsEntity.UpdateDatetime = DateTime.Now;
             macroScheduleDetailsEntity.UpdateUser = loggedinUser.Id.ToString();
             
-            //This is if we are edting the start date or end daTE OR THE MISSIONARY when the service has been cancelled. 
+            //This is if we are edting the start date or end daTE  when the service has been cancelled. 
             //We need to reset all the potential values 
-            if ((macroScheduleDetails.StartDateOld != macroScheduleDetails.StartDate || macroScheduleDetails.EndDate != macroScheduleDetails.EndDateOld) || macroScheduleDetails.UserId != macroScheduleDetails.UserIdOld)
+            //Note is the missionary changes nothing needs to be reapproved
+            if ((macroScheduleDetails.StartDateOld != macroScheduleDetails.StartDate || macroScheduleDetails.EndDate != macroScheduleDetails.EndDateOld))
             {
                 macroScheduleDetailsEntity.IsApproved = false;
                 macroScheduleDetailsEntity.ApprovedRejectBy = null;
@@ -529,7 +530,7 @@ namespace SFA.Services
                     var missionary2 = await _context.TblUserNta.Where(m => m.Id == macroScheduleDetailsEntity.UserId).FirstAsync();
                     var missionaryOld = await _context.TblUserNta.Where(m => m.Id == macroScheduleDetails.UserIdOld).FirstAsync();
                     var districtEntity2 = await _context.TblDistrictNta.Where(m => m.Id == macroScheduleDetailsEntity.DistrictId).FirstAsync();
-                    tmp2.SendEmailForMissionaryChangeMacroSchedule(districtEntity2.Name, missionary2.FirstName, missionary2.LastName, missionaryOld.FirstName, missionaryOld.LastName, missionary2.UserSalutation, missionary2.Email, macroScheduleDetails.StartDate.ToString(), macroScheduleDetails.EndDate.ToString(),dgmd2.Email,dgmd2.Phone);
+                    tmp2.SendEmailForMissionaryChangeMacroSchedule(districtEntity2.Name, missionary2.FirstName, missionary2.LastName, missionaryOld.FirstName, missionaryOld.LastName, missionary2.UserSalutation, missionary2.Email, macroScheduleDetails.StartDate.ToString(), macroScheduleDetails.EndDate.ToString(),dgmd2.Email,dgmd2.Phone, missionaryOld.Email);
                 }
                     return "";
                 }

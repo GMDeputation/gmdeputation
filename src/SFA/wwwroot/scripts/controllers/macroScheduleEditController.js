@@ -1,5 +1,6 @@
 ﻿app.controller('macroScheduleEditController', function ($scope, $window, $location, $mdDialog, macroScheduleService, districtService, userService) {
     var id = $location.absUrl().substr($location.absUrl().lastIndexOf('edit/') + 5);
+    $scope.isRescheduleClicked = false;
     $scope.backToMain = function () {
         $window.location.href = '/home';
     };
@@ -51,6 +52,17 @@
         //    });
         //}
     };
+
+    $scope.reschuduleClicked = function () {
+        //If we clicked on reschedule this will mean that we are wanting to change the information for missionary or the dates.
+        //Clicking it the first time will allow the user to make changes once approved. 
+        if ($scope.isRescheduleClicked == true || $scope.macroScheduleDetails.isCanceled) {
+            save()
+        }
+
+        $scope.isRescheduleClicked = true;
+
+    }
 
 
     $scope.save = function () {
