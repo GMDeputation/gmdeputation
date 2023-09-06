@@ -284,6 +284,8 @@ namespace SFA.Services
                     RoleId = userEntity.RoleId,
                     IsSuperAdmin = userEntity.IsSuperAdmin,
                     IsActive = userEntity.IsActive,
+                    IsWebUser = userEntity.IsWebUser,
+                    IsNewUser = userEntity.IsNewUser,
                     City = userEntity.City,
                     WorkPhoneNo = userEntity.WorkPhoneNo,
                     TelePhoneNo = userEntity.TelePhoneNo,
@@ -405,6 +407,8 @@ namespace SFA.Services
                     RoleId = m.RoleId,
                     IsSuperAdmin = m.IsSuperAdmin,
                     IsActive = m.IsActive,
+                    IsWebUser = m.IsWebUser,
+                    IsNewUser = m.IsNewUser,
                     ActiveStatus = m.IsActive ? "Active" : "In-Active",
                     UserStatus = m.IsSuperAdmin ? "Yes" : "No",
                     City = m.City,
@@ -490,12 +494,13 @@ namespace SFA.Services
                     userEntity.Email = user.Email;
                     userEntity.IsSuperAdmin = user.IsSuperAdmin;
                     userEntity.IsActive = user.IsActive;
+                    userEntity.IsWebUser = user.IsWebUser;
                     userEntity.RoleId = user.RoleId;
                     userEntity.NumberTraveling = user.NumberTraveling;
                     userEntity.TravelingVia = user.TravelingVia;
                     userEntity.UserSalutation = user.UserSalutation;
                     userEntity.R1 = user.R1;
-
+                    
                     var attributes = user.Attributes.Select(m => new TblUserAttributeNta
                     {
                         AttributeId = m.AttributeId,
@@ -503,6 +508,7 @@ namespace SFA.Services
                         UserId = user.Id,
                         Notes = m.Notes,
                     }).ToList();
+
                     if(attributes.Count != 0)
                     {
                         if (attributes[0].AttributeId != 0)
@@ -517,20 +523,20 @@ namespace SFA.Services
                         RelationType = m.RelationType,
                         UserId = user.Id,
                     }).ToList();
+
                     if(churches.Count != 0)
                     {
                         if (churches[0].ChurchId != 0)
                             userEntity.TblUserChurchNta = churches;
                     }
                    
-
                     var model = new TblUserPasswordNta
                     {                       
                         InsertDatetime = DateTime.Now,                  
                         Password = user.Password,
                         UserId = user.Id,
                         InsertUser = loggedinUser.Id.ToString(),
-                };
+                    };
 
                     userEntity.TblUserPasswordNta.Add(model);
 
@@ -567,6 +573,7 @@ namespace SFA.Services
                     userEntity.Email = user.Email;
                     userEntity.IsSuperAdmin = user.IsSuperAdmin;
                     userEntity.IsActive = user.IsActive;
+                    userEntity.IsWebUser = user.IsWebUser;
                     userEntity.RoleId = user.RoleId;
                     userEntity.UpdateDatetime = DateTime.Now;
                     userEntity.UpdateUser = loggedinUser.Id.ToString();
@@ -658,6 +665,7 @@ namespace SFA.Services
                 RoleId = userEntity.RoleId,
                 RoleName = userEntity.Role.Name,
                 DataAccessCode = userEntity.Role.DataAccessCode,
+                IsNewUser = userEntity.IsNewUser,
                 Groups = menuGroups.Select(m => new GroupPermission
                 {
                     GroupId = m.Id,

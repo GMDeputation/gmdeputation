@@ -45,6 +45,9 @@ namespace SFA.Models
         public int? NumberTraveling { get; set; }
         public string TravelingVia { get; set; }
 
+        public bool IsWebUser { get; set; }
+        public bool IsNewUser { get; set; }
+
         public string UserSalutation { get; set; }
         public bool R1 { get; set; }
         public bool sensitiveNation { get; set; }

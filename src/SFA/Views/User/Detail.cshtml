@@ -74,7 +74,7 @@
                 <md-input-container class="md-block" flex>
                     <input type="hidden" value="@ViewBag.Id" ng-model="id" />
                     <label>User Name</label>
-                    <input name="userName" ng-model="user.userName" maxlength="50" required>
+                    <input name="userName" ng-model="user.userName" maxlength="50" id="inp_usr_name" required>
                     <div ng-messages="form.userName.$error" md-auto-hide="false">
                         <div ng-message="required">User Name is required</div>
                     </div>
@@ -146,7 +146,7 @@
 
                 <md-input-container class="md-block" flex>
                     <label>Email</label>
-                    <input type="email" name="email" ng-model="user.email" required>
+                    <input type="email" name="email" ng-model="user.email" onkeyup="mail2Username();" id="inp_usr_email" required>
                     <div ng-messages="form.email.$error" md-auto-hide="false">
                         <div ng-message="required">User Email is required</div>
                     </div>
@@ -188,13 +188,13 @@
                 </md-input-container>
 
                   <md-input-container class="md-block" flex="none">
-                    <md-checkbox ng-model="user.R1" id="active" aria-label="active" ">
+                    <md-checkbox ng-model="user.R1" id="active" aria-label="active">
                         R1 Status ?
                     </md-checkbox>
                 </md-input-container>
 
                   <md-input-container class="md-block" flex="none">
-                    <md-checkbox ng-model="user.sensitiveNation" id="active" aria-label="active"">
+                    <md-checkbox ng-model="user.sensitiveNation" id="active" aria-label="active">
                         Sensitive Nation ?
                     </md-checkbox>
                 </md-input-container> 
@@ -207,6 +207,11 @@
                 <md-input-container class="md-block" flex="none">
                     <md-checkbox ng-model="user.isSuperAdmin" id="active" aria-label="active">
                         Super Admin ?
+                    </md-checkbox>
+                </md-input-container>
+                <md-input-container class="md-block" flex="none">
+                    <md-checkbox ng-model="" id="active" aria-label="active">
+                        Web User ?
                     </md-checkbox>
                 </md-input-container>
             </div>
@@ -320,7 +325,17 @@
     <script src="~/scripts/services/churchService.js" asp-append-version="true"></script>
     <script src="~/scripts/services/userService.js" asp-append-version="true"></script>
     <script src="~/scripts/controllers/userController.js" asp-append-version="true"></script>
+    <script>
+        function mail2Username(){
+            var url = window.location.href,
+                iemail = document.getElementById("inp_usr_email"),
+                iusrname = document.getElementById("inp_usr_name");
 
+            if (url.includes('user/detail/0') & iemail.value <> iusrname.value) {
+                iusrname.value = iemail.value;
+            }
+        }
+    </script>
 
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI"></script>
 

@@ -77,6 +77,8 @@ namespace SFA.Entities
         [StringLength(50)]
         public string ImageSequence { get; set; }
         public bool IsSuperAdmin { get; set; }
+        public bool IsWebUser { get; set; }
+        public bool IsNewUser { get; set; }
         public bool IsActive { get; set; }
         [StringLength(50)]
         public string City { get; set; }
