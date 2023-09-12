@@ -95,5 +95,13 @@ public class DashBoardController : Controller
 
         return new JsonResult(result);
     }
+
+    [Route("getSchedServiceKPI")]
+    public async Task<IActionResult> GetSchedServiceKPI()
+    {
+        var result = await _dashBoardService.GetSchedServiceKPI();
+
+        return new JsonResult(result);
+    }
 }
 

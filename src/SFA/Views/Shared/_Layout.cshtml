@@ -70,8 +70,8 @@
 
 
             /*table.dashboard-table > tbody > tr:nth-child(2n+1) {
-                            background: #fff;
-                        }*/
+                                    background: #fff;
+                                }*/
 
             table.dashboard-table > thead > tr {
                 background: #0582eb;
@@ -177,12 +177,12 @@
                                 }
 
                             /*table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(2n) {
-                                        background: #fff;
-                                    }
+                                                background: #fff;
+                                            }
 
-                                    table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(n+1) {
-                                        background-image: linear-gradient(to right, #d0d0d0, #e0e0e0);
-                                    }*/
+                                            table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr:nth-child(n+1) {
+                                                background-image: linear-gradient(to right, #d0d0d0, #e0e0e0);
+                                            }*/
 
                             table.dashboard-table > tbody > tr > td > table > tbody > tr > td > table > tbody > tr > td {
                                 padding: 10px 5px;
@@ -252,7 +252,7 @@
         }
 
         body {
-            font-family: 'Roboto Condensed', sans-serif, 'Poppins', sans-serif !important;
+            font-family: 'Roboto', sans-serif, 'Poppins', sans-serif !important;
         }
 
         .info-box {
@@ -301,6 +301,7 @@
             cursor: pointer;
             color: #e5e5e5;
         }
+
         .info-box {
             width: unset !important;
             margin-bottom: 10px;
@@ -313,22 +314,29 @@
             height: 125px !important;
             border-radius: 0 !important;
         }
-        .info-box span span {
-            font-size: 12px !important;
-        }
-        .info-box h4 {
-            font-size: 15px !important;
-            letter-spacing: -1px !important;
-        }
+
+            .info-box span span {
+                font-size: 14px !important;
+                font-family: sans-serif;
+                font-weight: 400 !important;
+                color: #6f6f6f !important;
+            }
+
+            .info-box h4 {
+                font-size: 18px !important;
+                letter-spacing: 0px !important;
+            }
 
         .info-box-icon {
             border-radius: 0 !important;
             border-left: 5px solid #a7c4e7;
         }
+
         .info-box-number {
             font-weight: 300;
             font-size: 21px;
         }
+
         .page-breadcrumb {
             font-size: 12px;
             letter-spacing: 1px;
@@ -336,8 +344,8 @@
         }
 
         .info-box-content {
-            padding: 18px 15px 10px 0 !important;
-            margin-left: 82px !important;
+            padding: 15px 15px 10px 0 !important;
+            margin-left: 100px !important;
         }
 
         .page-header-title h2 {
@@ -361,25 +369,25 @@
 
         ul.side-nav-list > li {
             position: relative !important;
-            padding: 15px 20px 15px 25px !important;
+            padding: 20px 25px !important;
             font-family: Poppins !important;
             font-size: .9em !important;
             line-height: 1.25 !important;
         }
 
-        ul.side-nav-list > li > i {
-            float: right;
-            font-size: 1.3em !important;
-        }
+            ul.side-nav-list > li > i {
+                float: right;
+                font-size: 1.3em !important;
+            }
 
-        ul.side-nav-list > li:hover::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 0;
-            border-right: 4px solid #d3d3d3 !important;
-                height: 47px !important;
-        }
+            ul.side-nav-list > li:hover::after {
+                content: '';
+                position: absolute;
+                right: 0;
+                top: 0;
+                border-right: 4px solid #d3d3d3 !important;
+                height: 57px !important;
+            }
 
     </style>
     @RenderSection("Styles", required: false)
@@ -433,13 +441,15 @@
                     <div data-ng-controller="navController"><span class="byeline">Today: {{ clock | date:'dd-MM-yyyy'}} {{ clock | date:'hh:mm:ss a'}}</span></div>*@
 
                     <div flex layout-align="center end">
+
                         <div class="info-panel">
-                            @*<div class="powerd-info">
-                            <a href="http://www.qbent.in" target="_blank">
-                            <img src="~/images/qb_logo.png" title="Powered By Qbent Technology" alt="Qbent Technology" />
-                            </a>
+
+                            <div class="powerd-info">
+                                <a href="https://www.gmdeputation.help/" target="_blank" style="font-size:2em;color: #fff;display: block;width: 25px !important;text-align: center;font-weight: bold;padding-left: 8px;" title="GMDeputation Support">?</a>
                             </div>
-                            <span flex="1" class="vertical-seperator">&nbsp;</span>*@
+
+                            <span flex="1" class="vertical-seperator">&nbsp;</span>
+
                             @*<div class="notification" aria-label="Open Notification" ng-if="@accessGroups.Count() > 0">
                             <div class="badge" ng-show="count>0">
                             <span>{{count}}</span>
@@ -515,7 +525,7 @@
             </div>
         </div>
         <!--Right side Nav-->
-        <div class="right-nav-toggle-btn">
+        <div class="right-nav-toggle-btn" style="display:none;">
             <div class="language-info">
                 <md-button class="md-fab md-mini" aria-label="Open Menu" data-ng-click="openSideNavPanel()">
                     <md-tooltip>Right Panel</md-tooltip>

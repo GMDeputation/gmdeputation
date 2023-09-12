@@ -30,4 +30,9 @@
         return resp;
     };
 
+    this.getSchedServiceKPI = function () {
+        var resp = $http.get('/dashBoard/getSchedServiceKPI');
+        return resp;
+    };
+
 });

@@ -7,11 +7,12 @@
         <div class="page-breadcrumb">
             <span>Home</span> \ <span>Dashboard</span>
         </div>
-        <h2>Dashboard</h2>
+        <h2>GMDeputation Dashboard</h2>
     </div>
+
     <div class="state-overview">
         <div class="row">
-            <div class="col-xl-3 col-md-6 col-12">
+            <div class="col-xl-4 col-md-6 col-12">
                 <a href="/reports/macroscheduleWithApoinmentReport" style="color:#FFF !important;" title="Appointment by Macro Report">
                     <div class="info-box">
                         <span class="info-box-icon push-bottom">
@@ -41,7 +42,7 @@
                 </a>
             </div>
             <!-- /.col -->
-            <div class="col-xl-3 col-md-6 col-12">
+            <div class="col-xl-4 col-md-6 col-12">
                 <a href="/reports/missionaryMacroScheduleReport" style="color:#FFF !important;" title="Macro Report">
                     <div class="info-box">
                         <span class="info-box-icon push-bottom">
@@ -70,7 +71,7 @@
                 <!-- /.info-box -->
             </div>
             <!-- /.col -->
-            <div class="col-xl-3 col-md-6 col-12">
+            <div class="col-xl-4 col-md-6 col-12">
                 <div class="info-box">
                     <span class="info-box-icon push-bottom">
                         <i class="ng-binding" style="font-weight:bold;font-size: 44px;font-style: normal;">
@@ -96,12 +97,13 @@
                 </div>
                 <!-- /.info-box -->
             </div>
+
         </div>
     </div>
 
     <div class="state-overview">
         <div class="row">
-            <div class="col-xl-3 col-md-6 col-12">
+            <div class="col-xl-4 col-md-6 col-12">
                 <a href="/reports/pastorAppoinmentReport" style="color:#FFF !important;" title="Pastor Appointment Report">
                     <div class="info-box">
                         <span class="info-box-icon push-bottom">
@@ -130,7 +132,7 @@
                 </a>
             </div>
             <!-- /.col -->
-            <div class="col-xl-3 col-md-6 col-12">
+            <div class="col-xl-4 col-md-6 col-12">
                 <div class="info-box">
                     <span class="info-box-icon push-bottom">
                         <i class="ng-binding" style="font-weight:bold;font-size: 44px;font-style: normal;">
@@ -157,7 +159,7 @@
                 <!-- /.info-box -->
             </div>
             <!-- /.col -->
-            <div class="col-xl-3 col-md-6 col-12">
+            <div class="col-xl-4 col-md-6 col-12">
                 <div class="info-box">
                     <span class="info-box-icon push-bottom">
                         <i class="ng-binding" style="font-weight:bold;font-size: 44px;font-style: normal;">
@@ -187,23 +189,37 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-sm-9">
-            <div class="card card-box">
-                <div class="card-head">
-                    <header style="height: unset !important;">Missionaries by Month</header>
-                </div>
-                <div class="card-body no-padding height-9">
-                    <div class="row">
-                        <canvas id="canvas1"></canvas>
+    <div class="state-overview">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card card-box">
+                    <div class="card-head">
+                        <header style="height: unset !important;">Missionaries by Month</header>
+                    </div>
+                    <div class="card-body no-padding height-9">
+                        <div class="row">
+                            <canvas id="canvas1"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-3" style="max-width:unset;">
-            <div class="card card-box" style="visibility:hidden;">
+
+            <div class="col-sm-6">
+                <div class="card card-box">
+                    <div class="card-head">
+                        <header style="height: unset !important;">Services by Month (YTD) </header>
+                    </div>
+                    <div class="card-body no-padding height-9">
+                        <div class="row">
+                            <canvas id="canvas2"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-box" style="display:none;">
                 <div class="card-head">
-                    <header style="height: unset !important;text-align:center;display:block;">Missionary Dataset</header>
+                    <header style="height: unset !important; font-size: 26px !important; text-align:center;display:block;">Missionary Dataset</header>
                 </div>
                 <div class="card-body no-padding height-9">
                     <div class="row">
@@ -234,28 +250,44 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!--
-            <div class="card card-box">
+    <div class="state-overview">
+        <div class="row">
+            
+            <div class="card card-box" style="display:none;">
                 <div class="card-head">
-                    <header>Chart Survey</header>
-                    <div class="tools">
-                        <a class="fa fa-repeat btn-color box-refresh" href="javascript:;"></a>
-                        <a class="t-collapse btn-color fa fa-chevron-down" href="javascript:;"></a>
-                        <a class="t-close btn-color fa fa-times" href="javascript:;"></a>
-                    </div>
+                    <header style="height: unset !important; font-size: 26px !important; text-align:center;display:block;">Services Dataset</header>
                 </div>
                 <div class="card-body no-padding height-9">
                     <div class="row">
-                        <canvas id="chartjs_pie"></canvas>
+                        <md-table-container style="width:100%;margin: 0 auto;">
+                            <table md-table id="tbl_services">
+                                <thead md-head>
+                                    <tr md-row>
+                                        <th md-column style="font-size:13px;text-align:center;line-height:1;">Year</th>
+                                        <th md-column style="font-size:13px;text-align:center;line-height:1;">Month<span style="display:block;font-size:11px;">Current</span></th>
+                                        <th md-column style="font-size:13px;text-align:center;line-height:1;">Services<span style="display:block;font-size:11px;">Current</span></th>
+                                        <th md-column style="font-size:13px;text-align:center;line-height:1;">Services (PY)</th>
+                                    </tr>
+                                </thead>
+                                <tbody md-body>
+                                    <tr md-row data-ng-repeat="dat in servstat track by $index">
+                                        <td md-cell style="font-size:12px;text-align:center;" class="">{{dat.service_yr}}</td>
+                                        <td md-cell style="font-size:12px;text-align:center;" class="">{{dat.service_mo_name}}</td>
+                                        <td md-cell style="font-size:12px;text-align:center;" class="">{{dat.tot_services}}</td>
+                                        <td md-cell style="font-size:12px;text-align:center;" class="">{{dat.prev_services}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
                     </div>
                 </div>
             </div>
-            -->
-
         </div>
-
     </div>
+
 </div>
 
 @section Styles{

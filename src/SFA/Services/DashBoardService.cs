@@ -17,6 +17,7 @@ namespace SFA.Services
         Task<List<MissionarySummary>> GetMissionarySummary();
         Task<List<ChurchEQSummary>> GetChurchEQ();
         Task<List<ChurchPastorServiceKPI>> GetChurchPastorKPI();
+        Task<List<SchedServiceKPI>> GetSchedServiceKPI();
     }
 
     public class DashBoardService : IDashBoardService
@@ -73,5 +74,10 @@ namespace SFA.Services
             return counts;
         }
 
+        public async Task<List<SchedServiceKPI>> GetSchedServiceKPI()
+        {
+            var counts = await _context.SchedServiceKPI.ToListAsync();
+            return counts;
+        }
     }
 }

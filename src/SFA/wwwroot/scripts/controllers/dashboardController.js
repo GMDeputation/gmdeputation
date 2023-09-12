@@ -19,6 +19,9 @@
         dashboardService.getChurchPastorKPI().then(function (resp) {
             $scope.churchsvc = resp.data;
         });
+        dashboardService.getSchedServiceKPI().then(function (resp) {
+            $scope.servstat = resp.data;
+        });
     }
     init();
 
