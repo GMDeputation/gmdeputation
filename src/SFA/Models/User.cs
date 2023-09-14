@@ -52,7 +52,6 @@ namespace SFA.Models
         public bool R1 { get; set; }
         public bool sensitiveNation { get; set; }
 
-        public int? StateId { get; set; }
         //public List<MenuAccess> Menus { get; set; }
         public List<GroupPermission> Groups { get; set; }
         public List<MenuPermission> Permissions { get; set; }
@@ -61,7 +60,13 @@ namespace SFA.Models
         public List<UserChurch> Churches { get; set; }
 
         public string ActiveStatus { get; set; }
-        public string UserStatus { get; set; } 
+        public string UserStatus { get; set; }
+
+        public string State { get; set; }
+        public string Zip { get; set; }
+        public string Street { get; set; }
+
+        public string HQID { get; set; }
     }
 
     public class UserQuery : Query

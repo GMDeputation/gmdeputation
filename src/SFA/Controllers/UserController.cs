@@ -148,8 +148,12 @@ public class UserController : Controller
 	[Route("export-section")]
 	public async Task<IActionResult> ExportSection([FromForm] User user)
 	{
-		var latitude = "";
-		var longitude = "";
+		var Pastorlatitude = "";
+		var Pastorlongitude = "";
+
+		var Churchlatitude = "";
+		var Churchlongitude = "";
+
 		var loggedinUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");
 		StringBuilder Errors = new StringBuilder();
 		IFormFileCollection files = base.Request.Form.Files;
@@ -193,12 +197,12 @@ public class UserController : Controller
 					List<TblStateNta> source = await _context.TblStateNta.ToListAsync();
 					for (int row = 2; row <= rowCount; row++)
 					{
-						//Make sure there is data in the first column -- If there isnt then we will ignore that under the assumption we read in a blank row.
-						if (((ExcelRangeBase)worksheet.Cells[row, 1]).Value != null)
+						//Make sure there is data in the 15th column(5) -- If there isnt then we will ignore that under the assumption we read in a blank row.
+						if (((ExcelRangeBase)worksheet.Cells[row, 5]).Value != null)
 						{
 							numberInserts++;
 							//Doing a check on the data and making sure there is no data in the 15th column. If there is something is off.
-							if (((ExcelRangeBase)worksheet.Cells[row, 15]).Value != null)
+							if (((ExcelRangeBase)worksheet.Cells[row, 32]).Value != null)
 							{
 								Errors.AppendLine("Row Number:" + row + " Excel Format is not right or data are not proper. Kindly upload the right format as per given format");
 								//jsonString2 = "Excel Format is not right or data are not proper. Kindly upload the right format as per given format";
@@ -206,128 +210,369 @@ public class UserController : Controller
 								numberFailed++;
 								continue;
 							}
-							//Makinf ssure the email does not already exists in the database. 
-							if (existingEntity.Select((TblUserNta m) => m.Email.ToLower()).Contains(((ExcelRangeBase)worksheet.Cells[row,4]).Value.ToString().ToLower()))
+					
+							TblRoleNta tblRole = roleEntities.Where((TblRoleNta m) => m.Id.ToString().Contains(((ExcelRangeBase)worksheet.Cells[row, 10]).Value.ToString())).FirstOrDefault();
+	
+							//Disting Name and Section Name we will Ignore in the import file. It is just for the user 
+							//to have a visual that the ID's match the name
+							//Looking into Section table for the district ID. If it does not find it district ID will be null old Logic it is being given now. 
+							//Leaving code here in case mind is changed later. 
+							//int? districtId = null;
+							//try
+							//{
+							//	districtId = ((((ExcelRangeBase)worksheet.Cells[row, 2]).Value != null) ? new int?(sectionEntities.Where((TblSectionNta m) => m.Id.ToString() == ((ExcelRangeBase)worksheet.Cells[row, 2]).Value.ToString()).FirstOrDefault().DistrictId) : null);
+							//}
+							//catch (Exception ex)
+							//{
+							//	Errors.AppendLine("Row Number:" + row + " Failed to retirve District ID. Please verify Section ID is valid.");
+							//	numberFailed++;
+							//	Console.WriteLine(ex.Message);
+							//	continue;
+							//}
+							//Column 2
+							var districtIDString = (((((ExcelRangeBase)worksheet.Cells[row, 2]).Value == null) ? null : ((ExcelRangeBase)worksheet.Cells[row, 2]).Value.ToString()));
+							int districtID = 0;
+							Int32.TryParse(districtIDString, out districtID);
+							//Column 3 is ignored. 
+							//Column 4
+							var sectionIdString = (((((ExcelRangeBase)worksheet.Cells[row, 4]).Value == null) ? null : ((ExcelRangeBase)worksheet.Cells[row, 4]).Value.ToString()));
+							int sectionId = 0;
+							Int32.TryParse(sectionIdString, out sectionId);
+							//column 5
+							var PastorfirstName = ((((ExcelRangeBase)worksheet.Cells[row, 5]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 5]).Value.ToString() : null);
+							//column 6
+							var PastorlastName = ((((ExcelRangeBase)worksheet.Cells[row, 6]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 6]).Value.ToString() : null);
+							//Column 7
+							var PastorGender = ((((ExcelRangeBase)worksheet.Cells[row, 7]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 7]).Value.ToString() : null);
+							//Column 8
+							var churchName = ((((ExcelRangeBase)worksheet.Cells[row, 8]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 8]).Value.ToString() : null);
+							//Column 9
+							var churchStreet = ((((ExcelRangeBase)worksheet.Cells[row, 9]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 9]).Value.ToString() : null);
+							//Column 10
+							var churchCity = ((((ExcelRangeBase)worksheet.Cells[row, 10]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 10]).Value.ToString() : null);
+							//Column 11
+							var churchState = ((((ExcelRangeBase)worksheet.Cells[row, 11]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 11]).Value.ToString() : null);
+							//Column 12
+							var churchPostalCode = ((((ExcelRangeBase)worksheet.Cells[row, 12]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 12]).Value.ToString() : null);
+							//Column 13
+							var churchCountryAlpha2 = ((((ExcelRangeBase)worksheet.Cells[row, 13]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 13]).Value.ToString() : null);
+							//Column 14
+							var churchFullAddress = ((((ExcelRangeBase)worksheet.Cells[row, 14]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 14]).Value.ToString() : null);
+							//Column 15
+							var email = ((((ExcelRangeBase)worksheet.Cells[row, 15]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 15]).Value.ToString() : null);
+							//We need to make sure the email is formatted correctly and looks like a valid email
+							//If it is not we are done reading in this row and will move to the next one
+							if (email != null)
+                            {
+								if (!IsValidEmail(email))
+								{
+									Errors.AppendLine("Row Number:" + row + " " + email + ": Is not valid");
+									numberFailed++;
+									continue;
+								}
+							}
+							else
+                            {
+								Errors.AppendLine("Row Number:" + row + " Email is a required field");
+								numberFailed++;
+								continue;
+							}
+
+
+							
+							//Making ssure the email does not already exists in the database. 
+							if (existingEntity.Select((TblUserNta m) => m.Email.ToLower()).Contains(email.ToLower()))
 							{
 								Errors.AppendLine("Row Number:" + row + " User Email Should be unique Or not right in " + row + " th row of excel sheet. Kindly check User Email");
 								//jsonString2 = "User Email Should be unique Or not right in " + row + " th row of excel sheet. Kindly check User Email";
 								//return Json(jsonString2);
 								numberFailed++;
 								continue;
-							}							
-							if (!roleEntities.Select((TblRoleNta m) => m.Id.ToString()).Contains(((ExcelRangeBase)worksheet.Cells[row, 10]).Value.ToString()))
+							}
+							//Column 16
+							var phone = ((((ExcelRangeBase)worksheet.Cells[row, 16]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 16]).Value.ToString() : null);
+							//Stripping all characters from phone number that isnt a number so a - or / etc
+							if(phone != null)
+								phone = GetNumbersOnly(phone);
+							//Column 17
+							var homePhone = ((((ExcelRangeBase)worksheet.Cells[row, 17]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 17]).Value.ToString() : null);
+							//Stripping all characters from phone number that isnt a number so a - or / etc
+							if (homePhone != null)
+								homePhone = GetNumbersOnly(homePhone);
+							//Column 18
+							var workPhone = ((((ExcelRangeBase)worksheet.Cells[row, 18]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 18]).Value.ToString() : null);
+							//Stripping all characters from phone number that isnt a number so a - or / etc
+							if (workPhone != null)
+								workPhone = GetNumbersOnly(workPhone);
+							//Column 19
+							var mobilePhone = ((((ExcelRangeBase)worksheet.Cells[row, 19]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 19]).Value.ToString() : null);
+							//Stripping all characters from phone number that isnt a number so a - or / etc
+							if (mobilePhone != null)
+								mobilePhone = GetNumbersOnly(mobilePhone);
+							//Column 20
+							var PastorFullAddress = ((((ExcelRangeBase)worksheet.Cells[row, 20]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 20]).Value.ToString() : null);
+							//Column 21
+							var PastorStreet = ((((ExcelRangeBase)worksheet.Cells[row, 21]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 21]).Value.ToString() : null);
+							//Column 22
+							var PastorCity = ((((ExcelRangeBase)worksheet.Cells[row, 22]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 22]).Value.ToString() : null);
+							//Column 23
+							var PastorStateCode = ((((ExcelRangeBase)worksheet.Cells[row, 23]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 23]).Value.ToString() : null);
+							//Column 24
+							var PastorPostal = ((((ExcelRangeBase)worksheet.Cells[row, 24]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 24]).Value.ToString() : null);
+							//Column 25
+							var PastorCountryAlpha2 = ((((ExcelRangeBase)worksheet.Cells[row, 25]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 25]).Value.ToString() : null);
+							//Column 26
+							var ChurchHQAccountNumber = ((((ExcelRangeBase)worksheet.Cells[row, 26]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 26]).Value.ToString() : null);
+							//Column 27
+							var UserHQID = ((((ExcelRangeBase)worksheet.Cells[row, 27]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 27]).Value.ToString() : null);
+							//Column 28
+							var sensitiveNationFlag = ((((ExcelRangeBase)worksheet.Cells[row, 28]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 28]).Value.ToString() : null);
+							//Column 29
+							var r1Flag = ((((ExcelRangeBase)worksheet.Cells[row, 29]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 29]).Value.ToString() : null);
+							var r1FlagBool = false;
+							Boolean.TryParse(r1Flag, out r1FlagBool);
+							//Column 30
+							var PastorUserSalutation = ((((ExcelRangeBase)worksheet.Cells[row, 30]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 30]).Value.ToString() : null);
+							var PastorUserSalutationBool = false;
+							Boolean.TryParse(PastorUserSalutation, out PastorUserSalutationBool);
+							//Column 31
+							var roleIDString = ((((ExcelRangeBase)worksheet.Cells[row, 31]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 31]).Value.ToString() : null);
+							int roleID = 0;
+							Int32.TryParse(roleIDString, out roleID);
+
+							if(roleID == 0)
+                            {
+								Errors.AppendLine("Row Number:" + row + " Role ID is a required field");
+								numberFailed++;
+								continue;
+							}
+							//Making sure the ID given exist in the database. If not we will stop reading in this row and move on to the next
+							if (!roleEntities.Select((TblRoleNta m) => m.Id.ToString()).Contains(((ExcelRangeBase)worksheet.Cells[row, 31]).Value.ToString()))
 							{
 								Errors.AppendLine("Row Number:" + row + " Role not right in " + row + " th row of excel sheet. Kindly check Role ID");
-								//jsonString2 = "Role not right in " + row + " th row of excel sheet. Kindly check Role ID";
-								//return Json(jsonString2);
 								numberFailed++;
 								continue;
 							}
-							//Looking into Section table for the district ID. If it does not find it district ID will be null
-							//Looking into Section table for the district ID. If it does not find it district ID will be null
-							int? districtId = null;
-							try
-							{
-								districtId = ((((ExcelRangeBase)worksheet.Cells[row, 8]).Value != null) ? new int?(sectionEntities.Where((TblSectionNta m) => m.Id.ToString() == ((ExcelRangeBase)worksheet.Cells[row, 8]).Value.ToString()).FirstOrDefault().DistrictId) : null);
-							}
-							catch (Exception ex)
-							{
-								Errors.AppendLine("Row Number:" + row + " Failed to retirve District ID. Please verify Section ID is valid.");
-								numberFailed++;
-								Console.WriteLine(ex.Message);
-								continue;
-							}														
+							//Column 31
+							var churchWebsite = ((((ExcelRangeBase)worksheet.Cells[row, 31]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 31]).Value.ToString() : null);
 
-							TblRoleNta tblRole = roleEntities.Where((TblRoleNta m) => m.Id.ToString().Contains(((ExcelRangeBase)worksheet.Cells[row, 10]).Value.ToString())).FirstOrDefault();
 
-							var firstName = ((ExcelRangeBase)worksheet.Cells[row, 1]).Value.ToString();
-							var middleName = ((((ExcelRangeBase)worksheet.Cells[row, 2]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 2]).Value.ToString() : null);
-							var lastName = ((ExcelRangeBase)worksheet.Cells[row, 3]).Value.ToString();
-							var email = ((ExcelRangeBase)worksheet.Cells[row, 4]).Value.ToString();
-							if(!IsValidEmail(email))
+							//For PastorFullAddress. if it does not exist but he street state city and zip do then we need to create
+							//the address with that.
+							if(PastorFullAddress == null)
                             {
-								Errors.AppendLine("Row Number:" + row + " " +email + ": Is not valid");
-								numberFailed++;
-								continue;
-							}
-							var gender = ((((ExcelRangeBase)worksheet.Cells[row, 5]).Value == null) ? null : ((ExcelRangeBase)worksheet.Cells[row, 5]).Value?.ToString());
-							var address = ((((ExcelRangeBase)worksheet.Cells[row, 6]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 6]).Value.ToString() : null);
-							if(address != null)
-                            {								
+								//If we have all the information needed to create the address
+								if(PastorStreet != null && PastorCity != null && PastorStateCode != null && PastorPostal != null)
+                                {
+									PastorFullAddress = PastorStreet + "," + PastorCity +","+ PastorStateCode + " " + PastorPostal;
 
+									//This will get the longitude and lat from the address. If we cannot find it then
+									//The assumption is that it is a bad address. 
+									var locationService = new GoogleLocationService("AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI");
+										MapPoint point = null;
+										try
+										{
+
+											point = locationService.GetLatLongFromAddress(PastorFullAddress);
+										}
+										catch (Exception ex)
+										{
+											Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Pastor Generated Address(" + PastorFullAddress + ") : Please verify Street, City State and Postal Code");
+											numberFailed++;
+											Console.WriteLine(ex.Message);
+											continue;
+										}
+
+									if(point != null)
+                                    {
+										Pastorlatitude = point.Latitude.ToString();
+										Pastorlongitude = point.Longitude.ToString();
+									}
+                                    else
+                                    {
+										Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Pastor Generated Address(" + PastorFullAddress + ") : Please verify Street, City State and Postal Code");
+										numberFailed++;										
+										continue;
+									}
+
+									
+								}
+								//This means we do not have enough information to have an address for the pastor and we are going to ignore this row
+								//else
+                               // {
+								//	Errors.AppendLine("Row Number:" + row + "Pastor Full Address was not given.Data City, State, Zip and Street were not given. Unable to create address for Pastor");
+								//	numberFailed++;
+								//}
+                            }
+							//Since the Full address does exist we are going to vaidate it using Google Validation. 
+							//This will get the longitude and lat from the address. If we cannot find it then
+							//The assumption is that it is a bad address. 
+							else if (PastorFullAddress != null)
+							{
 								var locationService = new GoogleLocationService("AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI");
 								MapPoint point = null;
 								try
-                                {
+								{
 
-									point = locationService.GetLatLongFromAddress(address);
-								}								
-								catch(Exception ex)
-                                {
-									Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Address: Please verify address syntax and validity");
+									point = locationService.GetLatLongFromAddress(PastorFullAddress);
+								}
+								catch (Exception ex)
+								{
+									Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Pastor Full Address: Please verify address syntax and validity");
 									numberFailed++;
 									Console.WriteLine(ex.Message);
 									continue;
 								}
+								if (point != null)
+                                {
+									Pastorlatitude = point.Latitude.ToString();
+									Pastorlongitude = point.Longitude.ToString();
+								}
+								else
+                                {
+									Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Pastor Generated Address(" + PastorFullAddress + ") : Please verify Street, City State and Postal Code");
+									numberFailed++;
+									continue;
+								}
 
-								latitude = point.Latitude.ToString();
-								longitude = point.Longitude.ToString();
+
 							}
-							var zipCode = ((ExcelRangeBase)worksheet.Cells[row, 7]).Value;
-							var sectionId = (((((ExcelRangeBase)worksheet.Cells[row, 8]).Value == null) ? null : ((ExcelRangeBase)worksheet.Cells[row, 8]).Value.ToString()));
-							int? sectionIdInt = null;
-							if (sectionId != null || sectionId != "")
-								sectionIdInt = Convert.ToInt32(sectionId);				
-							
-							var stateId = ((((ExcelRangeBase)worksheet.Cells[row, 9]).Value != null) ? new int?(source.Where((TblStateNta m) => m.Alias != null && m.Alias.ToString().ToUpper() == ((ExcelRangeBase)worksheet.Cells[row, 9]).Value.ToString().ToUpper()).FirstOrDefault().Id) : null);
-							var roleId = roleEntities.Where((TblRoleNta m) => m.Id.ToString().Contains(((ExcelRangeBase)worksheet.Cells[row, 10]).Value.ToString())).FirstOrDefault().Id;
-							var city = ((((ExcelRangeBase)worksheet.Cells[row, 11]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 11]).Value.ToString() : null);
-							var workPhoneNum = ((((ExcelRangeBase)worksheet.Cells[row, 12]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 12]).Value.ToString() : null);
-							var landLine = ((((ExcelRangeBase)worksheet.Cells[row, 13]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 13]).Value.ToString() : null);
-							var mobilePhone = ((((ExcelRangeBase)worksheet.Cells[row, 14]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 14]).Value.ToString() : null);
-							var countryId = ((((ExcelRangeBase)worksheet.Cells[row, 9]).Value != null) ? new int?(source.Where((TblStateNta m) => m.Alias != null && m.Alias.ToString().ToUpper() == ((ExcelRangeBase)worksheet.Cells[row, 9]).Value.ToString()).FirstOrDefault().CountryId) : null);
+
+
+							//For ChurchAddress. if it does not exist but he street state city and zip do then we need to create
+							//the address with that.
+							if (churchFullAddress == null)
+							{
+								//If we have all the information needed to create the address
+								if (churchStreet != null && churchCity != null && churchState != null && churchPostalCode != null)
+								{
+									churchFullAddress = churchStreet + "," + churchCity + "," + churchState + " " + churchPostalCode;
+
+									//This will get the longitude and lat from the address. If we cannot find it then
+									//The assumption is that it is a bad address. 
+									var locationService = new GoogleLocationService("AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI");
+									MapPoint point = null;
+									try
+									{
+
+										point = locationService.GetLatLongFromAddress(churchFullAddress);
+									}
+									catch (Exception ex)
+									{
+										Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Church Generated Address(" + churchFullAddress + ") : Please verify Street, City State and Postal Code");
+										numberFailed++;
+										Console.WriteLine(ex.Message);
+										continue;
+									}
+									if(point != null)
+                                    {
+										Churchlatitude = point.Latitude.ToString();
+										Churchlongitude = point.Longitude.ToString();
+									}
+									else
+                                    {
+										Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Church Generated Address(" + churchFullAddress + ") : Please verify Street, City State and Postal Code");
+										numberFailed++;
+										continue;
+									}
+
+
+								}
+								//This means we do not have enough information to have an address for the pastor and we are going to ignore this row
+								else
+								{
+									Errors.AppendLine("Row Number:" + row + "Church Full Address was not given.Data City, State, Zip and Street were not given. Unable to create address for Church");
+									numberFailed++;
+								}
+							}
+							//Since the Full address does exist we are going to vaidate it using Google Validation. 
+							//This will get the longitude and lat from the address. If we cannot find it then
+							//The assumption is that it is a bad address. 
+							else if (churchFullAddress != null)
+							{
+								var locationService = new GoogleLocationService("AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI");
+								MapPoint point = null;
+								try
+								{
+
+									point = locationService.GetLatLongFromAddress(churchFullAddress);
+								}
+								catch (Exception ex)
+								{
+									Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Church Full Address: Please verify address syntax and validity");
+									numberFailed++;
+									Console.WriteLine(ex.Message);
+									continue;
+								}
+								if(point != null)
+                                {
+									Churchlatitude = point.Latitude.ToString();
+									Churchlongitude = point.Longitude.ToString();
+								}
+								else
+                                {
+									Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Church Full Address: Please verify address syntax and validity");
+									numberFailed++;
+									continue;
+								}
+
+
+							}
+
+							//Retrieving the ID for the state based on the alias name
+							var stateId = ((PastorStateCode != null) ? new int?(source.Where((TblStateNta m) => m.Alias != null && m.Alias.ToString().ToUpper() == PastorStateCode.ToString().ToUpper()).FirstOrDefault().Id) : null);
+
+							//Retrieving the ID for the country based on the relationship from the state given
+							var countryId = ((PastorStateCode != null) ? new int?(source.Where((TblStateNta m) => m.Alias != null && m.Alias.ToString().ToUpper() == PastorStateCode.ToString().ToUpper()).FirstOrDefault().CountryId) : null);
+
+
 							TblUserNta formModel = new TblUserNta
 							{
 
-								FirstName = firstName,
+								FirstName = PastorfirstName == null? "":PastorfirstName,
 
-								MiddleName = middleName,
+								LastName = PastorlastName == null ? "" : PastorlastName,
 
-								LastName = lastName,
+								UserName = email == null ? "" : email,
 
-								UserName = email,
+								Email = email == null ? "" : email,
 
-								Email = email,
+								Address = PastorFullAddress == null ? "" : PastorFullAddress,
 
-								Gender = gender,
+								Zipcode = PastorPostal == null ? "" : PastorPostal,
 
-								Address = address,
+								SectionId = sectionId == 0 ? 0 : sectionId,
 
-								Zipcode = zipCode.ToString(),
+								StateId = stateId == null ? 0 : stateId,
 
-								SectionId = sectionIdInt,
+								RoleId = roleID == 0 ? 0 : roleID,
 
-								StateId = stateId,
+								City = PastorCity == null ? "" : PastorCity,
+								AddressState = PastorStateCode == null ? "" : PastorStateCode,
+								Street = PastorStreet == null ? "" : PastorStreet,
+								Zip = PastorPostal == null ? "" : PastorPostal,
+								R1 = r1FlagBool == false ? false : r1FlagBool,
+								sensitiveNation = sensitiveNationFlag == null ? false : Convert.ToBoolean(sensitiveNationFlag),
+								UserSalutation = PastorUserSalutation == null ? "" : PastorUserSalutation,
 
-								RoleId = roleId,
+								HQID = UserHQID == null ? "" : UserHQID,
+								Gender = PastorGender == null ? "" : PastorGender,
 
-								City = city,
+								WorkPhoneNo = workPhone == null ? "" : workPhone,
 
-								WorkPhoneNo = workPhoneNum,
+								TelePhoneNo = mobilePhone == null ? "" : mobilePhone,
 
-								TelePhoneNo = landLine,
-
-								Phone = mobilePhone,
+								Phone = phone == null ? "" : phone,
 
 								//We are looking up the country based on the state ID that is why we are looking at the state value here and extracting the Country ID from that table. 
-								CountryId = countryId,
+								CountryId = countryId == 0 ? 0 : countryId,
 
 								//This was another lookup that happened previous. We know the district because we know the section
-								DistrictId = districtId,
+								DistrictId = districtID == 0 ? 0 : districtID,
 
-								Lat = latitude,
+								Lat = Pastorlatitude == null ? "" : Pastorlatitude,
 
-								Long = longitude,
+								Long = Pastorlongitude == null ? "" : Pastorlongitude,
 
 								IsActive = true,
 								InsertDatetime = DateTime.Now,
@@ -336,16 +581,17 @@ public class UserController : Controller
 							};
 
 
-							//Adding User into Database Here
-							_context.TblUserNta.AddRange(formModel);
+						
 
 							try
 							{
+								//Adding User into Database Here
+								_context.TblUserNta.AddRange(formModel);
 								await _context.SaveChangesAsync();
 							}
 							catch(Exception ex)
                             {
-								Errors.AppendLine("Row Number:" + row + " " + ex.InnerException.Message);
+								Errors.AppendLine("Adding User Failed: " + ex.InnerException.Message);
 								numberFailed++;
 								continue;
 
@@ -360,19 +606,74 @@ public class UserController : Controller
 								InsertDatetime = DateTime.Now,
 								InsertUser = loggedinUser.Id.ToString(),
 							});
-							//Adding Password for User into Database Here
-							_context.TblUserPasswordNta.AddRange(tmpInsert);
+							
 							try
                             {
+								//Adding Password for User into Database Here
+								_context.TblUserPasswordNta.AddRange(tmpInsert);
 								await _context.SaveChangesAsync();
 							}
 							catch (Exception ex)
                             {
-								Errors.AppendLine("Row Number:" + row + " " + ex.InnerException.Message);
+								Errors.AppendLine("Adding Password For User Failed: " + ex.InnerException.Message);
 								numberFailed++;
 								continue;
                             }
-							
+
+							TblChurchNta ChurchModel = new TblChurchNta
+							{
+								
+								ChurchName = churchName == null ? "" : churchName,
+								City = churchCity == null ? "" : churchCity,
+								State = churchState == null ? "" : churchState,
+								Zip = churchPostalCode == null ? "" : churchPostalCode,
+								Street = churchStreet == null ? "" : churchStreet,
+								Address = churchFullAddress == null ? "" : churchFullAddress,
+								WebSite = churchWebsite == null ? "" : churchWebsite,
+								AccountNo = ChurchHQAccountNumber == null ? "" : ChurchHQAccountNumber,
+								Lat = Churchlatitude == null ? "" : Churchlatitude,
+								Lon = Churchlongitude == null ? "" : Churchlongitude,
+								InsertDatetime = DateTime.Now ,
+								InsertUser = loggedinUser.Id.ToString(),
+								DistrictId = districtID == 0 ? 0 : districtID,
+								SectionId = sectionId == 0 ? 0 : sectionId,
+							};
+
+							try
+							{
+								//Adding Churchinto Database Here
+								_context.TblChurchNta.AddRange(ChurchModel);
+								await _context.SaveChangesAsync();
+							}
+							catch (Exception ex)
+							{
+								Errors.AppendLine("Inserting Church Failed: " + ex.InnerException.Message);
+								numberFailed++;
+								continue;
+
+							}
+
+							TblUserChurchNta pastorChurchConnetion = new TblUserChurchNta
+							{
+								UserId = formModel.Id,
+								ChurchId = ChurchModel.Id,
+								InsertDatetime = DateTime.Now,
+								InsertUser = loggedinUser.Id.ToString(),
+							};
+							try
+							{
+								//Adding Church Pastor Connection into Database Here
+								_context.TblUserChurchNta.AddRange(pastorChurchConnetion);
+								await _context.SaveChangesAsync();
+							}
+							catch (Exception ex)
+							{
+								Errors.AppendLine("Pastor Church Connection Failed: " + ex.InnerException.Message);
+								numberFailed++;
+								continue;
+
+							}
+
 
 						}
 						//This means the data import read in a blank link and we are going to ingore
@@ -452,6 +753,11 @@ public class UserController : Controller
 		{
 			return false;
 		}
+	}
+
+	private static string GetNumbersOnly(string input)
+	{
+		return new string(input.Where(c => char.IsDigit(c)).ToArray());
 	}
 
 	[Route("exportListData")]

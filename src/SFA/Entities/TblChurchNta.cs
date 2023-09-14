@@ -51,6 +51,14 @@ namespace SFA.Entities
         [StringLength(50)]
         public string WebSite { get; set; }
         [StringLength(50)]
+        public string City { get; set; }
+        [StringLength(200)]
+        public string State { get; set; }
+        [StringLength(200)]
+        public string Zip { get; set; }
+        [StringLength(200)]
+        public string Street { get; set; }
+        [StringLength(200)]
         public string Status { get; set; }
         public bool IsDelete { get; set; }
         [Column("INSERT_USER")]

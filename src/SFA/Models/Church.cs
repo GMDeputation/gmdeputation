@@ -36,6 +36,15 @@ namespace SFA.Models
 
         public decimal? TotalPoint { get; set; }
 
+        public string City { get; set; }
+
+        public string State { get; set; }
+
+        public string Zip { get; set; }
+
+        public string Street { get; set; }
+
+
         public List<ChurchServiceTime> ChurchServiceTimes { get; set; }
 
         public List<ChurchAttribute> Attributes { get; set; }

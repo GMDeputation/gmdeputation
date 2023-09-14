@@ -632,10 +632,19 @@ namespace SFA.Services
 
         public async Task<User> Validate(string email, string password)
          {
-            foreach(var user in _context.TblUserNta.ToList())
+
+            try
             {
-                Console.WriteLine(user.FirstName);
+                foreach (var user in _context.TblUserNta.ToList())
+                {
+                    Console.WriteLine(user.FirstName);
+                }
             }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.InnerException);
+            }
+         
            // var testEmail =  _context.TblUserNta.Where(m => m.Email == email).FirstOrDefault();
             var userEntity = await _context
                 .TblUserNta.Include(m => m.Role).Include(m => m.TblUserPasswordNta)

@@ -126,8 +126,10 @@ namespace SFA.Entities
         [InverseProperty("TblUserNta")]
         public TblStateNta State { get; set; }
 
-
-
+        public string AddressState { get; set; }
+        public string Zip { get; set; }
+        public string Street { get; set; }
+        public string HQID { get; set; }
 
         [InverseProperty("ApprovedByNavigation")]
         public ICollection<TblAccomodationBookingNta> TblAccomodationBookingNtaApprovedByNavigation { get; set; }
