@@ -44,7 +44,6 @@ $(document).ready(function () {
             }, {
                 type: 'bar',
                 label: 'Missionaries (PY)',
-                backgroundColor: color(window.chartColors.blue).alpha(0.2).rgbString(),
                 //borderColor: window.chartColors.blue,
                 data: csdata
             }, {
