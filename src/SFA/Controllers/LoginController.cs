@@ -64,6 +64,7 @@ namespace SFA.Controllers
             }
 
             await _userService.SaveLogIn(user.Id);
+
             HttpContext.Session.Set<User>("SESSIONSFAUSER", user);
 
             var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -73,8 +74,6 @@ namespace SFA.Controllers
 
             //var sessionUser = .Session.Get<User>("SESSIONUSER");
             var sessionUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");
-
-
 
 
             if (returnUrl == null)
