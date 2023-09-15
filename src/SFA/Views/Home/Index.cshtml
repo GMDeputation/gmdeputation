@@ -16,7 +16,7 @@
                 <a href="/reports/macroscheduleWithApoinmentReport" style="color:#FFF !important;" title="Appointment by Macro Report">
                     <div class="info-box">
                         <span class="info-box-icon push-bottom">
-                            <i class="ng-binding" style="font-weight:bold;font-size: 44px;font-style: normal;">
+                            <i class="ng-binding" style="font-weight:bold;font-size: 40px;font-style: normal;">
                                 {{macros[0].macro_lt5_services}}
                             </i>
                         </span>
@@ -38,7 +38,7 @@
 
                         <!-- /.info-box-content -->
                     </div>
-                <!-- /.info-box -->
+                    <!-- /.info-box -->
                 </a>
             </div>
             <!-- /.col -->
@@ -46,7 +46,7 @@
                 <a href="/reports/missionaryMacroScheduleReport" style="color:#FFF !important;" title="Macro Report">
                     <div class="info-box">
                         <span class="info-box-icon push-bottom">
-                            <i class="ng-binding" style="font-weight:bold;font-size: 44px;font-style: normal;">
+                            <i class="ng-binding" style="font-weight:bold;font-size: 40px;font-style: normal;">
                                 {{upcoming[0].upcoming_mac_sched}}
                             </i>
                         </span>
@@ -74,7 +74,7 @@
             <div class="col-xl-4 col-md-6 col-12">
                 <div class="info-box">
                     <span class="info-box-icon push-bottom">
-                        <i class="ng-binding" style="font-weight:bold;font-size: 44px;font-style: normal;">
+                        <i class="ng-binding" style="font-weight:bold;font-size: 40px;font-style: normal;">
                             {{churcheq[0].tot_church_eq}}
                         </i>
                     </span>
@@ -107,7 +107,7 @@
                 <a href="/reports/pastorAppoinmentReport" style="color:#FFF !important;" title="Pastor Appointment Report">
                     <div class="info-box">
                         <span class="info-box-icon push-bottom">
-                            <i class="ng-binding" style="font-weight:bold;font-size: 44px;font-style: normal;">
+                            <i class="ng-binding" style="font-weight:bold;font-size: 40px;font-style: normal;">
                                 {{services[0].cy_tot_services}}
                             </i>
                         </span>
@@ -128,16 +128,14 @@
                         </div>
                         <!-- /.info-box-content -->
                     </div>
-                <!-- /.info-box -->
+                    <!-- /.info-box -->
                 </a>
             </div>
             <!-- /.col -->
             <div class="col-xl-4 col-md-6 col-12">
                 <div class="info-box">
                     <span class="info-box-icon push-bottom">
-                        <i class="ng-binding" style="font-weight:bold;font-size: 44px;font-style: normal;">
-                            {{churchsvc[0].church_no_svc_cy}}
-                        </i>
+                        <i id="church_no_svc_id" class="ng-binding" style="font-weight:bold;font-size: 40px;font-style: normal;">{{churchsvc[0].church_no_svc_cy}}</i>
                     </span>
                     <div class="info-box-content">
                         <h4 class="info-box-text" style="font-weight:600;margin: 5px 0;border-bottom: 2px solid #CCC;letter-spacing: -1px;">
@@ -309,4 +307,20 @@
     <script src="~/scripts/controllers/dashboardController.js" asp-append-version="true"></script>
 
     <script src="~/lib/home-data.js" asp-append-version="true"></script>
+
+    <script>
+        $(document).ready(function () {
+            setTimeout(function () {
+                
+                var $church = parseInt($('#church_no_svc_id').html());
+                if($church > 99)
+                {
+                    $('#church_no_svc_id').html('99+');
+                }
+                
+            }, 600);
+            
+        });
+    </script>
+
 }
