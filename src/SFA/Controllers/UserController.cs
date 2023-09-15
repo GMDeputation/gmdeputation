@@ -189,7 +189,7 @@ public class UserController : Controller
 					int numberInserts = 0;
 					int numberFailed = 0;
 					_ = string.Empty;
-					List<TblUserNta> existingEntity = await _context.TblUserNta.Include((TblUserNta m) => m.District).ToListAsync();
+					
 					List<TblRoleNta> roleEntities = await _context.TblRoleNta.ToListAsync();
 					List<TblDistrictNta> districtEntities = await _context.TblDistrictNta.ToListAsync();
 					List<TblSectionNta> sectionEntities = await _context.TblSectionNta.ToListAsync();
@@ -197,6 +197,7 @@ public class UserController : Controller
 					List<TblStateNta> source = await _context.TblStateNta.ToListAsync();
 					for (int row = 2; row <= rowCount; row++)
 					{
+						List<TblUserNta> existingEntity = await _context.TblUserNta.Include((TblUserNta m) => m.District).ToListAsync();
 						//Make sure there is data in the 15th column(5) -- If there isnt then we will ignore that under the assumption we read in a blank row.
 						if (((ExcelRangeBase)worksheet.Cells[row, 5]).Value != null)
 						{
@@ -333,8 +334,7 @@ public class UserController : Controller
 							Boolean.TryParse(r1Flag, out r1FlagBool);
 							//Column 30
 							var PastorUserSalutation = ((((ExcelRangeBase)worksheet.Cells[row, 30]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 30]).Value.ToString() : null);
-							var PastorUserSalutationBool = false;
-							Boolean.TryParse(PastorUserSalutation, out PastorUserSalutationBool);
+
 							//Column 31
 							var roleIDString = ((((ExcelRangeBase)worksheet.Cells[row, 31]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 31]).Value.ToString() : null);
 							int roleID = 0;
@@ -573,6 +573,7 @@ public class UserController : Controller
 								Lat = Pastorlatitude == null ? "" : Pastorlatitude,
 
 								Long = Pastorlongitude == null ? "" : Pastorlongitude,
+								
 
 								IsActive = true,
 								InsertDatetime = DateTime.Now,
