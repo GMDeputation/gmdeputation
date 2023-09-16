@@ -7,11 +7,11 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Play', sans-serif;
-    background: url(/images/login-bg.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    min-height: 100vh;
     overflow: hidden;
+    background-image: linear-gradient(to bottom right, #b400ff52, #007eff8f);
+    background-image: -webkit-linear-gradient(left, #b400ff52, #007eff8f);
+    background-image: -o-linear-gradient(left, #b400ff52, #007eff8f);
+    background-image: -moz-linear-gradient(to bottom right, #b400ff52, #007eff8f);
 }
 
 .body-overlay-wraper {
@@ -20,11 +20,11 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    background-image: linear-gradient(to bottom right, #b400ff52, #007eff8f);
-    background-image: -webkit-linear-gradient(left, #b400ff52, #007eff8f);
-    background-image: -o-linear-gradient(left, #b400ff52, #007eff8f);
-    background-image: -ms-linear-gradient(left, #b400ff52, #007eff8f);
-    background-image: -moz-linear-gradient(to bottom right, #b400ff52, #007eff8f);
+    min-height: 100vh;
+    background: url('https://cdn.ntacreative.com/client/gmdeputation/gmd-login-bg-edit.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -1;
 }
 
 .login-wraper {
@@ -42,6 +42,7 @@ body {
     animation-name: fadeInRight;
     animation-duration: 1s;
     animation-timing-function: ease-in;
+    box-shadow: 0px 0px 10px #333;
 }
 
     .login-wraper > * {
@@ -89,12 +90,18 @@ body {
     }
 
 .login-btn {
-    width: 130px;
+    width: 200px;
     height: 40px;
     padding: 10px 20px;
-    border-radius: 25px;
+    border-radius: 20px;
     background-image: linear-gradient(to bottom right, #1b83ef, #7628f3);
+    font-weight: 600;
 }
+
+    .login-btn:hover {
+        background: #14487d;
+        border: 1px solid #1b83ef;
+    }
 
     .login-btn:focus, .login-btn:active {
         border: none;

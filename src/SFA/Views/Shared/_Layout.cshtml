@@ -45,12 +45,152 @@
         <link href="~/libs/md-time-picker.css" rel="stylesheet" />
         <link rel="stylesheet" href="~/libs/lf-ng-md-file-input.css" />
         <link rel="stylesheet" href="~/styles/loader.css" />
-
         @*<link rel="stylesheet" href="~/css/admin/loader.css" asp-append-version="true" />*@
         <link rel="stylesheet" href="~/styles/site.css" asp-append-version="true" />
     </environment>
     <style>
-        table.dashboard-table {
+        
+        body {
+            font-family: 'Roboto', sans-serif, 'Poppins', sans-serif !important;
+        }
+
+        .info-box {
+            border-bottom-left-radius: 20px !important;
+            border-top-right-radius: 20px !important;
+            min-height: 100px;
+            height: 150px !important;
+            width: 95% !important;
+            box-shadow: 1px 3px 5px rgb(0 0 0 / 25%) !important;
+            -webkit-box-shadow: 1px 2px 5px rgb(0 0 0 / 25%) !important;
+            margin: 10px 0 15px 0 !important;
+            padding: 12px 10px 12px 15px !important;
+            border-width: 5px !important;
+            border-color: #eee;
+            border-style: solid;
+        }
+
+        .bg-b-blue {
+            background: linear-gradient(45deg,#253a52,#6496d2) !important;
+        }
+
+        .bg-b-black {
+            background: linear-gradient(45deg, #222222, #b6b6b6) !important;
+        }
+
+        .bg-b-danger {
+            background: linear-gradient(45deg, #5c0c0c, #ff818180) !important;
+        }
+
+        .login-logo-holder {
+            background: #00000073;
+            display: block;
+            width: 100%;
+            position: relative;
+            z-index: 0;
+            margin: 15% auto;
+            padding-left: 25px;
+        }
+
+        ul.side-nav-list > li {
+            position: relative !important;
+            padding: 15px 27px !important;
+            font-family: Roboto !important;
+            font-size: 18px !important;
+            line-height: 1.25 !important;
+            cursor: pointer;
+            color: #e5e5e5;
+        }
+
+        .info-box {
+            width: unset !important;
+            margin-bottom: 10px;
+            color: #333;
+            padding: 5px 0 !important;
+            border-width: 2px !important;
+            font-family: 'Poppins';
+            border-color: #eee;
+            border-style: solid;
+            height: 125px !important;
+            border-radius: 0 !important;
+        }
+
+            .info-box span span {
+                font-size: 14px !important;
+                font-family: sans-serif;
+                font-weight: 400 !important;
+                color: #6f6f6f !important;
+            }
+
+            .info-box h4 {
+                font-size: 18px !important;
+                letter-spacing: 0px !important;
+            }
+
+        .info-box-icon {
+            border-radius: 0 !important;
+            border-left: 5px solid #a7c4e7;
+            width: 95px !important;
+        }
+
+        .info-box-number {
+            font-weight: 300;
+            font-size: 21px;
+        }
+
+        .page-breadcrumb {
+            font-size: 12px;
+            letter-spacing: 1px;
+            color: #777;
+        }
+
+        .info-box-content {
+            padding: 15px 15px 10px 0 !important;
+            margin-left: 115px !important;
+        }
+
+        .page-header-title h2 {
+            font-weight: 500;
+            font-family: 'Poppins';
+        }
+
+        .page-header-title {
+            padding: 10px 5px;
+        }
+
+        .toggler-btn {
+            float: right;
+            color: #fff;
+            border: none;
+            box-shadow: none;
+            background: none;
+            font-size: 25px;
+            padding: 0 12px;
+            line-height: 1.5em;
+        }
+
+        ul.side-nav-list > li {
+            position: relative !important;
+            padding: 20px 25px !important;
+            font-family: Poppins !important;
+            font-size: .9em !important;
+            line-height: 1.25 !important;
+        }
+
+            ul.side-nav-list > li > i {
+                float: right;
+                font-size: 18px !important;
+            }
+
+            ul.side-nav-list > li:hover::after {
+                content: '';
+                position: absolute;
+                right: 0;
+                top: 0;
+                border-right: 4px solid #d3d3d3 !important;
+                height: 57px !important;
+            }
+
+            table.dashboard-table {
             border-spacing: 0 3px;
             width: 100%;
         }
@@ -251,145 +391,6 @@
             background-color: white;
         }
 
-        body {
-            font-family: 'Roboto', sans-serif, 'Poppins', sans-serif !important;
-        }
-
-        .info-box {
-            border-bottom-left-radius: 20px !important;
-            border-top-right-radius: 20px !important;
-            min-height: 100px;
-            height: 150px !important;
-            width: 95% !important;
-            box-shadow: 1px 3px 5px rgb(0 0 0 / 25%) !important;
-            -webkit-box-shadow: 1px 2px 5px rgb(0 0 0 / 25%) !important;
-            margin: 10px 0 15px 0 !important;
-            padding: 12px 10px 12px 15px !important;
-            border-width: 5px !important;
-            border-color: #eee;
-            border-style: solid;
-        }
-
-        .bg-b-blue {
-            background: linear-gradient(45deg,#253a52,#6496d2) !important;
-        }
-
-        .bg-b-black {
-            background: linear-gradient(45deg, #222222, #b6b6b6) !important;
-        }
-
-        .bg-b-danger {
-            background: linear-gradient(45deg, #5c0c0c, #ff818180) !important;
-        }
-
-        ul.side-nav-list > li {
-            position: relative !important;
-            padding: 15px 27px !important;
-            font-family: Roboto !important;
-            font-size: 1.25em !important;
-            line-height: 1.25 !important;
-            cursor: pointer;
-            color: #e5e5e5;
-        }
-
-        ul.side-nav-list > li {
-            position: relative;
-            padding: 15px 27px;
-            font-family: Roboto;
-            font-size: 1.2em;
-            line-height: 1.25;
-            cursor: pointer;
-            color: #e5e5e5;
-        }
-
-        .info-box {
-            width: unset !important;
-            margin-bottom: 10px;
-            color: #333;
-            padding: 5px 0 !important;
-            border-width: 2px !important;
-            font-family: 'Poppins';
-            border-color: #eee;
-            border-style: solid;
-            height: 125px !important;
-            border-radius: 0 !important;
-        }
-
-            .info-box span span {
-                font-size: 14px !important;
-                font-family: sans-serif;
-                font-weight: 400 !important;
-                color: #6f6f6f !important;
-            }
-
-            .info-box h4 {
-                font-size: 18px !important;
-                letter-spacing: 0px !important;
-            }
-
-        .info-box-icon {
-            border-radius: 0 !important;
-            border-left: 5px solid #a7c4e7;
-            width: 95px !important;
-        }
-
-        .info-box-number {
-            font-weight: 300;
-            font-size: 21px;
-        }
-
-        .page-breadcrumb {
-            font-size: 12px;
-            letter-spacing: 1px;
-            color: #777;
-        }
-
-        .info-box-content {
-            padding: 15px 15px 10px 0 !important;
-            margin-left: 115px !important;
-        }
-
-        .page-header-title h2 {
-            font-weight: 500;
-            font-family: 'Poppins';
-        }
-
-        .page-header-title {
-            padding: 10px 5px;
-        }
-
-        .toggler-btn {
-            float: right;
-            color: #fff;
-            border: none;
-            box-shadow: none;
-            background: none;
-            font-size: 2em;
-            line-height: 1.5em;
-        }
-
-        ul.side-nav-list > li {
-            position: relative !important;
-            padding: 20px 25px !important;
-            font-family: Poppins !important;
-            font-size: .9em !important;
-            line-height: 1.25 !important;
-        }
-
-            ul.side-nav-list > li > i {
-                float: right;
-                font-size: 1.3em !important;
-            }
-
-            ul.side-nav-list > li:hover::after {
-                content: '';
-                position: absolute;
-                right: 0;
-                top: 0;
-                border-right: 4px solid #d3d3d3 !important;
-                height: 57px !important;
-            }
-
     </style>
     @RenderSection("Styles", required: false)
 </head>
@@ -446,7 +447,7 @@
                         <div class="info-panel">
 
                             <div class="powerd-info">
-                                <a href="https://www.gmdeputation.help/" target="_blank" style="font-size:2em;color: #fff;display: block;width: 25px !important;text-align: center;font-weight: bold;padding-left: 8px;" title="GMDeputation Support">?</a>
+                                <a href="https://www.gmdeputation.help/" target="_blank" style="font-size:2em;color: #fff;display: block;width: 25px !important;text-align: center;font-weight: bold;font-size: 26px;padding-left: 8px;padding-top: 8px;text-decoration: none !important;" title="GMDeputation Support">?</a>
                             </div>
 
                             <span flex="1" class="vertical-seperator">&nbsp;</span>
