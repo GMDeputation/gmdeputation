@@ -250,7 +250,7 @@ namespace SFA.Services
                     InsertDatetime = DateTime.Now,
                     InsertUser = userId.ToString(),
                     OfferingOnly = appointment.OfferingOnly
-                   // ServiceTypeId = appointment.ServiceTypeId
+                    //ServiceTypeId = appointment.ServiceTypeId
                     
                 };
                 list.Add(item);
@@ -315,7 +315,6 @@ namespace SFA.Services
                             appointment.EventTime.ToString(), serviceTypeEntity.Name, missionaryEntity.TelePhoneNo, missionaryEntity.Email, dgmd.FirstName,
                             dgmd.LastName, dgmd.TelePhoneNo, dgmd.Email, dgmd.Phone, pastorEntity.Email, appointment.OfferingOnly,"","");
                         }
-
                     }
                     catch(Exception ex)
                     {

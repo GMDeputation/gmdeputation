@@ -117,7 +117,6 @@
         if (id !== null && id !== undefined && id !== '0') {
             macroScheduleService.get(id).then(function (data) {
                 $scope.macroSchedule = data;
-
                 if ($scope.macroSchedule.macroScheduleDetails.length > 0) {
                     angular.forEach($scope.macroSchedule.macroScheduleDetails, function (detail) {
                         detail.district = { "id": detail.districtId, "name": detail.districtName };
@@ -130,7 +129,7 @@
             });
         }
         else {
-            $scope.macroSchedule = { "entryDate": new Date(), "macroScheduleDetails": [{ "district": null, "userId": null, "users": [], "startDate": new Date(), "endDate": new Date() }] };
+            $scope.macroSchedule = { "entryDate": new Date(), "isActive": true, "macroScheduleDetails": [{ "district": null, "userId": null, "users": [], "startDate": new Date(), "endDate": new Date() }] };
         }
     }
     init();

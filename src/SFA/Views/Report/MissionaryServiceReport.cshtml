@@ -1,0 +1,85 @@
+﻿@{
+    ViewData["Title"] = "Missionary Service Report";
+}
+<div data-ng-controller="missionaryServiceReportController">
+    <form name="form">
+    <!--Topbar section-->
+    <div class="topbar">
+        <div class="md-toolbar-tools" layout="row">
+            <div class="topbar-title" flex>
+                <h2>Missionary Service Report</h2>
+                <i class="vertical-seperator" hide-sm hide-xs>&nbsp;</i> <span hide-sm hide-xs><a href="/home">Home</a> / <a href="/nav/@ViewBag.Group">@ViewBag.Group</a> / Missionary Service Report</span>
+            </div>
+            <div flex="none">
+                <md-button class="add-btn" aria-label="Back to home" href="/home"> <md-tooltip>Back to home</md-tooltip> <i class="ti-angle-double-left"></i> </md-button>
+            </div>
+        </div>
+    </div>
+    <!--//End Topbar section-->
+    <!--Filter Section-->
+       <div class="container">
+        <div layout="row" layout-sm="column" layout-xs="column">
+
+            <md-autocomplete
+                flex
+                class="padding-wrap"
+                md-no-cache="true"
+                md-selected-item="reportParams.user"
+                md-selected-item-change="selectedUserName(user)"
+                md-search-text="userSearch"
+                md-items="user in searchUser(userSearch)"
+                md-item-text="user.name"
+                md-min-length="0"
+                md-floating-label="Missionary Name"
+            >
+                <md-item-template> <span md-highlight-text="userSearch" md-highlight-flags="gi">{{user.name}}</span> </md-item-template> <md-not-found> No Data Found . </md-not-found>
+            </md-autocomplete>
+
+        </div>
+        <div layout="row" layout-align="center center">
+            <md-button class="save-btn" aria-label="Save" data-ng-click="searchUserActivityData()" data-ng-disabled="form.$invalid"> <md-tooltip>Search</md-tooltip> <i class="ti-search"></i> Search </md-button>
+            <md-button class="cancel-btn" aria-label="Cancel" href="/nav/@ViewBag.Group"> <md-tooltip>Cancel</md-tooltip> <i class="fas fa-reply"></i> Cancel </md-button>
+        </div>
+        <div layout="row" layout-sm="column" layout-xs="column">
+            <md-button class="add-btn" aria-label="Download" data-ng-click="generateExcell()" data-ng-disabled="searchDatas.length === 0"> <md-tooltip>Generate Excel</md-tooltip> <i class="fas fa-download"></i> Generate Excel </md-button>
+            <md-button class="add-btn" aria-label="Download" data-ng-click="generatePdf()" data-ng-disabled="searchDatas.length === 0"> <md-tooltip>Generate PDF</md-tooltip> <i class="fas fa-download"></i> Generate PDF </md-button>
+            <md-button class="add-btn" aria-label="Download" data-ng-click="generateWord()" data-ng-disabled="searchDatas.length === 0"> <md-tooltip>Generate Word</md-tooltip> <i class="fas fa-download"></i> Generate Word </md-button>
+        </div>
+
+        <table md-table md-progress="promise">
+            <thead md-head>
+                <tr md-row>
+                    <th md-column class="center">Sl No</th>
+                    <th md-column><span class="pad-l-8">EVENT DATE</span></th>
+                    <th md-column><span class="pad-l-8">EVENT TIME</span></th>
+                    <th md-column><span class="pad-l-8">DISTRICT NAME</span></th>
+                    <th md-column><span class="pad-l-8">CHURCH NAME</span></th>
+                    <th md-column><span class="pad-l-8">PASTOR NAME</span></th>
+                    <th md-column><span class="pad-l-8">SERVICE TYPE</span></th>                   
+                </tr>
+            </thead>
+            <tbody md-body>
+                <tr class="md-row md-row-empty" ng-show="searchDatas.length === 0">
+                    <td class="md-cell" colspan="8">No Data Found</td>
+                </tr>
+                <tr md-row data-ng-repeat="item in searchDatas track by $index">
+                    <td md-cell class="center">{{$index+1}}</td>
+                    <td md-cell class="pad-l-8">{{item.eventDate}}</td>
+                    <td md-cell class="pad-l-8">{{item.eventTime}}</td>
+                    <td md-cell class="pad-l-8">{{item.districtName}}</td>
+                    <td md-cell class="pad-l-8">{{item.churchName}}</td>
+                    <td md-cell class="pad-l-8">{{item.pastorName}}</td>
+                    <td md-cell class="pad-l-8">{{item.serviceType}}</td>
+                    <!--<td md-cell class="pad-l-8">{{item.actionTime | date: 'dd-MM-yyyy HH:mm:ss'}}</td>-->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+</div>
+
+@section Scripts{    
+    <script src="~/scripts/services/userService.js" asp-append-version="true"></script>
+      <script src="~/scripts/services/reportsService.js" asp-append-version="true"></script>
+    <script src="~/scripts/controllers/missionaryServiceReportsController.js" asp-append-version="true"></script>
+}

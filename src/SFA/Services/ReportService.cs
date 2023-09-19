@@ -37,6 +37,8 @@ namespace SFA.Services
 		Task<List<PastorAppoinmentReport>> GetPastorAppoinmentData(MacroScheduleReportParams reportParams, string accessCode, int userId);
 
 		Task<List<AccomodationBooking>> GetAccomodationBookingReportData(ReportParams reportParams, string accessCode, int userId);
+
+		Task<List<MissionaryServiceReport>> GetMissionaryServiceReport(MissionaryServiceReportParams reportParams);
 	}
 	public class ReportService : IReportService
 	{
@@ -651,6 +653,47 @@ namespace SFA.Services
 				Reason = m.Reason,
 				FeedBack = m.FeedBack
 			}).ToList();
+		}
+
+		public async Task<List<MissionaryServiceReport>> GetMissionaryServiceReport(MissionaryServiceReportParams reportParams)
+		{
+			List<MissionaryServiceReport> userDataList = new List<MissionaryServiceReport>();
+			using DbCommand cmd = _context.Database.GetDbConnection().CreateCommand();
+			cmd.CommandType = CommandType.StoredProcedure;
+			cmd.CommandText = "USP_MissionarySchedule";
+			cmd.Parameters.Add(new SqlParameter("@userId", SqlDbType.Int)
+			{
+				Value = reportParams.UserId.Value
+			});
+
+			if (cmd.Connection.State != ConnectionState.Open)
+			{
+				cmd.Connection.Open();
+			}
+			try
+			{
+				using (DbDataReader dbDataReader = await cmd.ExecuteReaderAsync())
+				{
+					while (dbDataReader.Read())
+					{
+						userDataList.Add(new MissionaryServiceReport
+						{
+							EventDate = ((!dbDataReader.IsDBNull(dbDataReader.GetOrdinal("Event Date"))) ? dbDataReader.GetString(dbDataReader.GetOrdinal("Event Date")) : string.Empty),
+							EventTime = ((!dbDataReader.IsDBNull(dbDataReader.GetOrdinal("Event Time"))) ? dbDataReader.GetString(dbDataReader.GetOrdinal("Event Time")) : string.Empty),
+							DistrictName = ((!dbDataReader.IsDBNull(dbDataReader.GetOrdinal("District Name"))) ? dbDataReader.GetString(dbDataReader.GetOrdinal("District Name")) : string.Empty),
+							ChurchName = ((!dbDataReader.IsDBNull(dbDataReader.GetOrdinal("Church Name"))) ? dbDataReader.GetString(dbDataReader.GetOrdinal("Church Name")) : string.Empty),
+							PastorName = ((!dbDataReader.IsDBNull(dbDataReader.GetOrdinal("Pastor Name"))) ? dbDataReader.GetString(dbDataReader.GetOrdinal("Pastor Name")) : string.Empty),
+							ServiceType = ((!dbDataReader.IsDBNull(dbDataReader.GetOrdinal("Service Type"))) ? dbDataReader.GetString(dbDataReader.GetOrdinal("Service Type")) : string.Empty)
+						});
+					}
+				}
+				
+				return userDataList;
+			}
+			catch (Exception)
+			{
+				throw;
+			}
 		}
 	}
 }

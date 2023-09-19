@@ -91,12 +91,7 @@ namespace SFA.Controllers
         public async Task<IActionResult> Add([FromBody] List<Appointment> appointments)
         {
             User user = base.HttpContext.Session.Get<User>("SESSIONSFAUSER");
-            TimeZoneInfo local = TimeZoneInfo.Local;
-            TimeZoneInfo destinationTimeZone = TimeZoneInfo.FindSystemTimeZoneById(local.Id);
-            foreach (Appointment appointment in appointments)
-            {
-                appointment.EventDate = appointment.EventDate;//TimeZoneInfo.ConvertTimeFromUtc(appointment.EventDate, destinationTimeZone);
-            }
+
             return new JsonResult(await _appointmentService.Add(appointments, user.DataAccessCode, user.Id));
         }
 
@@ -105,12 +100,7 @@ namespace SFA.Controllers
         public async Task<IActionResult> addOfferingOnly([FromBody] List<Appointment> appointments)
         {
             User user = base.HttpContext.Session.Get<User>("SESSIONSFAUSER");
-            TimeZoneInfo local = TimeZoneInfo.Local;
-            TimeZoneInfo destinationTimeZone = TimeZoneInfo.FindSystemTimeZoneById(local.Id);
-            foreach (Appointment appointment in appointments)
-            {
-                appointment.EventDate = TimeZoneInfo.ConvertTimeFromUtc(appointment.EventDate, destinationTimeZone);
-            }
+            
             return new JsonResult(await _appointmentService.Add(appointments, user.DataAccessCode, user.Id));
         }
 

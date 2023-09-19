@@ -100,6 +100,12 @@ namespace SFA.Controllers
 		{
 			return View();
 		}
+		[Route("MissionaryServiceReport")]
+		[CheckAccess]
+		public IActionResult MissionaryServiceReport()
+		{
+			return View();
+		}
 
 		[HttpPost]
 		[Route("getUserActivityData")]
@@ -118,6 +124,13 @@ namespace SFA.Controllers
 		public async Task<IActionResult> GetChurchServiceCountReportData([FromBody] ChurchServiceReportParam reportParams)
 		{
 			return new JsonResult(await _reportService.ChurchServiceCountReport(reportParams));
+		}
+
+		[HttpPost]
+		[Route("getMissionaryServiceReportData")]
+		public async Task<IActionResult> GetMissionaryServiceReportData([FromBody] MissionaryServiceReportParams reportParams)
+		{
+			return new JsonResult(await _reportService.GetMissionaryServiceReport(reportParams));
 		}
 
 		[HttpPost]

@@ -37,7 +37,7 @@ namespace SFA
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromMinutes(60);
+                options.IdleTimeout = TimeSpan.FromMinutes(90);
                 options.Cookie.HttpOnly = true;
             });
 

@@ -1,5 +1,9 @@
 ﻿app.service('reportsService', function ($http) {
 
+    this.missionaryServiceRerport = function (reportParams) {
+        return $http.post('/reports/getMissionaryServiceReportData', reportParams);
+    };
+
     this.getUserActivityData = function (reportParams) {
         return $http.post('/reports/getUserActivityData', reportParams);
     };

@@ -120,7 +120,9 @@ namespace SFA.Entities
 
                 entity.ToView("SchedServiceKPI");
             });
-            
+
+
+
 
             modelBuilder.Entity<TblAccomodationBookingNta>(entity =>
             {

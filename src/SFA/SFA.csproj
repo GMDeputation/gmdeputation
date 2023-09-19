@@ -162,6 +162,9 @@
     <Content Update="Views\Report\ChurchServiceCountReport.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Report\MissionaryServiceReport.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Report\UserActivityReport.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

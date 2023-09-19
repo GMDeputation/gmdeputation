@@ -280,16 +280,24 @@ public class UserController : Controller
 							}
 
 
-							
+
 							//Making ssure the email does not already exists in the database. 
-							if (existingEntity.Select((TblUserNta m) => m.Email.ToLower()).Contains(email.ToLower()))
-							{
+							//TODO Check to see if first name, last name and email are the same. IF so we
+							//Will not error out the line. If not then it is a duplicate email. 
+
+							//This should be null if we do not find a memnber. 
+							var emailDuplicateEntity =  _context.TblUserNta.Where(m => (m.FirstName != PastorfirstName || m.LastName != PastorlastName) && m.Email == email).ToList();
+							
+							if(emailDuplicateEntity.Count > 0)
+                            {
 								Errors.AppendLine("Row Number:" + row + " User Email Should be unique Or not right in " + row + " th row of excel sheet. Kindly check User Email");
 								//jsonString2 = "User Email Should be unique Or not right in " + row + " th row of excel sheet. Kindly check User Email";
 								//return Json(jsonString2);
 								numberFailed++;
 								continue;
 							}
+
+							
 							//Column 16
 							var phone = ((((ExcelRangeBase)worksheet.Cells[row, 16]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 16]).Value.ToString() : null);
 							//Stripping all characters from phone number that isnt a number so a - or / etc
@@ -354,7 +362,7 @@ public class UserController : Controller
 								continue;
 							}
 							//Column 31
-							var churchWebsite = ((((ExcelRangeBase)worksheet.Cells[row, 31]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 31]).Value.ToString() : null);
+							var churchWebsite = ((((ExcelRangeBase)worksheet.Cells[row, 32]).Value != null) ? ((ExcelRangeBase)worksheet.Cells[row, 32]).Value.ToString() : null);
 
 
 							//For PastorFullAddress. if it does not exist but he street state city and zip do then we need to create

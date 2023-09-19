@@ -188,10 +188,8 @@ namespace SFA.Services
         public async Task<List<MacroScheduleDetails>> GetAllapproved(MacroScheduleQuery query, int userId, bool superAdmn)
         {
             var userEntity = await _context.TblUserNta.FirstOrDefaultAsync(m => m.Id == userId);
-            if(userEntity.DistrictId == null)
-            {
-                return null;
-            }
+
+            //If you are super admin it will show all distrcits if you are not it will filter based on your district
             var macroScheduleEntities = superAdmn ? await _context.TblMacroScheduleDetailsNta.Include(m => m.MacroSchedule).Include(m => m.District).Include(m => m.User).Where(m => m.IsApproved).ToListAsync()
                                         : await _context.TblMacroScheduleDetailsNta.Include(m => m.MacroSchedule).Include(m => m.District).Include(m => m.User).Where(m => m.IsApproved && m.DistrictId == userEntity.DistrictId).ToListAsync();
 
@@ -363,7 +361,7 @@ namespace SFA.Services
 
                     macroScheduleDetailsEntities.Add(macroScheduleDetailsEntity);
                     //This is grabbing the DGMD from the database for the district. 7 Is the dgmd ID for the role. 
-                    var dgmd = await _context.TblUserNta.Where(m => m.DistrictId == item.DistrictId && m.RoleId == 7).FirstAsync();
+                    var dgmd =  _context.TblUserNta.Where(m => m.DistrictId == item.DistrictId && m.RoleId == 7).ToList();
                     var missionary = await _context.TblUserNta.Where(m => m.Id == item.UserId ).FirstAsync();
                     var districtEntity = await _context.TblDistrictNta.Where(m => m.Id == item.DistrictId).FirstAsync();
                     macroScheduleDetailsEntities.Add(macroScheduleDetailsEntity);
@@ -390,7 +388,10 @@ namespace SFA.Services
                     {
                         typeOfEmail = "sensitiveNation";
                     }
-                        tmp.SendEmailDGMDIncomingSchedule(districtEntity.Name, missionary.FirstName, missionary.LastName, missionary.UserSalutation, missionary.Email, dgmd.Email, dgmd.Phone, item.StartDate.ToString("MM/dd/yyyy"), item.EndDate.ToString("MM/dd/yyyy"), typeOfEmail);
+                    foreach(TblUserNta inddgmd in dgmd)
+                    {
+                        tmp.SendEmailDGMDIncomingSchedule(districtEntity.Name, missionary.FirstName, missionary.LastName, missionary.UserSalutation, missionary.Email, inddgmd.Email, inddgmd.Phone, item.StartDate.ToString("MM/dd/yyyy"), item.EndDate.ToString("MM/dd/yyyy"), typeOfEmail);
+                    }
 
                     }
 
@@ -428,7 +429,7 @@ namespace SFA.Services
                     };
 
                     //This is grabbing the DGMD from the database for the district. 7 Is the dgmd ID for the role. 
-                    var dgmd = await _context.TblUserNta.Where(m => m.DistrictId == item.DistrictId && m.RoleId == 7).FirstAsync();
+                    var dgmd =  _context.TblUserNta.Where(m => m.DistrictId == item.DistrictId && m.RoleId == 7).ToList();
                     var missionary = await _context.TblUserNta.Where(m => m.Id == item.UserId).FirstAsync();
                     macroScheduleDetailsEntities.Add(macroScheduleDetailsEntity);
                     var districtEntity = await _context.TblDistrictNta.Where(m => m.Id == item.DistrictId).FirstAsync();
@@ -455,9 +456,10 @@ namespace SFA.Services
                     {
                         typeOfEmail = "sensitiveNation";
                     }
-                    tmp.SendEmailDGMDIncomingSchedule(districtEntity.Name, missionary.FirstName, missionary.LastName, missionary.UserSalutation, missionary.Email, dgmd.Email, dgmd.Phone, item.StartDate.ToString("MM/dd/yyyy"), item.EndDate.ToString("MM/dd/yyyy"), typeOfEmail);
-
-
+                    foreach (TblUserNta inddgmd in dgmd)
+                    {
+                        tmp.SendEmailDGMDIncomingSchedule(districtEntity.Name, missionary.FirstName, missionary.LastName, missionary.UserSalutation, missionary.Email, inddgmd.Email, inddgmd.Phone, item.StartDate.ToString("MM/dd/yyyy"), item.EndDate.ToString("MM/dd/yyyy"), typeOfEmail);
+                    }
 
 
                 }

@@ -270,11 +270,17 @@
             (function (marker, data) {
                 google.maps.event.addListener(marker, "click", function (e) {
                     // $scope.Map.setZoom(8);
+                    var serviceTimes = ""
 
+                    //Getting all the service times to display in the marker box
+                    data.churchServiceTimes.forEach((element, index, array) => {
+                        serviceTimes += element.weekDay + " - " + element.timeString + "</br>";
+                    });
+                 
                     //$scope.InfoWindow.setContent("<div onclick='setChurch(\""+data.id+"\",\""+data.title+"\")'><div style = 'width:200px'>" + data.title + "</div>" + "<div>" + data.description + "</div>" + "<div>" + data.section + "</div>" + "<div>" + data.district + "</div></div>");
                     $scope.InfoWindow.setContent("<div style = 'color:blue'><div style = 'width:200px'>" + data.title + "</div>" + "<div>" + data.description + "</div>"
                         + "<div>" + data.section + "</div>" + "<div>" + data.district + "</div>" + "<div>" + "Pastor : " + data.pastor +
-                        "</div>" + "<div style = 'color:purple'>" + "Service Time : " + data.serviceTypewiseTime + "</div></div>");
+                        "</div>" + "<div style = 'color:purple'>" + "Service Times : " + serviceTimes + "</div></div>");
                     $scope.Map.setZoom(8);
                     $scope.InfoWindow.open($scope.Map, marker);
 
