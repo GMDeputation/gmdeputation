@@ -22,7 +22,7 @@ $(document).ready(function () {
             for (var j = 0; j < tableRow.cells.length; j++) {
                 rowData[headers[j]] = tableRow.cells[j].innerHTML;
                 if (i < 13) {
-                    xlabel[i - 1] = tableRow.cells[1].innerHTML + ' ' + tableRow.cells[0].innerHTML;
+                    xlabel[i - 1] = tableRow.cells[1].innerHTML + " '" + tableRow.cells[0].innerHTML.substring(tableRow.cells[0].innerHTML.length - 2);
                     cmdata[i - 1] = tableRow.cells[2].innerHTML;
                     csdata[i - 1] = tableRow.cells[3].innerHTML;
                     pmdata[i - 1] = tableRow.cells[4].innerHTML;
@@ -103,7 +103,7 @@ $(document).ready(function () {
             for (var j = 0; j < tableRow.cells.length; j++) {
                 rowData[headers[j]] = tableRow.cells[j].innerHTML;
                 if (i < 13) {
-                    xlabel[i - 1] = tableRow.cells[1].innerHTML + ' ' + tableRow.cells[0].innerHTML;
+                    xlabel[i - 1] = tableRow.cells[1].innerHTML + " '" + tableRow.cells[0].innerHTML.substring(tableRow.cells[0].innerHTML.length - 2);
                     cmdata[i - 1] = tableRow.cells[2].innerHTML;
                     pmdata[i - 1] = tableRow.cells[3].innerHTML;
                 }

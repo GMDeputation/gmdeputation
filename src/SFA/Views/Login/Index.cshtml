@@ -128,17 +128,17 @@
 
         label {
             color: #999;
-            font-size: 14px;
-            font-weight: normal;
+            font-size: 13px;
+            font-family: sans-serif;
             position: absolute;
             pointer-events: none;
-            left: 5px;
-            top: 5px;
+            left: 3px;
+            top: -18px;
             transition: 0.2s ease all;
             -moz-transition: 0.2s ease all;
             -webkit-transition: 0.2s ease all;
         }
-
+        /*
         .floating-input:focus ~ label, .floating-input:not(:placeholder-shown) ~ label {
             top: -18px;
             font-size: 14px;
@@ -150,7 +150,7 @@
             font-size: 14px;
             color: #5264AE;
         }
-
+                */
         /* active state */
         .floating-input:focus ~ .bar:before, .floating-input:focus ~ .bar:after, .floating-select:focus ~ .bar:before, .floating-select:focus ~ .bar:after {
             width: 50%;
@@ -174,7 +174,7 @@
             position: absolute;
             height: 50%;
             width: 100%;
-            top: 15%;
+            top: 20%;
             left: 0;
             pointer-events: none;
             opacity: 0.5;
@@ -246,10 +246,23 @@
         .red {
             color: #8B0000;
         }
+
+        .login-logo-holder {
+            background: #00000073;
+            display: block;
+            width: 100%;
+            position: relative;
+            z-index: 0;
+            margin: 16% auto;
+            padding-left: 25px;
+        }
     </style>
 </head>
 <body>
     <div class="body-overlay-wraper"></div>
+    <!--<div class="login-logo-holder">
+        <img src="https://cdn.ntacreative.com/client/gmdeputation/demo-gmd-logo-white-text.png" alt="" width="32%">
+        </div>-->
     <div class="login-wraper">
         <div class="login-grid">
             <div class="logo">
@@ -268,14 +281,17 @@
                         </div>
                     }
                     <div class="floating-label">
+                        <label>Email <span class="red">*</span></label>
                         <input class="floating-input" type="text" placeholder=" " asp-for="Email" required>
                         <span class="highlight"></span>
-                        <label>Email <span class="red">*</span></label>
+                        
                     </div>
                     <div class="floating-label">
+
+                        <label>Password <span class="red">*</span></label>
                         <input class="floating-input" type="password" placeholder=" " asp-for="Password" required>
                         <span class="highlight"></span>
-                        <label>Password <span class="red">*</span></label>
+                        
                     </div>
                     <button class="login-btn" type="submit"><span class="ti-unlock"></span> LOG IN</button>
                 </form>

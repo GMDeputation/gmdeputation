@@ -1,12 +1,6 @@
-﻿
-
-/**********************************************************
-
-
-					[28. STATE OVERVIEW ]
-						
-*****************************************************************/
-
+﻿body, html {
+    height: unset !important;
+}
 .state-overview h1.sbold,
 .state-overview p.sbold {
     float: left;
@@ -340,7 +334,7 @@ ul.side-nav-list > li > i {
     .info-panel > .user-info {
         position: relative;
         display: flex;
-        padding: 0 10px;
+        padding: 0 20px 0 5px;
         cursor: pointer;
     }
 
@@ -349,19 +343,26 @@ ul.side-nav-list > li > i {
             content: "\e64b";
             position: absolute;
             color: #fff;
-            right: 10px;
-            top: 15px;
+            /* background: #395168; */
+            width: 30px;
+            height: 32px;
+            right: 4px;
+            top: 9px;
+            text-align: center;
+            padding: 4px 0;
         }
 
 .user-info img {
-    border: 1px solid #fff;
+    border: 2px solid #fff;
     border-radius: 50%;
-    margin: 0 15px 0 0;
+    margin: 5px 15px 0 0;
 }
 
 .user-information {
     display: block;
     min-width: 175px;
+    line-height: 1;
+    margin: 10px 0;
 }
 
 .user-info:focus, .work-info:focus {
