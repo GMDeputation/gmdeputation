@@ -81,6 +81,7 @@ public class UserController : Controller
 	{
 		User user = base.HttpContext.Session.Get<User>("SESSIONSFAUSER");
 		int id = user.Id;
+
 		return Json(await _userService.GetMenuByUser(id));
 	}
 

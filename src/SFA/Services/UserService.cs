@@ -1,4 +1,5 @@
-﻿using GoogleMaps.LocationServices;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using GoogleMaps.LocationServices;
 using Microsoft.EntityFrameworkCore;
 using SFA.Entities;
 using SFA.Models;
@@ -23,6 +24,7 @@ namespace SFA.Services
         //Task<List<UserApplication>> GetMenuByUser(int userId);
         Task<bool> SaveLogIn(int id);
         Task<bool> SaveLogOut(int id);
+        Task<bool> DisableNewUser(int id);
         Task<bool> VerifyMail(int otp, int userId);
         Task<bool> SaveOTP(int otp, int userId);
 
@@ -68,6 +70,24 @@ namespace SFA.Services
             if (tblUserLog != null)
             {
                 tblUserLog.LogoutTime = DateTime.Now;
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> DisableNewUser(int id)
+        {
+            TblUserNta tblUser = await _context.TblUserNta.Where((TblUserNta m) => m.Id == id).FirstOrDefaultAsync();
+            if (tblUser != null)
+            {
+                tblUser.IsNewUser = false;
             }
             try
             {
@@ -201,7 +221,9 @@ namespace SFA.Services
                 TravelingVia = m.TravelingVia,
                 NumberTraveling = m.NumberTraveling,
                 R1 = m.R1,
-                sensitiveNation = m.sensitiveNation
+                sensitiveNation = m.sensitiveNation,
+                IsNewUser = m.IsNewUser,
+                IsWebUser = m.IsWebUser
                 
             }).ToList();
         }
@@ -463,11 +485,8 @@ namespace SFA.Services
                         return 3;
                     }
                    
-
-
                 }
                
-
                 var userEntity = new TblUserNta();        
                 if (user.Id == 0)
                 {      
@@ -495,6 +514,7 @@ namespace SFA.Services
                     userEntity.IsSuperAdmin = user.IsSuperAdmin;
                     userEntity.IsActive = user.IsActive;
                     userEntity.IsWebUser = user.IsWebUser;
+                    userEntity.IsNewUser = true;
                     userEntity.RoleId = user.RoleId;
                     userEntity.NumberTraveling = user.NumberTraveling;
                     userEntity.TravelingVia = user.TravelingVia;
@@ -675,6 +695,7 @@ namespace SFA.Services
                 RoleName = userEntity.Role.Name,
                 DataAccessCode = userEntity.Role.DataAccessCode,
                 IsNewUser = userEntity.IsNewUser,
+                IsWebUser = userEntity.IsWebUser,
                 Groups = menuGroups.Select(m => new GroupPermission
                 {
                     GroupId = m.Id,

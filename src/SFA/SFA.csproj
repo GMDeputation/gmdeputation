@@ -206,10 +206,10 @@
       <HintPath>..\..\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="MailKit">
-      <HintPath>..\..\..\MailKit.dll</HintPath>
+      <HintPath>..\..\..\..\gmdeputation0\MailKit.dll</HintPath>
     </Reference>
     <Reference Include="MimeKit">
-      <HintPath>..\..\..\MimeKit.dll</HintPath>
+      <HintPath>..\..\..\..\gmdeputation0\MimeKit.dll</HintPath>
     </Reference>
     <Reference Include="NETCore.MailKit">
       <HintPath>..\..\..\NETCore.MailKit.dll</HintPath>

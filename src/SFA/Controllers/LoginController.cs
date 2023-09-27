@@ -46,16 +46,16 @@ namespace SFA.Controllers
         [HttpPost]
         [Route("validate")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Validate([Bind("Email,Password")]LoginViewModel login, string returnUrl = null)
+        public async Task<IActionResult> Validate([Bind("Email,Password")] LoginViewModel login, string returnUrl = null)
         {
             const string badUserNameOrPasswordMessage = "Email or password is incorrect.";
             if (login == null)
             {
                 TempData["ERRMSG"] = badUserNameOrPasswordMessage;
-                var vm = new LoginViewModel();
+                var vm = new LoginViewModel(); 
                 return View("Index", vm);
             }
-             var user = await _userService.Validate(login.Email, login.Password);
+            var user = await _userService.Validate(login.Email, login.Password);
             if (user == null)
             {
                 TempData["ERRMSG"] = badUserNameOrPasswordMessage;
@@ -74,8 +74,13 @@ namespace SFA.Controllers
 
             //var sessionUser = .Session.Get<User>("SESSIONUSER");
             var sessionUser = HttpContext.Session.Get<User>("SESSIONSFAUSER");
-
-
+            
+            // for new users logging in for the first time; flip new user flag from true to false
+            if (user.IsNewUser == true)
+            {
+                await _userService.DisableNewUser(user.Id);
+                return Redirect("/user/changePassword");
+            }
             if (returnUrl == null)
             {
                 returnUrl = TempData["returnUrl"]?.ToString();

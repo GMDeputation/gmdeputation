@@ -373,6 +373,7 @@ ul.side-nav-list > li > i {
     margin: 0;
     text-transform: uppercase;
     color: #fff;
+    font-size: 11px;
 }
 
 .user-information small {

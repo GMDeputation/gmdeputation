@@ -20,9 +20,10 @@
         </div>
         <div class="container">
             <div layout="row" layout-sm="column" layout-xs="column">
+
                 <md-input-container class="md-block" flex>
-                    <label>Role</label>
-                    <md-select  id=userRole name="userRole" ng-model="user.roleId" required ng-change="roleChange(user.roleId)">
+                    <label for="userRole">Role</label>
+                    <md-select id=userRole name="userRole" ng-model="user.roleId" required ng-change="roleChange(user.roleId)">
                         <md-option ng-repeat="role in roles" ng-value="role.id">{{role.name}}</md-option>
                     </md-select>
                     <div ng-messages="form.userRole.$error" md-auto-hide="false">
@@ -31,8 +32,8 @@
                 </md-input-container>
 
                  <md-input-container class="md-block" flex>
-                    <label>Salutation</label>
-                    <md-select name="salutation" ng-model="user.userSalutation" required>
+                    <label for="salutation_id">Salutation</label>
+                    <md-select id="salutation_id" name="salutation" ng-model="user.userSalutation" required>
                         <md-option ng-repeat="salutation in salutations" ng-value="salutation.id">{{salutation.name}}</md-option>
                     </md-select>
                     <div ng-messages="form.salutation.$error" md-auto-hide="false">
@@ -42,18 +43,20 @@
 
                 <md-input-container class="md-block" flex>
                     <input type="hidden" value="@ViewBag.Id" ng-model="id" />
-                    <label>First Name</label>
-                    <input name="firstName" ng-model="user.firstName" maxlength="50" required>
+                    <label for="firstname_id">First Name</label>
+                    <input name="firstName" ng-model="user.firstName" id="firstname_id" maxlength="50" required>
                     <div ng-messages="form.firstName.$error" md-auto-hide="false">
                         <div ng-message="required">User First Name is required</div>
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block" flex>
-                    <label>Middle Name</label>
-                    <input name="middleName" ng-model="user.middleName" maxlength="50" />
+                    <label for="middle_id">Middle Name</label>
+                    <input name="middleName" ng-model="user.middleName" id="middle_id" maxlength="50" />
                 </md-input-container>
+
             </div>
             <div layout="row" layout-sm="column" layout-xs="column">
+
                 <md-input-container class="md-block" flex>
                     <input type="hidden" value="@ViewBag.Id" ng-model="id" />
                     <label>Last Name</label>
@@ -82,6 +85,7 @@
 
             </div>
             <div layout="row" layout-sm="column" layout-xs="column">
+
                 <md-input-container class="md-block" ng-if="edit" flex>
                     <label>Password</label>
                     <input name="password" ng-model="user.password" required>
@@ -102,13 +106,14 @@
                     <label>City</label>
                     <input ng-model="user.city">
                 </md-input-container>
+
             </div>
             <div layout="row" layout-sm="column" layout-xs="column">
                 <md-input-container class="md-block" flex>
                     <label>Country Name</label>
                     <md-select ng-model="state.countryId" ng-required="isMissonaries">
-                        <md-option ng-repeat="country in countries" ng-value="country.id"  ng-selected="{{ country.name === 'United State of America' ? 'true' : 'false' }}">{{country.name}}
-                           
+                        <md-option ng-repeat="country in countries" ng-value="country.id"  ng-selected="{{ country.name === 'United State of America' ? 'true' : 'false' }}">
+                            {{country.name}}
                         </md-option>
                     </md-select>
                 </md-input-container>
@@ -154,7 +159,7 @@
 
                 <md-input-container class="md-block" flex>
                     <label>Home Phone</label>
-                    <input  id="phoneNumber"name="phone" ng-model="user.phone" required>
+                    <input  id="phoneNumber" name="phone" ng-model="user.phone" required>
                     <div ng-messages="form.phone.$error" md-auto-hide="false">
                         <div ng-message="required">User Phone is required</div>
                     </div>
@@ -163,23 +168,22 @@
             <div layout="row" layout-sm="column" layout-xs="column">
                 <md-input-container class="md-block" flex>
                     <label>Work Phone</label>
-                    <input id="phoneNumber2" ng-model="user.workPhoneNo">
+                    <input id="phoneNumber2" ng-model="user.workPhoneNo" name="workPhoneNo">
                 </md-input-container>
 
                 <md-input-container class="md-block" flex>
                     <label>Mobile Phone</label>
-                    <input id="phoneNumber3" ng-model="user.telePhoneNo">
+                    <input id="phoneNumber3" ng-model="user.telePhoneNo" name="telePhoneNo">
                 </md-input-container>
 
                 <md-input-container class="md-block" flex>
                     <label>Number Traveling</label>
-
-                    <input ng-model="user.numberTraveling"  type="number" ng-required = "isOneContactRequired()">
+                    <input ng-model="user.numberTraveling" type="number" ng-required="isOneContactRequired()">
                 </md-input-container>
 
-                   <md-input-container class="md-block" flex>
+                <md-input-container class="md-block" flex>
                     <label>Travling Via</label>
-                    <md-select name="travelingVia" ng-model="user.travelingVia" ng-required = "isOneContactRequired()">
+                    <md-select name="travelingVia" ng-model="user.travelingVia" ng-required="isOneContactRequired()">
                         <md-option ng-repeat="travelingVia in travelingViaOptions" ng-value="travelingVia.id">{{travelingVia.name}}</md-option>
                     </md-select>
                     <div ng-messages="form.travelingVia.$error" md-auto-hide="false">
@@ -187,35 +191,39 @@
                     </div>
                 </md-input-container>
 
-                  <md-input-container class="md-block" flex="none">
-                    <md-checkbox ng-model="user.R1" id="active" aria-label="active">
-                        R1 Status ?
+                <md-input-container class="md-block" flex="none">
+                    <md-checkbox ng-model="user.R1" id="r1" aria-label="active">
+                        R1 Status?
                     </md-checkbox>
                 </md-input-container>
 
-                  <md-input-container class="md-block" flex="none">
-                    <md-checkbox ng-model="user.sensitiveNation" id="active" aria-label="active">
-                        Sensitive Nation ?
+                <md-input-container class="md-block" flex="none">
+                    <md-checkbox ng-model="user.sensitiveNation" id="sensitiveNation" aria-label="active">
+                        Sensitive Nation?
                     </md-checkbox>
-                </md-input-container> 
+                </md-input-container>
 
                 <md-input-container class="md-block" flex="none">
-                    <md-checkbox ng-model="user.isActive" id="active" aria-label="active">
-                        Active ?
+                    <md-checkbox ng-model="user.isActive" id="isactive" aria-label="active">
+                        Active?
                     </md-checkbox>
                 </md-input-container>
+
                 <md-input-container class="md-block" flex="none">
-                    <md-checkbox ng-model="user.isSuperAdmin" id="active" aria-label="active">
-                        Super Admin ?
+                    <md-checkbox ng-model="user.isSuperAdmin" id="issuperadmin" aria-label="active">
+                        Super Admin?
                     </md-checkbox>
                 </md-input-container>
+
                 <md-input-container class="md-block" flex="none">
-                    <md-checkbox ng-model="" id="active" aria-label="active">
-                        Web User ?
+                    <md-checkbox ng-model="user.IsWebUser" id="iswebuser" aria-label="active">
+                        Web User?
                     </md-checkbox>
                 </md-input-container>
             </div>
+
         </div>
+
 @*        <md-table-container layout="column" layout-xs="column">
             <table md-table md-progress="promise">
                 <thead md-head>
@@ -325,6 +333,8 @@
     <script src="~/scripts/services/churchService.js" asp-append-version="true"></script>
     <script src="~/scripts/services/userService.js" asp-append-version="true"></script>
     <script src="~/scripts/controllers/userController.js" asp-append-version="true"></script>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI"></script>
     <script>
         function mail2Username(){
             var url = window.location.href,
@@ -336,7 +346,4 @@
             }
         }
     </script>
-
-    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyAoL5Cb3GKL803gYag0jud6d3iPHFZmbuI"></script>
-
 }
