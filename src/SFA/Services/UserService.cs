@@ -255,6 +255,24 @@ namespace SFA.Services
             }).ToList();
         }
 
+
+        public static string GenerateRandomPassword()
+        {
+            int numsLength = 12;
+
+            const string nums = "0123456789 ~!@#$%^&*()_-+={[}]|<,>.?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            string tempPass = string.Empty;
+            Random rnd = new Random();
+
+            for (int i = 1; i <= numsLength; i++)
+            {
+                int index = rnd.Next(nums.Length);
+                tempPass += nums[index];
+            }
+
+            return tempPass;
+        }
+
         public async Task<List<User>> GetAllPastorsByDistrict(int districtID)
         {
             var userEntities = await _context.TblUserNta.Include(m => m.Role).Where(m => m.Role.DataAccessCode == "P" && m.DistrictId == districtID).ToListAsync();
@@ -509,7 +527,7 @@ namespace SFA.Services
                     userEntity.SectionId = user.SectionId;
                     userEntity.DistrictId = user.DistrictId;
                     userEntity.CountryId = user.CountryId;
-                    userEntity.UserName = user.UserName;
+                    userEntity.UserName = user.Email;
                     userEntity.Email = user.Email;
                     userEntity.IsSuperAdmin = user.IsSuperAdmin;
                     userEntity.IsActive = user.IsActive;
@@ -549,7 +567,12 @@ namespace SFA.Services
                         if (churches[0].ChurchId != 0)
                             userEntity.TblUserChurchNta = churches;
                     }
-                   
+
+                    //This allows a user to input their own first password or leave it blank for a password to be generated                     
+                   if(user.Password == null || user.Password == String.Empty )
+                    {
+                        user.Password = GenerateRandomPassword();
+                    }
                     var model = new TblUserPasswordNta
                     {                       
                         InsertDatetime = DateTime.Now,                  
@@ -561,6 +584,16 @@ namespace SFA.Services
                     userEntity.TblUserPasswordNta.Add(model);
 
                     _context.TblUserNta.Add(userEntity);
+
+                    //Send Email to New User if a web user
+                    if(user.IsWebUser)
+                    {
+                        Utilites email = new Utilites();
+                        email.SendEmailForNewUser(user.FirstName, user.LastName, user.Email, user.Password, "Support@gmdeputation.com");
+                    }
+
+
+
                 }
                 //This is the update code
                 else

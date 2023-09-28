@@ -45,7 +45,9 @@ namespace SFA.Services
         //Function SendEmailForMissionaryDateChange uses this
         static string EmailForDateChange = "2d6f.32b15e784a472135.k1.656854b0-9c01-11ed-9725-525400e3c1b1.185e48a157b";
 
+        //Function SendEmailForNewUser
         static string EmailForNewUsers = "2d6f.32b15e784a472135.k1.f1c38a20-3b15-11ee-8e73-525400103106.189f7167bc2";
+
 
         private readonly SFADBContext _context = null;
 
@@ -717,7 +719,7 @@ namespace SFA.Services
 
             apiTemplateKey = EmailForNewUsers;
 
-            jsonString = "{'template_key':'" + apiTemplateKey + "','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'GMDeputationAdmin'},'to': [{'email_address': {'address': '" + Username + "','name': 'DGMD'}}],'merge_info':{'FirstName':'" + FirstName + "','LastName':'" + LastName + "','Username':'" + Username + "','Password':'" + Password + "','SupportEmail':'" + SupportEmail + "','DistrictWebsite':'" + districtWebsite + "'}}";
+            jsonString = "{'template_key':'" + apiTemplateKey + "','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'GMDeputationAdmin'},'to': [{'email_address': {'address': '" + Username + "','name': '" + FirstName + " " + LastName + "'}}],'merge_info':{'FirstName':'" + FirstName + "','LastName':'" + LastName + "','Username':'" + Username + "','Password':'" + Password + "','SupportEmail':'" + SupportEmail + "','DistrictWebsite':'" + districtWebsite + "'}}";
 
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
             var baseAddress = "https://api.zeptomail.com/v1.1/email/template";

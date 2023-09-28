@@ -74,6 +74,7 @@
                         <div ng-message="required">Gender is required</div>
                     </div>
                 </md-input-container>
+                <!--
                 <md-input-container class="md-block" flex>
                     <input type="hidden" value="@ViewBag.Id" ng-model="id" />
                     <label>User Name</label>
@@ -82,19 +83,8 @@
                         <div ng-message="required">User Name is required</div>
                     </div>
                 </md-input-container>
-
-            </div>
-            <div layout="row" layout-sm="column" layout-xs="column">
-
-                <md-input-container class="md-block" ng-if="edit" flex>
-                    <label>Password</label>
-                    <input name="password" ng-model="user.password" required>
-                    <div ng-messages="form.password.$error" md-auto-hide="false">
-                        <div ng-message="required">User Password is required</div>
-                    </div>
-                </md-input-container>
-
-                <md-input-container class="md-block" flex>
+                -->
+                                <md-input-container class="md-block" flex>
                     <input type="hidden" value="@ViewBag.Id" ng-model="id"  />
                      <label>Address</label>
                     <input id="Address" name="address" ng-model="user.address" maxlength="150" placeholder="Address">
@@ -102,12 +92,27 @@
                         <div ng-message="required">Address is required</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="md-block" flex>
+
+                                <md-input-container class="md-block" flex>
                     <label>City</label>
                     <input ng-model="user.city">
                 </md-input-container>
-
             </div>
+              <!--<div layout="row" layout-sm="column" layout-xs="column">
+              
+                <md-input-container class="md-block" ng-if="edit" flex>
+                    <label>Password</label>
+                    <input name="password" ng-model="user.password" required>
+                    <div ng-messages="form.password.$error" md-auto-hide="false">
+                        <div ng-message="required">User Password is required</div>
+                    </div>
+                </md-input-container>
+               
+
+
+
+
+            </div> -->
             <div layout="row" layout-sm="column" layout-xs="column">
                 <md-input-container class="md-block" flex>
                     <label>Country Name</label>

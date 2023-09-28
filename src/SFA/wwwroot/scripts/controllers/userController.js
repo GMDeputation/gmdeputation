@@ -395,6 +395,8 @@
         }
         else {
             $scope.user = {};
+            $scope.user.IsWebUser = true;
+            $scope.user.isActive = true;
             $scope.user.churches = [{}];
             $scope.user.attributes = [{}];
         }
