@@ -6,7 +6,7 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Play', sans-serif;
+    font-family: 'Roboto';
     overflow: hidden;
     background-image: linear-gradient(to bottom right, #b400ff52, #007eff8f);
     background-image: -webkit-linear-gradient(left, #b400ff52, #007eff8f);
@@ -55,6 +55,11 @@ body {
     width: 100%;
 }
 
+    .login-grid .logo {
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+    }
+
 @keyframes fadeInRight {
     0% {
         opacity: 0;
@@ -71,13 +76,25 @@ body {
     text-align: center;
 }
 
+.login-grid h2 {
+    font-family: 'Roboto' !important;
+    color: #333 !important;
+    letter-spacing: -1px !important;
+    margin: 0;
+}
+
 .logo > img {
     width: 100%;
     margin: 15px 0px;
 }
 
 .logo > h3 {
-    color: #0070b8;
+    color: #888;
+    font-size: .9em;
+    font-weight: 500;
+    font-family: 'Roboto';
+    margin: 0;
+    padding: 0;
 }
 
 .form-grid {
@@ -87,6 +104,10 @@ body {
 
     .form-grid > h3 {
         font-weight: normal;
+        font-size: .85em;
+        font-family: sans-serif;
+        color: #666;
+        font-weight: 600;
     }
 
 .login-btn {
@@ -94,7 +115,7 @@ body {
     height: 40px;
     padding: 10px 20px;
     border-radius: 20px;
-    background-image: linear-gradient(to bottom right, #1b83ef, #7628f3);
+    background-image: linear-gradient(to bottom right, rgb(0 117 178), rgb(16 78 110));
     font-weight: 600;
 }
 
