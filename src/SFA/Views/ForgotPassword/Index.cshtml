@@ -1,4 +1,4 @@
-﻿@model SFA.Models.LoginViewModel
+﻿@model SFA.Models.ForgotPasswordModel
 @{
     Layout = null;
 }
@@ -6,7 +6,7 @@
 <html>
 <head>
     @*<link rel="icon" href="~/images/favicon.ico" type="image/png" sizes="16x16">*@
-    <title>Church Council Management Application (CCMA) - User Login</title>
+    <title>Church Council Management Application (CCMA) - User Forgot Password</title>
     <link href="~/styles/fonts/play/play.css" rel="stylesheet">
     @*<link href="//db.onlinewebfonts.com/c/cb8d4d30de89efdc96a98761ede26d3d?family=Mongolian+Baiti" rel="stylesheet"/>*@
     @*<link href="~/css/font-awesome.min.css" rel="stylesheet">*@
@@ -269,10 +269,10 @@
                 @*<img src="~/images/dar_logo.png" />
                 <div style="font-size:x-large;font-weight:bold;color:#e73140;margin-bottom:10px;font-family: Mongolian Baiti">V I J A Y</div>*@
                 <h2 style="color:blueviolet">Church Council Management Application</h2>
-                <h3>LOGIN TO YOUR ACCOUNT</h3>
+                <h3>RESET PASSWORD</h3>
             </div>
             <div class="form-grid">
-                <form asp-controller="Login" asp-action="Validate">
+                <form asp-controller="ForgotPassword" asp-action="ValidateEmail">
                     @if (TempData["ERRMSG"] != null)
                     {
                         <div class="form-group">
@@ -281,20 +281,39 @@
                         </div>
                     }
                     <div class="floating-label">
-                        <label>Email <span class="red">*</span></label>
+                        <label>PLEASE ENTER YOUR EMAIL <span class="red">*</span></label>
                         <input class="floating-input" type="text" placeholder=" " asp-for="Email" required>
                         <span class="highlight"></span>
                         
                     </div>
-                    <div class="floating-label">
-
-                        <label>Password <span class="red">*</span></label>
-                        <input class="floating-input" type="password" placeholder=" " asp-for="Password" required>
+					<div class="floating-label">
+                        <label>Security Code<span class="red">*</span></label>
+                        <input class="floating-input" type="text" placeholder=" " asp-for="SecurityCode">
                         <span class="highlight"></span>
                         
                     </div>
-                    <button class="login-btn" type="submit"><span class="ti-unlock"></span> LOG IN</button>
-                     <p>If you forgot your password, click <a href="/ForgotPassword">here</a> to reset it.</p>
+
+
+    <div>
+                           <div class="floating-label">
+                        <label>New Password<span class="red">*</span></label>
+                        <input class="floating-input" type="text" placeholder=" " asp-for="NewPassword">
+                        <span class="highlight"></span>
+                        
+                    </div>
+
+                    <div class="floating-label">
+                        <label>Confirm Password<span class="red">*</span></label>
+                        <input class="floating-input" type="text" placeholder=" " asp-for="ConfirmPassword">
+                        <span class="highlight"></span>
+                        
+                    </div>
+    </div>
+
+
+
+                    <button class="login-btn" type="submit"><span class="ti-unlock"></span>Submit</button>
+                     
                 </form>
             </div>
         </div>

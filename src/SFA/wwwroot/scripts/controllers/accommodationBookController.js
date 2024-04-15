@@ -63,7 +63,7 @@
 
         if ($scope.accommodationBook.churchId !== null && $scope.accommodationBook.churchId !== undefined && $scope.accommodationBook.churchId !== '0') {
 
-            accommodationService.getAllByChurch($scope.accommodationBook.churchId).then(function (resp) {
+            accommodationService.get($scope.accommodationBook.churchId).then(function (resp) {
                 $scope.accommodations = resp;
             });
         }

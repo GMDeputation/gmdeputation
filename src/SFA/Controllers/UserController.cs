@@ -203,17 +203,17 @@ public class UserController : Controller
 						if (((ExcelRangeBase)worksheet.Cells[row, 5]).Value != null)
 						{
 							numberInserts++;
-							//Doing a check on the data and making sure there is no data in the 15th column. If there is something is off.
-							if (((ExcelRangeBase)worksheet.Cells[row, 32]).Value != null)
-							{
-								Errors.AppendLine("Row Number:" + row + " Excel Format is not right or data are not proper. Kindly upload the right format as per given format");
+							//Doing a check on the data and making sure there is no data in the 31st column. If there is something is off.
+							//if (((ExcelRangeBase)worksheet.Cells[row, 31]).Value != null)
+						//	{
+								//Errors.AppendLine("Row Number:" + row + " Excel Format is not right or data are not proper. Kindly upload the right format as per given format");
 								//jsonString2 = "Excel Format is not right or data are not proper. Kindly upload the right format as per given format";
 								//return Json(jsonString2);
-								numberFailed++;
-								continue;
-							}
+								//numberFailed++;
+								//continue;
+							//}
 					
-							TblRoleNta tblRole = roleEntities.Where((TblRoleNta m) => m.Id.ToString().Contains(((ExcelRangeBase)worksheet.Cells[row, 10]).Value.ToString())).FirstOrDefault();
+							//TblRoleNta tblRole = roleEntities.Where((TblRoleNta m) => m.Id.ToString().Contains(((ExcelRangeBase)worksheet.Cells[row, 31]).Value.ToString())).FirstOrDefault();
 	
 							//Disting Name and Section Name we will Ignore in the import file. It is just for the user 
 							//to have a visual that the ID's match the name
@@ -287,9 +287,11 @@ public class UserController : Controller
 							//Will not error out the line. If not then it is a duplicate email. 
 
 							//This should be null if we do not find a memnber. 
-							var emailDuplicateEntity =  _context.TblUserNta.Where(m => (m.FirstName != PastorfirstName || m.LastName != PastorlastName) && m.Email == email).ToList();
-							
-							if(emailDuplicateEntity.Count > 0)
+							//2024/02/16 Mitch does not want this he want no duplicates at all
+							//var emailDuplicateEntity =  _context.TblUserNta.Where(m => (m.FirstName != PastorfirstName || m.LastName != PastorlastName) && m.Email == email).ToList();
+							var emailDuplicateEntity = _context.TblUserNta.Where(m => m.Email == email).ToList();
+
+							if (emailDuplicateEntity.Count > 0)
                             {
 								Errors.AppendLine("Row Number:" + row + " User Email Should be unique Or not right in " + row + " th row of excel sheet. Kindly check User Email");
 								//jsonString2 = "User Email Should be unique Or not right in " + row + " th row of excel sheet. Kindly check User Email";
@@ -386,11 +388,13 @@ public class UserController : Controller
 										}
 										catch (Exception ex)
 										{
-											Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Pastor Generated Address(" + PastorFullAddress + ") : Please verify Street, City State and Postal Code");
-											numberFailed++;
-											Console.WriteLine(ex.Message);
-											continue;
-										}
+										//Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Pastor Generated Address(" + PastorFullAddress + ") : Please verify Street, City State and Postal Code");
+										//numberFailed++;
+										//Console.WriteLine(ex.Message);
+										//continue;
+										Pastorlatitude = "";
+										Pastorlongitude = "";
+									}
 
 									if(point != null)
                                     {
@@ -399,9 +403,11 @@ public class UserController : Controller
 									}
                                     else
                                     {
-										Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Pastor Generated Address(" + PastorFullAddress + ") : Please verify Street, City State and Postal Code");
-										numberFailed++;										
-										continue;
+										//Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Pastor Generated Address(" + PastorFullAddress + ") : Please verify Street, City State and Postal Code");
+										//numberFailed++;										
+										//continue;
+										Pastorlatitude = "";
+										Pastorlongitude = "";
 									}
 
 									
@@ -427,10 +433,12 @@ public class UserController : Controller
 								}
 								catch (Exception ex)
 								{
-									Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Pastor Full Address: Please verify address syntax and validity");
-									numberFailed++;
-									Console.WriteLine(ex.Message);
-									continue;
+									//Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Pastor Full Address: Please verify address syntax and validity");
+									//numberFailed++;
+									//Console.WriteLine(ex.Message);
+									//continue;
+									Pastorlatitude = "";
+									Pastorlongitude = "";
 								}
 								if (point != null)
                                 {
@@ -439,9 +447,11 @@ public class UserController : Controller
 								}
 								else
                                 {
-									Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Pastor Generated Address(" + PastorFullAddress + ") : Please verify Street, City State and Postal Code");
-									numberFailed++;
-									continue;
+									Pastorlatitude = "";
+									Pastorlongitude = "";
+									//Errors.AppendLine("Row Number:" + row + " Google was not able to get Lat and Long from Pastor Generated Address(" + PastorFullAddress + ") : Please verify Street, City State and Postal Code");
+									//numberFailed++;
+									//continue;
 								}
 
 

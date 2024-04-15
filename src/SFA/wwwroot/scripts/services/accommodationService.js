@@ -8,7 +8,7 @@
     };
 
     this.get = function (id) {
-        return $http.get('/accommodations/get/' + id).then(function (resp) {
+        return $http.get('/accomodation-booking/get/' + id).then(function (resp) {
             return resp.data;
         });
     };

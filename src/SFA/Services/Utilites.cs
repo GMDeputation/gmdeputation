@@ -761,5 +761,60 @@ namespace SFA.Services
                 Console.WriteLine(ex.Message);
             }
         }
+
+        //Template Security Code
+        public Boolean SendSecurityCode(string email, string securityCode)
+        {
+            string jsonString = "";
+            string apiTemplateKey = "";
+
+
+            apiTemplateKey = "2d6f.32b15e784a472135.k1.1f9437d0-b99f-11ee-b096-525400ae9113.18d345a6bcd";
+
+            jsonString = "{'template_key':'" + apiTemplateKey + "','bounce_address':'bounceback@bounce.gmdeputation.com','from': { 'address': 'noreply@gmdeputation.com','name':'GMDeputationAdmin'},'to': [{'email_address': {'address': '" + email + "','name': 'SECURITY CODE'}}],'merge_info':{'username':'" + email + "','SecurityCode':'" + securityCode + "'}}";
+
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+            var baseAddress = "https://api.zeptomail.com/v1.1/email/template";
+
+            var http = (HttpWebRequest)WebRequest.Create(new Uri(baseAddress));
+            http.Accept = "application/json";
+            http.ContentType = "application/json";
+            http.Method = "POST";
+            http.PreAuthenticate = true;
+            http.Headers.Add("Authorization", "Zoho-enczapikey wSsVR60irB74DaZ+zzL/Lu5umg5RA1ugE0R6jVWiuXH6HvvD98c9wkKcUVOlFPAaEzNqEjdGo7krzUxR2jVa24t+ng5WCyiF9mqRe1U4J3x17qnvhDzKWW9alxONJY4MzgtukmdpEMgn+g==");
+
+            JObject parsedContent = null;
+            try
+            {
+                parsedContent = JObject.Parse(jsonString);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+
+            Console.WriteLine(parsedContent.ToString());
+            ASCIIEncoding encoding = new ASCIIEncoding();
+            Byte[] bytes = encoding.GetBytes(parsedContent.ToString());
+
+            Stream newStream = http.GetRequestStream();
+            newStream.Write(bytes, 0, bytes.Length);
+            newStream.Close();
+            try
+            {
+                var response = http.GetResponse();
+                var stream = response.GetResponseStream();
+                var sr = new StreamReader(stream);
+                var content = sr.ReadToEnd();
+                Console.WriteLine(content);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+            return true;
+        }
     }
 }

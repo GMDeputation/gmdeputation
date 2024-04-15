@@ -131,6 +131,10 @@ namespace SFA.Entities
         public string Street { get; set; }
         public string HQID { get; set; }
 
+        public string SecurityCode { get; set; }
+
+        public DateTime? SecurityCodeInsertDatetime { get; set; }
+
         [InverseProperty("ApprovedByNavigation")]
         public ICollection<TblAccomodationBookingNta> TblAccomodationBookingNtaApprovedByNavigation { get; set; }
         [InverseProperty("RequestedUser")]

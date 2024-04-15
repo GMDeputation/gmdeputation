@@ -67,6 +67,8 @@ namespace SFA.Models
         public string Street { get; set; }
 
         public string HQID { get; set; }
+        public string SecurityCode { get; set; }
+        public DateTime? SecurityCodeInsertDatetime { get; set; }
     }
 
     public class UserQuery : Query
@@ -80,6 +82,15 @@ namespace SFA.Models
     {
         public string Email { get; set; }
         public string Password { get; set; }
+    }
+
+    public class ForgotPasswordModel
+    {
+        public string Email { get; set; }
+        public string SecurityCode { get; set; }
+        public string NewPassword { get; set; }
+        public string ConfirmPassword { get; set; }
+
     }
 
     public class UserPassword

@@ -17,6 +17,8 @@ namespace SFA.Services
         Task<List<User>> GetByRoleId(int roleId);
         Task<QueryResult<User>> Search(UserQuery query);
         Task<bool> ChangePassword(int userId, User user);
+
+        Task<bool> UpdatePassword(string email, string password);
         Task<int> Save(User user, User loggedinUser);
         Task<User> Validate(string email, string password);
         Task<List<RoleMenu>> GetMenuByUser(int userId);
@@ -32,6 +34,10 @@ namespace SFA.Services
         Task<List<User>> GetAllMissionariesUser();
 
         Task<List<User>> GetAllPastorsByDistrict(int districtID);
+
+        Task<User> SendSecurityCode(string email);
+
+        Task<Boolean> ValidateSecurityCode(string email, string securityCode);
     }
 
     public class UserService : IUserService
@@ -117,6 +123,34 @@ namespace SFA.Services
             {
                 throw ex;
             }
+        }
+
+        public async Task<bool> UpdatePassword(string email, string password)
+        {
+            var userEntity = await _context.TblUserNta.FirstOrDefaultAsync(m => m.UserName == email);
+
+            if (userEntity == null)
+            {
+                return false;
+            }
+
+            var passwordEntity = new TblUserPasswordNta
+            {
+                UpdateDatetime = DateTime.Now,
+                Password = password,
+                UserId = userEntity.Id
+            };
+            try
+            {
+                _context.TblUserPasswordNta.Add(passwordEntity);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
 
@@ -260,7 +294,7 @@ namespace SFA.Services
         {
             int numsLength = 12;
 
-            const string nums = "0123456789 ~!@#$%^&*()_-+={[}]|<,>.?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            const string nums = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
             string tempPass = string.Empty;
             Random rnd = new Random();
 
@@ -284,6 +318,125 @@ namespace SFA.Services
                 IsActive = m.IsActive
             }).ToList();
         }
+        public async Task <User> SendSecurityCode(string email)
+        {
+            var userEntity = await _context.TblUserNta.Include(m => m.Role).Include(m => m.TblUserChurchNta).ThenInclude(m => m.Church).Include(m => m.TblUserAttributeNta)
+                 .ThenInclude(m => m.Attribute).Include(m => m.Section).Include(m => m.District).Include(m => m.Country).FirstOrDefaultAsync(m => m.UserName == email);
+
+            var attributeEntities = await _context.TblAttributeNta.ToListAsync();
+
+            if (userEntity == null)
+            {
+                return null;
+            }
+
+            const string validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var securityCode = "";
+            Random random = new Random();
+
+            for (int i = 0; i < 6; i++)
+            {
+                int index = random.Next(validChars.Length);
+                securityCode = securityCode + validChars[index];
+            }
+
+            Utilites tmp = new Utilites();
+            if (tmp.SendSecurityCode(email, securityCode))
+            {
+                userEntity.SecurityCode = securityCode;
+                userEntity.SecurityCodeInsertDatetime = DateTime.Now;
+
+                //This will save the users code into the database 
+                await _context.SaveChangesAsync();
+            }
+            return new User
+            {
+                Id = userEntity.Id,
+                FirstName = userEntity.FirstName,
+                MiddleName = userEntity.MiddleName,
+                LastName = userEntity.LastName,
+                Address = userEntity.Address,
+                InsertDatetime = (DateTime)userEntity.InsertDatetime,
+                Gender = userEntity.Gender,
+                ImageFile = userEntity.ImageFile,
+                ImageSequence = userEntity.ImageSequence,
+                IsEmailVerify = userEntity.IsEmailVerify,
+                Lat = userEntity.Lat,
+                Long = userEntity.Long,
+                Name = userEntity.FirstName + " " + userEntity.LastName,
+                Phone = userEntity.Phone,
+                Zipcode = userEntity.Zipcode,
+                SectionId = userEntity.SectionId,
+                SectionName = userEntity.Section?.Name,
+                DistrictId = userEntity.DistrictId,
+                DistrictName = userEntity.District?.Name,
+                CountryId = userEntity.CountryId,
+                CountryName = userEntity.Country?.Name,
+                UserName = userEntity.UserName,
+                Email = userEntity.Email,
+                RoleName = userEntity.Role.Name,
+                RoleId = userEntity.RoleId,
+                IsSuperAdmin = userEntity.IsSuperAdmin,
+                IsActive = userEntity.IsActive,
+                IsWebUser = userEntity.IsWebUser,
+                IsNewUser = userEntity.IsNewUser,
+                City = userEntity.City,
+                WorkPhoneNo = userEntity.WorkPhoneNo,
+                TelePhoneNo = userEntity.TelePhoneNo,
+                Status = userEntity.Status,
+                NumberTraveling = userEntity.NumberTraveling,
+                TravelingVia = userEntity.TravelingVia,
+                R1 = userEntity.R1,
+                sensitiveNation = userEntity.sensitiveNation,
+                UserSalutation = userEntity.UserSalutation,
+                Attributes = userEntity.TblUserAttributeNta.Select(m => new UserAttribute
+                {
+                    AttributeId = m.AttributeId,
+                    AttributeTypeId = m.Attribute.AttributeTypeId,
+                    AttributeValue = m.AttributeValue,
+                    UserId = userEntity.Id,
+                    Notes = m.Notes,
+                    Butes = attributeEntities.Where(n => n.AttributeTypeId == m.Attribute.AttributeTypeId).Select(n => new AttributeModel
+                    {
+                        Id = n.Id,
+                        AttributeName = n.AttributeName
+                    }).ToList()
+                }).ToList(),
+                Churches = userEntity.TblUserChurchNta.Select(m => new UserChurch
+                {
+                    ChurchId = m.ChurchId,
+                    ChurchName = m.Church.ChurchName,
+                    CreatedOn = DateTime.Now,
+                    RelationType = m.RelationType,
+                    UserId = userEntity.Id,
+                }).ToList()
+            };
+        }
+        public async Task<Boolean> ValidateSecurityCode(string email,string securityCode)
+        {
+
+            var userEntity = await _context.TblUserNta.Include(m => m.Role).Include(m => m.TblUserChurchNta).ThenInclude(m => m.Church).Include(m => m.TblUserAttributeNta)
+                             .ThenInclude(m => m.Attribute).Include(m => m.Section).Include(m => m.District).Include(m => m.Country).FirstOrDefaultAsync(m => m.UserName == email);
+
+
+            if (userEntity.SecurityCode == securityCode && !IsOlderThan30Minutes(userEntity.SecurityCodeInsertDatetime??DateTime.Now))
+            {
+                return true;
+            }
+            else
+                return false;
+
+        }
+        static bool IsOlderThan30Minutes(DateTime dateTime)
+        {
+            TimeSpan difference = DateTime.Now - dateTime;
+
+            return difference.TotalMinutes > 30;
+        }
+
+
+
+
 
         public async Task<User> GetById(int id)
         {
